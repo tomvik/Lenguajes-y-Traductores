@@ -25,6 +25,7 @@ class Parser:
         inside_logic : loops inside_logic
         inside_logic : calls inside_logic
         inside_logic : read_or_write inside_logic
+        inside_logic : assign inside_logic
         |
         '''
     
@@ -45,7 +46,7 @@ class Parser:
     
     def p_conditions(self, p):
         '''
-        conditions : if
+        conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic end if
         '''
 
     def p_loops(self, p):
@@ -61,6 +62,8 @@ class Parser:
         logic_expression : compared_to_bool
         logic_expression : arithmetic_expression logic_operand arithmetic_expression
         logic_expression : logic_expression logic_operand logic_expression
+        logic_expression : not logic_expression
+        logic_expression : open_parenthesis logic_expression close_parenthesis
         '''
     
     def p_logic_operand(self, p):
@@ -137,6 +140,12 @@ class Parser:
         subroutines : sub function id open_parenthesis close_parenthesis as variable_type inside_logic end sub subroutines
         subroutines : sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub subroutines
         |
+        '''
+
+    def p_assign(self, p):
+        '''
+        assign : let id equals logic_expression
+        assign : let id equals arithmetic_expression
         '''
 
     def p_parameters(self, p):
