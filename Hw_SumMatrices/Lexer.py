@@ -36,7 +36,7 @@ class Lexer:
         self.t_close_brackets = r'\]'
         self.t_open_braces = r'\{'
         self.t_close_braces = r'\}'
-        self.t_string = r'\"[a-zA-Z0-9 \.\?\:\t\r\n\f()\[\]\&\!\@\#\$\%\^\-\=\+\/\,]*\"'
+        self.t_string = r'\"[a-zA-Z0-9 \.\?\:\t\r\n\f()\[\]\&\!\@\#\$\%\^\-\_\=\+\/\,]*\"'
 
         # A string containing ignored characters (spaces and tabs)
         self.t_ignore  =  ' \t\n'
@@ -69,5 +69,4 @@ class Lexer:
         return t
     
     def t_error(self, t):
-        print("Illegal character '%s'" % t.value[0])
-        t.lexer.skip(1)
+        raise Exception("Illegal character '%s'" % t.value[0])

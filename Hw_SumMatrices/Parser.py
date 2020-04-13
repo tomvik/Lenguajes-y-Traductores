@@ -47,6 +47,15 @@ class Parser:
     def p_conditions(self, p):
         '''
         conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic end if
+        conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
+        conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
+        conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+        '''
+    
+    def p_else_ifs(self, p):
+        '''
+        else_ifs : elsif open_parenthesis logic_expression close_parenthesis then inside_logic
+        else_ifs : else_ifs else_ifs
         '''
 
     def p_loops(self, p):
@@ -85,6 +94,7 @@ class Parser:
         compared_to_bool : arithmetic_expression is_not_equal bool_value
         compared_to_bool : bool_value is_equal arithmetic_expression
         compared_to_bool : bool_value is_not_equal arithmetic_expression
+        compared_to_bool : bool_value
         '''
 
     def p_arithmetic_expression(self, p):
@@ -129,7 +139,7 @@ class Parser:
     def p_calls(self, p):
         '''
         calls : gosub id
-        calls : id open_parenthesis close_parenthesis
+        calls : functions
         '''
 
     def p_subroutines(self, p):
@@ -171,6 +181,7 @@ class Parser:
         '''
         read_or_write : print
         read_or_write : read
+        read_or_write : dunkelCls
         '''
 
     def p_print(self, p):
@@ -182,7 +193,7 @@ class Parser:
     def p_multiple_print(self, p):
         '''
         multiple_print : string
-        multiple_print : value
+        multiple_print : arithmetic_expression
         multiple_print : multiple_print comma multiple_print
         '''
     
@@ -199,4 +210,4 @@ class Parser:
         '''
 
     def p_error(self, p):
-        print('\nIncorrecto\n')
+        raise Exception('\nIncorrecto\n')
