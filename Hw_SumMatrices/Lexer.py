@@ -14,7 +14,6 @@ class Lexer:
 
     def __initializeSimpleRegexRules(self):
         # Regular expression rules for simple tokens
-        self.t_dim = r'dim'
         self.t_is_equal = r'\=\='
         self.t_is_not_equal = r'\<\>'
         self.t_greater_than = r'\>'

@@ -1,5 +1,8 @@
+import sys
+
 from Lexer import Lexer
 import ply.yacc as yacc
+from SymbolsElement import SymbolsElement
 
 class Parser:
 
@@ -7,9 +10,23 @@ class Parser:
         self.__lexer = Lexer()
         self.tokens = self.__lexer.getTokens()
         self.__parser = yacc.yacc(module=self)
+        self.__symbols_table = {}
+        self.__symbols_table_index = 0
+        self.__functions_table_index = 1
 
     def Parse(self, s):
         self.__parser.parse(s)
+
+    def add_symbol(self, name, data_type, index = 0, dimention_1 = 0, dimention_2 = 0, dimention_3 = 0):
+        if (data_type == 'word_array' or data_type == 'bool_array' or data_type == 'double_array'):
+            self.__symbols_table[name] = SymbolsElement(name, data_type, '*' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
+        else:
+            self.__symbols_table[name] = SymbolsElement(name, data_type, '#' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
+        self.__symbols_table_index += 1
+
+    def print_symbol_table(self):
+        for key in self.__symbols_table:
+            self.__symbols_table[key].print_element()
 
     def p_program(self, p):
         '''
@@ -17,6 +34,8 @@ class Parser:
         program : inside_logic end subroutines
         '''
         print('\nCorrecto\n')
+        self.print_symbol_table()
+        
 
     def p_inside_logic(self, p):
         '''
@@ -36,6 +55,25 @@ class Parser:
         variable : dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
         variable : dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
         '''
+        if(len(p) == 5):
+            self.add_symbol(p[2], p[4])
+        else:
+            p[4] += '_array'
+            dimention_1 = p[6]
+            if(len(p) == 8):
+                self.add_symbol(p[2], p[4], dimention_1=dimention_1)
+            else:
+                dimention_2 = p[9]
+                if(len(p) == 11):
+                    self.add_symbol(p[2], p[4], dimention_1=dimention_1, dimention_2=dimention_2)
+                else:
+                    dimention_3 = p[12]
+                    self.add_symbol(p[2], p[4], dimention_1=dimention_1, dimention_2=dimention_2, dimention_3=dimention_3)
+
+        #print('This variable is: ', len(p))
+        #for i in range(len(p)):
+        #    print(p[i], sep=' ', end=' ')
+        #print(' ')
     
     def p_variable_type(self, p):
         '''
@@ -43,6 +81,7 @@ class Parser:
         variable_type : float
         variable_type : bool
         '''
+        p[0] = p[1] # To have the variable_type back in p_variable()
     
     def p_conditions(self, p):
         '''
@@ -151,6 +190,10 @@ class Parser:
         subroutines : sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub subroutines
         |
         '''
+
+        if len(p) >= 3:
+            self.add_symbol(p[3], p[2], index=self.__functions_table_index)
+            self.__functions_table_index += 1
 
     def p_assign(self, p):
         '''
