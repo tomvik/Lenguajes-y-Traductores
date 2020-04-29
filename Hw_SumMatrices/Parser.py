@@ -13,6 +13,12 @@ class Parser:
         self.__symbols_table = {}
         self.__symbols_table_index = 0
         self.__functions_table_index = 1
+        self.__operands_stack = []
+        self.__operators_stack = []
+        self.__types_stack = []
+        self.__jumps_stack = []
+        self.__ifs_stack = []
+        self.__quadruplets = []
 
     def Parse(self, s):
         self.__parser.parse(s)
@@ -140,6 +146,7 @@ class Parser:
         '''
         arithmetic_expression : value
         arithmetic_expression : value arithmetic_operand value
+        arithmetic_expression : arithmetic_expression arithmetic_operand arithmetic_expression
         '''
     
     def p_arithmetic_operand(self, p):
@@ -150,6 +157,7 @@ class Parser:
         arithmetic_operand : division
         arithmetic_operand : exponent
         '''
+
 
     def p_value(self, p):
         '''

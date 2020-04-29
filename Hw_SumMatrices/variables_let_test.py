@@ -59,6 +59,11 @@ class Test_TestParserVariablesLet(unittest.TestCase):
             let variable_one = 5
             variable_two = 7
             end
+            ''',
+            '''
+            let variable_one = 5
+            let variable_two = 7 +
+            end
             '''
         ]
         self.__incorrect_tests(incorrect_texts)
@@ -69,6 +74,7 @@ class Test_TestParserVariablesLet(unittest.TestCase):
             '''
             let variable_one = 5
             let variable_two = 7
+            let variable_three = 9 + variable_one - variable_two
             end
             ''',
             '''
