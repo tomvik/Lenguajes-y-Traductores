@@ -61,9 +61,11 @@ sub procedure tryWhileAndIfs
         elsif(hola) then
             dunkelPrint "hola"
         elsif(hola and adios) then
-            dunkelPrint "hola adios"
+            dunkelPrint "hola and adios"
+        elsif(not hola or not adios) then
+            dunkelPrint "hola or not adios"
         else
-            dunkelPrint "adios"
+            dunkelPrint "else"
         end if
     wend
 return

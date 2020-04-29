@@ -113,33 +113,22 @@ class Parser:
     def p_logic_expression(self, p):
         '''
         logic_expression : arithmetic_expression
-        logic_expression : compared_to_bool
-        logic_expression : arithmetic_expression logic_operand arithmetic_expression
+        logic_expression : bool_value
+        logic_expression : not ACTION_ADD_OPERAND logic_expression
         logic_expression : logic_expression logic_operand logic_expression
-        logic_expression : not logic_expression
         logic_expression : open_parenthesis logic_expression close_parenthesis
         '''
     
     def p_logic_operand(self, p):
         '''
-        logic_operand : and
-        logic_operand : or
-        logic_operand : not
-        logic_operand : is_equal
-        logic_operand : is_not_equal
-        logic_operand : greater_than
-        logic_operand : greater_or_equal_than
-        logic_operand : less_than
-        logic_operand : less_or_equal_than
-        '''
-
-    def p_compared_to_bool(self, p):
-        '''
-        compared_to_bool : arithmetic_expression is_equal bool_value
-        compared_to_bool : arithmetic_expression is_not_equal bool_value
-        compared_to_bool : bool_value is_equal arithmetic_expression
-        compared_to_bool : bool_value is_not_equal arithmetic_expression
-        compared_to_bool : bool_value
+        logic_operand : and ACTION_ADD_OPERAND
+        logic_operand : or ACTION_ADD_OPERAND
+        logic_operand : is_equal ACTION_ADD_OPERAND
+        logic_operand : is_not_equal ACTION_ADD_OPERAND
+        logic_operand : greater_than ACTION_ADD_OPERAND
+        logic_operand : greater_or_equal_than ACTION_ADD_OPERAND
+        logic_operand : less_than ACTION_ADD_OPERAND
+        logic_operand : less_or_equal_than ACTION_ADD_OPERAND
         '''
 
     def p_arithmetic_expression(self, p):
@@ -151,11 +140,11 @@ class Parser:
     
     def p_arithmetic_operand(self, p):
         '''
-        arithmetic_operand : sum
-        arithmetic_operand : substraction
-        arithmetic_operand : multiplication
-        arithmetic_operand : division
-        arithmetic_operand : exponent
+        arithmetic_operand : sum ACTION_ADD_OPERAND
+        arithmetic_operand : substraction ACTION_ADD_OPERAND
+        arithmetic_operand : multiplication ACTION_ADD_OPERAND
+        arithmetic_operand : division ACTION_ADD_OPERAND
+        arithmetic_operand : exponent ACTION_ADD_OPERAND
         '''
 
 
@@ -259,6 +248,13 @@ class Parser:
         multiple_read : ids_access
         multiple_read : multiple_read comma multiple_read
         '''
+
+    def p_action_add_operand(self, p):
+        '''
+        ACTION_ADD_OPERAND :
+        '''
+        print("Added operand: ", p[-1])
+        self.__operators_stack.append(p[-1])
 
     def p_error(self, p):
         raise Exception('\nIncorrecto\n')

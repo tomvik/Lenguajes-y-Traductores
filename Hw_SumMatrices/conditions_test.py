@@ -144,6 +144,18 @@ class Test_TestParserConditions(unittest.TestCase):
                 dunkelPrint "in else"
             end if
             end
+            ''',
+            '''
+            if (variable + 2 > 10) then
+                dunkelPrint "in if"
+            elsif (variable - 3 < 10 and not true) then
+                dunkelPrint "in first elsif"
+            elsif (variable == 15) then
+                dunkelPrint "in second elsif"
+            else
+                dunkelPrint "in else"
+            end if
+            end
             '''
             ]
         self.__correct_tests(correct_texts)
