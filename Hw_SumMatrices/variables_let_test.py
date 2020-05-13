@@ -80,6 +80,7 @@ class Test_TestParserVariablesLet(unittest.TestCase):
             '''
             let variable_one = 5
             let variable_two = variable_one
+            let variable_three = true
             end
             '''
         ]

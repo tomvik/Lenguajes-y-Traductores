@@ -11,14 +11,18 @@ class Parser:
         self.tokens = self.__lexer.getTokens()
         self.__parser = yacc.yacc(module=self)
         self.__symbols_table = {}
-        self.__symbols_table_index = 0
         self.__functions_table_index = 1
+        self.__quadruplets_index = 1
+        self.__max_available_in_memory = 50
+        self.__current_available_used = 0
+        self.__symbols_table_index = self.__max_available_in_memory + 1
         self.__operands_stack = []
         self.__operators_stack = []
         self.__types_stack = []
         self.__jumps_stack = []
         self.__ifs_stack = []
         self.__quadruplets = []
+        self.add_symbol('result', 'bool')
 
     def Parse(self, s):
         self.__parser.parse(s)
@@ -33,6 +37,11 @@ class Parser:
     def print_symbol_table(self):
         for key in self.__symbols_table:
             self.__symbols_table[key].print_element()
+
+    def add_operand_with_type(self, current_operand, current_type):
+        self.__operands_stack.append(current_operand)
+        self.__types_stack.append(current_type)
+        print("I added the operand: ", current_operand, " With type: ", current_type)
 
     def p_program(self, p):
         '''
@@ -107,44 +116,44 @@ class Parser:
         '''
         loops : while open_parenthesis logic_expression close_parenthesis inside_logic wend
         loops : do inside_logic loop until open_parenthesis logic_expression close_parenthesis
-        loops : for id equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
+        loops : for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
         '''
     
     def p_logic_expression(self, p):
         '''
         logic_expression : arithmetic_expression
-        logic_expression : bool_value
-        logic_expression : not ACTION_ADD_OPERAND logic_expression
-        logic_expression : logic_expression logic_operand logic_expression
+        logic_expression : bool_value ACTION_ADD_BOOL_VALUE
+        logic_expression : not ACTION_ADD_OPERATOR logic_expression
+        logic_expression : logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET
         logic_expression : open_parenthesis logic_expression close_parenthesis
         '''
     
-    def p_logic_operand(self, p):
+    def p_logic_operator(self, p):
         '''
-        logic_operand : and ACTION_ADD_OPERAND
-        logic_operand : or ACTION_ADD_OPERAND
-        logic_operand : is_equal ACTION_ADD_OPERAND
-        logic_operand : is_not_equal ACTION_ADD_OPERAND
-        logic_operand : greater_than ACTION_ADD_OPERAND
-        logic_operand : greater_or_equal_than ACTION_ADD_OPERAND
-        logic_operand : less_than ACTION_ADD_OPERAND
-        logic_operand : less_or_equal_than ACTION_ADD_OPERAND
+        logic_operator : and ACTION_ADD_OPERATOR
+        logic_operator : or ACTION_ADD_OPERATOR
+        logic_operator : is_equal ACTION_ADD_OPERATOR
+        logic_operator : is_not_equal ACTION_ADD_OPERATOR
+        logic_operator : greater_than ACTION_ADD_OPERATOR
+        logic_operator : greater_or_equal_than ACTION_ADD_OPERATOR
+        logic_operator : less_than ACTION_ADD_OPERATOR
+        logic_operator : less_or_equal_than ACTION_ADD_OPERATOR
         '''
 
     def p_arithmetic_expression(self, p):
         '''
         arithmetic_expression : value
-        arithmetic_expression : value arithmetic_operand value
-        arithmetic_expression : arithmetic_expression arithmetic_operand arithmetic_expression
+        arithmetic_expression : value arithmetic_operator value ACTION_ADD_QUADRUPLET
+        arithmetic_expression : arithmetic_expression arithmetic_operator arithmetic_expression ACTION_ADD_QUADRUPLET
         '''
     
-    def p_arithmetic_operand(self, p):
+    def p_arithmetic_operator(self, p):
         '''
-        arithmetic_operand : sum ACTION_ADD_OPERAND
-        arithmetic_operand : substraction ACTION_ADD_OPERAND
-        arithmetic_operand : multiplication ACTION_ADD_OPERAND
-        arithmetic_operand : division ACTION_ADD_OPERAND
-        arithmetic_operand : exponent ACTION_ADD_OPERAND
+        arithmetic_operator : sum ACTION_ADD_OPERATOR
+        arithmetic_operator : substraction ACTION_ADD_OPERATOR
+        arithmetic_operator : multiplication ACTION_ADD_OPERATOR
+        arithmetic_operator : division ACTION_ADD_OPERATOR
+        arithmetic_operator : exponent ACTION_ADD_OPERATOR
         '''
 
 
@@ -152,24 +161,23 @@ class Parser:
         '''
         value : real_value
         value : functions
-        value : open_parenthesis arithmetic_expression close_parenthesis
         value : ids_access
         '''
 
     def p_ids_access(self, p):
         '''
-        ids_access : id
-        ids_access : id open_brackets arithmetic_expression close_brackets 
-        ids_access : id open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets 
-        ids_access : id open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets
+        ids_access : id ACTION_ADD_VAR_VALUE
+        ids_access : id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND
+        ids_access : id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
+        ids_access : id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
         ids_access : open_parenthesis ids_access close_parenthesis
         '''
 
     def p_real_value(self, p):
         '''
-        real_value : word_value
-        real_value : float_value
-        real_value : id
+        real_value : word_value ACTION_ADD_WORD_VALUE
+        real_value : float_value ACTION_ADD_FLOAT_VALUE
+        real_value : id ACTION_ADD_VAR_VALUE
         '''
 
     def p_calls(self, p):
@@ -194,9 +202,16 @@ class Parser:
 
     def p_assign(self, p):
         '''
-        assign : let id equals logic_expression
-        assign : let id equals arithmetic_expression
+        assign : let ids_access equals logic_expression
+        assign : let ids_access equals arithmetic_expression
         '''
+        value = self.__operands_stack.pop()
+        address = self.__operands_stack.pop()
+
+        self.__quadruplets.append('= ' + str(value) + ' ' + address)
+        self.__quadruplets_index += 1
+        print('The value: ', value, ' Will go to: ', address)
+
 
     def p_parameters(self, p):
         '''
@@ -245,16 +260,105 @@ class Parser:
     
     def p_multiple_read(self, p):
         '''
-        multiple_read : ids_access
-        multiple_read : multiple_read comma multiple_read
+        multiple_read : ids_access 
+        multiple_read : multiple_read comma ids_access
         '''
 
-    def p_action_add_operand(self, p):
+    def p_action_add_for_value(self, p):
         '''
-        ACTION_ADD_OPERAND :
+        ACTION_ADD_FOR_VALUE :
         '''
-        print("Added operand: ", p[-1])
+        if not (p[-1] in self.__symbols_table):
+            # If it's a new value
+            self.add_symbol(p[-1], 'word')
+        self.add_operand_with_type(p[-1], 'word')
+
+
+    def p_action_add_var_value(self, p):
+        '''
+        ACTION_ADD_VAR_VALUE :
+        '''
+        self.__operands_stack.append(self.__symbols_table[p[-1]].address)
+        self.__types_stack.append(self.__symbols_table[p[-1]].type)
+        print("I added the operand: ", self.__symbols_table[p[-1]].address, " With type: ", self.__symbols_table[p[-1]].type)
+
+    def p_action_add_word_value(self, p):
+        '''
+        ACTION_ADD_WORD_VALUE :
+        '''
+        self.add_operand_with_type(p[-1], 'word')
+
+    def p_action_add_float_value(self, p):
+        '''
+        ACTION_ADD_FLOAT_VALUE :
+        '''
+        self.add_operand_with_type(p[-1], 'float')
+
+    def p_action_add_bool_value(self, p):
+        '''
+        ACTION_ADD_BOOL_VALUE :
+        '''
+        self.add_operand_with_type(p[-1], 'bool')
+
+    def p_action_add_operator(self, p):
+        '''
+        ACTION_ADD_OPERATOR :
+        '''
+        #print("Added operator: ", p[-1])
         self.__operators_stack.append(p[-1])
+
+    def p_action_add_quadruplet(self, p):
+        '''
+        ACTION_ADD_QUADRUPLET :
+        '''
+        current_operator = self.__operators_stack.pop()
+        current_right_operand = self.__operands_stack.pop()
+        current_left_operand = self.__operands_stack.pop()
+
+        if(self.__current_available_used > self.__max_available_in_memory):
+            raise Exception('\nNot enough memory\n')
+        result_stored_in = '#' + str(self.__current_available_used)
+        self.__current_available_used += 1
+        
+        self.__quadruplets.append(str(current_operator) + ' ' + str(current_left_operand) + ' ' + str(current_right_operand) + ' ' + str(result_stored_in))
+        self.__quadruplets_index += 1
+
+        self.__operands_stack.append(result_stored_in)
+
+        print('I added the quadruplet: ', self.__quadruplets[-1], ' and stored it in: ', self.__operands_stack[-1])
+
+    def p_action_add_one_dim_operand(self, p):
+        '''
+        ACTION_ADD_ONE_DIM_OPERAND :
+        '''
+        first_dim = self.__operands_stack.pop()
+        matrix = self.__operands_stack.pop()
+
+        self.__operands_stack.append('* ' + str(matrix) + ' ' + str(first_dim))
+        print('I added the one dim operand: ', self.__operands_stack[-1])
+
+    def p_action_add_two_dim_operand(self, p):
+        '''
+        ACTION_ADD_TWO_DIM_OPERAND :
+        '''
+        second_dim = self.__operands_stack.pop()
+        first_dim = self.__operands_stack.pop()
+        matrix = self.__operands_stack.pop()
+
+        self.__operands_stack.append('** ' + str(matrix) + ' ' + str(first_dim) + ' ' + str(second_dim))
+        print('I added the two dim operand: ', self.__operands_stack[-1])
+
+    def p_action_add_three_dim_operand(self, p):
+        '''
+        ACTION_ADD_THREE_DIM_OPERAND :
+        '''
+        third_dim = self.__operands_stack.pop()
+        second_dim = self.__operands_stack.pop()
+        first_dim = self.__operands_stack.pop()
+        matrix = self.__operands_stack.pop()
+
+        self.__operands_stack.append('*** ' + str(matrix) + ' ' + str(first_dim) + ' ' + str(second_dim) + ' ' + str(third_dim))
+        print('I added the three dim operand: ', self.__operands_stack[-1])
 
     def p_error(self, p):
         raise Exception('\nIncorrecto\n')

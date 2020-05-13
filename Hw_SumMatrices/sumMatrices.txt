@@ -2,8 +2,11 @@ dim col_a as word
 dim row_a as word
 dim col_b as word
 dim row_b as word
+dim max_row_and_col as word
 
-dim matrices0 as word[2][10][10]
+let max_row_and_col = 10
+
+dim matrices as word[2][10][10]
 
 gosub getVerifiedDimensions
 gosub getData
@@ -47,14 +50,20 @@ sub procedure sumAndPrintData
 return
 
 sub function dimensionsAreSumable(dim col_a_ as word, dim row_a_ as word, dim col_b_ as word, dim row_b_ as word) as bool
-    let result = col_a == col_b and row_a == row_b
-    let result = result and col_a <= 10 and row_a <= 10
+    let result = (col_a == col_b) and (row_a == row_b)
+    let result = result and (col_a <= max_row_and_col) and (row_a <= max_row_and_col)
     if (not result) then
         dunkelPrint "Incorrect Dimensions, try again"
     end if
 end sub
 
 sub procedure tryWhileAndIfs
+    dim hola as bool
+    dim adios as bool
+
+    let hola = true
+    let hola = false
+    
     while (true)
         if(not hola) then
             dunkelPrint "not hola"
