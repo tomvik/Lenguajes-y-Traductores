@@ -111,19 +111,24 @@ class Parser:
         variable_type : bool
         '''
         p[0] = p[1] # To have the variable_type back in p_variable()
+
+    def p_base_if(self, p):
+        '''
+        base_if : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+        '''
     
     def p_conditions(self, p):
         '''
-        conditions : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
-        conditions : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-        conditions : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
-        conditions : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+        conditions : base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+        conditions : base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+        conditions : base_if else_ifs end if ACTION_FILL_JUMP_END_IF
+        conditions : base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
         '''
     
     def p_else_ifs(self, p):
         '''
         else_ifs : elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-        else_ifs : else_ifs else_ifs
+        else_ifs : else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
         '''
 
     def p_loops(self, p):
