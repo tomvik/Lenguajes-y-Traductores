@@ -32,11 +32,22 @@ class Parser:
             self.__symbols_table[name] = SymbolsElement(name, data_type, '*' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
         else:
             self.__symbols_table[name] = SymbolsElement(name, data_type, '#' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
+        
+        for i in range(len(self.__operands_stack)):
+            if self.__operands_stack[i] == name:
+                self.__operands_stack[i] = '#' + str(self.__symbols_table_index)
+
+        for i in range(len(self.__quadruplets)):
+            self.__quadruplets[i] = self.__quadruplets[i].replace(name, '#' + str(self.__symbols_table_index))  
+        
         self.__symbols_table_index += 1
 
     def print_symbol_table(self):
         for key in self.__symbols_table:
             self.__symbols_table[key].print_element()
+
+        for current_quadruplet in self.__quadruplets:
+            print(current_quadruplet)
 
     def add_operand_with_type(self, current_operand, current_type):
         self.__operands_stack.append(current_operand)
@@ -121,9 +132,14 @@ class Parser:
     
     def p_logic_expression(self, p):
         '''
-        logic_expression : arithmetic_expression
+        logic_expression : value
+        logic_expression : not value
+        logic_expression : logic_expression arithmetic_operator value
+        logic_expression : logic_expression arithmetic_operator not value
         logic_expression : bool_value ACTION_ADD_BOOL_VALUE
-        logic_expression : not ACTION_ADD_OPERATOR logic_expression
+        logic_expression : not bool_value ACTION_ADD_BOOL_VALUE
+
+        logic_expression : not ACTION_ADD_OPERATOR logic_expression 
         logic_expression : logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET
         logic_expression : open_parenthesis logic_expression close_parenthesis
         '''
@@ -143,8 +159,7 @@ class Parser:
     def p_arithmetic_expression(self, p):
         '''
         arithmetic_expression : value
-        arithmetic_expression : value arithmetic_operator value ACTION_ADD_QUADRUPLET
-        arithmetic_expression : arithmetic_expression arithmetic_operator arithmetic_expression ACTION_ADD_QUADRUPLET
+        arithmetic_expression : arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET
         '''
     
     def p_arithmetic_operator(self, p):
@@ -197,7 +212,15 @@ class Parser:
         '''
 
         if len(p) >= 3:
-            self.add_symbol(p[3], p[2], index=self.__functions_table_index)
+            close_parenthesis = len(p)
+            for i in range(len(p)):
+                if p[i] == ')':
+                    close_parenthesis = i
+                    break
+            if(close_parenthesis < len(p) and p[close_parenthesis+1] == 'as'):
+                self.add_symbol(p[3], p[2] + ' ' + p[close_parenthesis+2], index=self.__functions_table_index)
+            else:
+                self.add_symbol(p[3], p[2], index=self.__functions_table_index)
             self.__functions_table_index += 1
 
     def p_assign(self, p):
@@ -221,14 +244,14 @@ class Parser:
     
     def p_functions(self, p):
         '''
-        functions : id open_parenthesis close_parenthesis
-        functions : id open_parenthesis arguments close_parenthesis
+        functions : id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
+        functions : id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
         '''
 
     def p_arguments(self, p):
         '''
-        arguments : ByVal value
-        arguments : ByRef id
+        arguments : ByVal value ACTION_ADD_FUNCTION_OPERAND
+        arguments : ByRef id ACTION_ADD_FUNCTION_OPERAND
         arguments : arguments comma arguments
         '''
 
@@ -306,6 +329,41 @@ class Parser:
         '''
         #print("Added operator: ", p[-1])
         self.__operators_stack.append(p[-1])
+
+    def p_action_add_function_operand(self, p):
+        '''
+        ACTION_ADD_FUNCTION_OPERAND :
+        '''
+        real_operand = self.__operands_stack.pop()
+        self.__operands_stack.append(p[-2] + ' ' + real_operand)
+        print('I Added the function operand: ', self.__operands_stack[-1])
+        
+    def p_action_add_function(self, p):
+        '''
+        ACTION_ADD_FUNCTION :
+        '''
+        self.__quadruplets.append('function_call ' + p[-1])
+        self.__quadruplets_index += 1
+        print('I Added the function call: ', self.__quadruplets[-1])
+        
+    def p_action_add_parameters(self, p):
+        '''
+        ACTION_ADD_PARAMETERS :
+        '''
+        current_quadruplet = self.__quadruplets.pop()
+        operands_to_add = ''
+        while(len(self.__operands_stack) > 0 and ('ByVal' in self.__operands_stack[-1] or 'ByRef' in self.__operands_stack[-1]) ):
+            current_operand = self.__operands_stack.pop()
+            operands_to_add += ' ' + current_operand
+        self.__quadruplets.append(current_quadruplet + operands_to_add)
+
+        
+    def p_action_add_not_quadruplet(self, p):
+        '''
+        ACTION_ADD_NOT_QUADRUPLET :
+        '''
+        #current_operator = self.__operators_stack.pop()
+        #current_operand = self.__operands_stack.pop()
 
     def p_action_add_quadruplet(self, p):
         '''
