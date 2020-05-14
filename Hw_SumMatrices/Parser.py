@@ -21,6 +21,8 @@ class Parser:
         self.__types_stack = []
         self.__jumps_stack = []
         self.__ifs_stack = []
+        self.__for_increment_stack = []
+        self.__for_id_stack = []
         self.__quadruplets = []
         self.add_symbol('result', 'bool')
 
@@ -54,7 +56,11 @@ class Parser:
         self.__types_stack.append(current_type)
         print("I added the operand: ", current_operand, " With type: ", current_type)
 
-    def fill_jump(self, empty_jump_quadruplet_index, goto_index):
+    def fill_jump(self, empty_jump_quadruplet_index, goto_index, goto_str):
+        # This loop is done because when the expression needs to be recalculated many times
+        # as in a loop, the jump must be from it, and not from the gotoF.
+        while(not goto_str in self.__quadruplets[empty_jump_quadruplet_index]):
+            empty_jump_quadruplet_index += 1
         self.__quadruplets[empty_jump_quadruplet_index] += ' ' + str(goto_index)
 
     def p_program(self, p):
@@ -135,7 +141,7 @@ class Parser:
         '''
         loops : while open_parenthesis logic_expression close_parenthesis inside_logic wend
         loops : do inside_logic loop until open_parenthesis logic_expression close_parenthesis
-        loops : for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
+        loops : for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
         '''
     
     def p_logic_expression(self, p):
@@ -234,16 +240,9 @@ class Parser:
 
     def p_assign(self, p):
         '''
-        assign : let ids_access equals logic_expression
-        assign : let ids_access equals arithmetic_expression
+        assign : let ids_access equals logic_expression ACTION_ASSIGN_VALUE
+        assign : let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
         '''
-        value = self.__operands_stack.pop()
-        address = self.__operands_stack.pop()
-
-        self.__quadruplets.append('= ' + str(value) + ' ' + address)
-        self.__quadruplets_index += 1
-        print('The value: ', value, ' Will go to: ', address)
-
 
     def p_parameters(self, p):
         '''
@@ -303,7 +302,10 @@ class Parser:
         if not (p[-1] in self.__symbols_table):
             # If it's a new value
             self.add_symbol(p[-1], 'word')
-        self.add_operand_with_type(p[-1], 'word')
+        self.__operands_stack.append(self.__symbols_table[p[-1]].address)
+        self.__types_stack.append(self.__symbols_table[p[-1]].type)
+        self.__for_id_stack.append(self.__symbols_table[p[-1]].address)
+        print("I added the FOR operand: ", self.__symbols_table[p[-1]].id, self.__symbols_table[p[-1]].address, " With type: ", self.__symbols_table[p[-1]].type)
 
 
     def p_action_add_var_value(self, p):
@@ -312,7 +314,7 @@ class Parser:
         '''
         self.__operands_stack.append(self.__symbols_table[p[-1]].address)
         self.__types_stack.append(self.__symbols_table[p[-1]].type)
-        print("I added the operand: ", self.__symbols_table[p[-1]].address, " With type: ", self.__symbols_table[p[-1]].type)
+        print("I added the operand: ", self.__symbols_table[p[-1]].id, self.__symbols_table[p[-1]].address, " With type: ", self.__symbols_table[p[-1]].type)
 
     def p_action_add_word_value(self, p):
         '''
@@ -354,6 +356,17 @@ class Parser:
         self.__quadruplets.append('function_call ' + p[-1])
         self.__quadruplets_index += 1
         print('I Added the function call: ', self.__quadruplets[-1])
+
+    def p_action_assign_value(self, p):
+        '''
+        ACTION_ASSIGN_VALUE : 
+        '''
+        value = self.__operands_stack.pop()
+        address = self.__operands_stack.pop()
+
+        self.__quadruplets.append('= ' + str(value) + ' ' + address)
+        self.__quadruplets_index += 1
+        print('The value: ', value, ' Will go to: ', address)
         
     def p_action_add_parameters(self, p):
         '''
@@ -441,7 +454,9 @@ class Parser:
         '''
         ACTION_ADD_QUADRUPLET_EMPTY_JUMP :
         '''
-        logical_expression_result = self.__operands_stack.pop()
+        logical_expression_result = str(self.__operands_stack.pop())
+        if(logical_expression_result[0] != '#' and logical_expression_result[0] != '*'):
+            logical_expression_result = 'L ' + logical_expression_result
         self.__quadruplets.append('gotoF ' + logical_expression_result)
         self.__jumps_stack.append(self.__quadruplets_index)
 
@@ -472,7 +487,7 @@ class Parser:
         '''
         jump_index = self.__jumps_stack.pop() - 1
         print('Before filling the jump: ', self.__quadruplets[jump_index])
-        self.fill_jump(jump_index, self.__quadruplets_index)
+        self.fill_jump(jump_index, self.__quadruplets_index, 'gotoF')
         print('After filling the jump: ', self.__quadruplets[jump_index])
 
     def p_action_fill_jump_end_if(self, p):
@@ -482,9 +497,57 @@ class Parser:
         print('FILL ALL THE JUMPS')
         for goto_index in self.__ifs_stack[-1]:
             print('Before filling the jump: ', self.__quadruplets[goto_index - 1])
-            self.fill_jump(goto_index - 1, self.__quadruplets_index)
+            self.fill_jump(goto_index - 1, self.__quadruplets_index, 'goto')
             print('Before filling the jump: ', self.__quadruplets[goto_index - 1])
         self.__ifs_stack.pop()
+
+    def p_action_for_jump_back(self, p):
+        '''
+        ACTION_FOR_JUMP_BACK :
+        '''
+        self.__jumps_stack.append(self.__quadruplets_index + 1)
+
+        
+    def p_action_add_for_quadruplet_empty_jump(self, p):
+        '''
+        ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP :
+        '''
+        limit = self.__operands_stack.pop()
+        address = self.__for_id_stack.pop()
+
+        if(self.__current_available_used > self.__max_available_in_memory):
+            raise Exception('\nNot enough memory\n')
+        result_stored_in = '#' + str(self.__current_available_used)
+        self.__current_available_used += 1
+
+        self.__quadruplets.append('< ' + address + ' ' + str(limit) + ' ' + result_stored_in)
+        self.__quadruplets_index += 1
+        print('I added a FOR CONDITION: ', self.__quadruplets[-1])
+
+        self.__quadruplets.append('gotoF ' + result_stored_in)
+        self.__quadruplets_index += 1
+
+        print('I added a FOR JUMP CONDITION: ', self.__quadruplets[-1])
+
+    def p_action_for_increment(self, p):
+        '''
+        ACTION_FOR_INCREMENT :
+        '''
+        increment = self.__operands_stack.pop()
+        address = (self.__quadruplets[-1].split())[-1]
+        self.__for_increment_stack.append('+ ' + address + ' ' + str(increment) + ' ' + address)
+        print('I added to the for stack: ', self.__for_increment_stack[-1])
+
+    def p_action_for_goto(self, p):
+        '''
+        ACTION_FOR_GOTO :
+        '''
+        empty_jump_quadruplet_index = self.__jumps_stack.pop() - 1
+        self.__quadruplets.append(self.__for_increment_stack.pop())
+        self.__quadruplets_index += 1
+        self.__quadruplets.append('goto ' + str(empty_jump_quadruplet_index))
+        self.__quadruplets_index += 1
+        self.fill_jump(empty_jump_quadruplet_index, self.__quadruplets_index, 'gotoF')
 
     def p_error(self, p):
         raise Exception('\nIncorrecto\n')

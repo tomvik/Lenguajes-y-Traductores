@@ -33,6 +33,7 @@ sub procedure getData
     for matrix = 0 to 1 step 1
         for row = 0 to row_a - 1 step 1
             for col = 0 to col_a - 1 step 1
+                let matrices[matrix][row][col] = row + col
                 dunkelRead matrices[matrix][row][col]
             next col
         next row
@@ -74,6 +75,8 @@ sub procedure tryWhileAndIfs
             dunkelPrint "hola and adios"
         elsif(not hola or not adios) then
             dunkelPrint "hola or not adios"
+        elsif(true) then
+            dunkelPrint "always"
         else
             dunkelPrint "else"
         end if
