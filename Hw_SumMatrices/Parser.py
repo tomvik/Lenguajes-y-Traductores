@@ -132,14 +132,7 @@ class Parser:
     
     def p_logic_expression(self, p):
         '''
-        logic_expression : value
-        logic_expression : not value
-        logic_expression : logic_expression arithmetic_operator value
-        logic_expression : logic_expression arithmetic_operator not value
-        logic_expression : bool_value ACTION_ADD_BOOL_VALUE
-        logic_expression : not bool_value ACTION_ADD_BOOL_VALUE
-
-        logic_expression : not ACTION_ADD_OPERATOR logic_expression 
+        logic_expression : arithmetic_expression        
         logic_expression : logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET
         logic_expression : open_parenthesis logic_expression close_parenthesis
         '''
@@ -160,6 +153,7 @@ class Parser:
         '''
         arithmetic_expression : value
         arithmetic_expression : arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET
+        arithmetic_expression : open_parenthesis arithmetic_expression close_parenthesis
         '''
     
     def p_arithmetic_operator(self, p):
@@ -171,12 +165,18 @@ class Parser:
         arithmetic_operator : exponent ACTION_ADD_OPERATOR
         '''
 
+    def p_possible_values(self, p):
+        '''
+        possible_values : real_value
+        possible_values : functions
+        possible_values : ids_access
+        '''
 
     def p_value(self, p):
         '''
-        value : real_value
-        value : functions
-        value : ids_access
+        value : possible_values
+        value : not possible_values ACTION_ADD_NOT_OPERAND
+        value : open_parenthesis value close_parenthesis
         '''
 
     def p_ids_access(self, p):
@@ -192,6 +192,7 @@ class Parser:
         '''
         real_value : word_value ACTION_ADD_WORD_VALUE
         real_value : float_value ACTION_ADD_FLOAT_VALUE
+        real_value : bool_value ACTION_ADD_BOOL_VALUE
         real_value : id ACTION_ADD_VAR_VALUE
         '''
 
@@ -327,7 +328,6 @@ class Parser:
         '''
         ACTION_ADD_OPERATOR :
         '''
-        #print("Added operator: ", p[-1])
         self.__operators_stack.append(p[-1])
 
     def p_action_add_function_operand(self, p):
@@ -342,6 +342,7 @@ class Parser:
         '''
         ACTION_ADD_FUNCTION :
         '''
+        self.__operands_stack.append(p[-1])
         self.__quadruplets.append('function_call ' + p[-1])
         self.__quadruplets_index += 1
         print('I Added the function call: ', self.__quadruplets[-1])
@@ -356,14 +357,23 @@ class Parser:
             current_operand = self.__operands_stack.pop()
             operands_to_add += ' ' + current_operand
         self.__quadruplets.append(current_quadruplet + operands_to_add)
+        print('I Added the function call with paremeters: ', self.__quadruplets[-1])
 
         
-    def p_action_add_not_quadruplet(self, p):
+    def p_action_add_not_operand(self, p):
         '''
-        ACTION_ADD_NOT_QUADRUPLET :
+        ACTION_ADD_NOT_OPERAND :
         '''
-        #current_operator = self.__operators_stack.pop()
-        #current_operand = self.__operands_stack.pop()
+        current_operand = self.__operands_stack.pop()
+
+        if(self.__current_available_used > self.__max_available_in_memory):
+            raise Exception('\nNot enough memory\n')
+        result_stored_in = '#' + str(self.__current_available_used)
+        self.__current_available_used += 1
+
+        self.__quadruplets.append('not ' + str(current_operand) + ' ' + str(result_stored_in))
+        self.__quadruplets_index += 1
+        self.__operands_stack.append(result_stored_in)
 
     def p_action_add_quadruplet(self, p):
         '''
