@@ -46,13 +46,16 @@ class Parser:
         for key in self.__symbols_table:
             self.__symbols_table[key].print_element()
 
-        for current_quadruplet in self.__quadruplets:
-            print(current_quadruplet)
+        for i in range(len(self.__quadruplets)):
+            print(i+1, ':', self.__quadruplets[i])
 
     def add_operand_with_type(self, current_operand, current_type):
         self.__operands_stack.append(current_operand)
         self.__types_stack.append(current_type)
         print("I added the operand: ", current_operand, " With type: ", current_type)
+
+    def fill_jump(self, empty_jump_quadruplet_index, goto_index):
+        self.__quadruplets[empty_jump_quadruplet_index] += ' ' + str(goto_index)
 
     def p_program(self, p):
         '''
@@ -111,15 +114,15 @@ class Parser:
     
     def p_conditions(self, p):
         '''
-        conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-        conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-        conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-        conditions : if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+        conditions : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+        conditions : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+        conditions : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+        conditions : if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
         '''
     
     def p_else_ifs(self, p):
         '''
-        else_ifs : elsif open_parenthesis logic_expression close_parenthesis then inside_logic
+        else_ifs : elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
         else_ifs : else_ifs else_ifs
         '''
 
@@ -374,6 +377,7 @@ class Parser:
         self.__quadruplets.append('not ' + str(current_operand) + ' ' + str(result_stored_in))
         self.__quadruplets_index += 1
         self.__operands_stack.append(result_stored_in)
+        print('I added the not operand and quadruplet as: ', self.__quadruplets[-1])
 
     def p_action_add_quadruplet(self, p):
         '''
@@ -427,6 +431,55 @@ class Parser:
 
         self.__operands_stack.append('*** ' + str(matrix) + ' ' + str(first_dim) + ' ' + str(second_dim) + ' ' + str(third_dim))
         print('I added the three dim operand: ', self.__operands_stack[-1])
+
+    def p_action_add_quadruplet_empty_jump(self, p):
+        '''
+        ACTION_ADD_QUADRUPLET_EMPTY_JUMP :
+        '''
+        logical_expression_result = self.__operands_stack.pop()
+        self.__quadruplets.append('gotoF ' + logical_expression_result)
+        self.__jumps_stack.append(self.__quadruplets_index)
+
+        self.__quadruplets_index += 1
+
+        print('I added a jump and qudruplet with condition: ', logical_expression_result)
+
+    def p_action_new_if(self, p):
+        '''
+        ACTION_NEW_IF :
+        '''
+        self.__ifs_stack.append([])
+        print('NEW IF ADDED')
+
+    def p_action_quadruplet_empty_jump_end_if(self, p):
+        '''
+        ACTION_QUADRUPLET_EMPTY_JUMP_END_IF  :
+        '''
+        self.__ifs_stack[-1].append(self.__quadruplets_index)
+
+        self.__quadruplets.append('goto ')
+        self.__quadruplets_index += 1
+        print('A jump finished, and I added a goto to quadruplet and this to if stack: ', self.__ifs_stack[-1])
+
+    def p_action_fill_jump(self, p):
+        '''
+        ACTION_FILL_JUMP :
+        '''
+        jump_index = self.__jumps_stack.pop() - 1
+        print('Before filling the jump: ', self.__quadruplets[jump_index])
+        self.fill_jump(jump_index, self.__quadruplets_index)
+        print('After filling the jump: ', self.__quadruplets[jump_index])
+
+    def p_action_fill_jump_end_if(self, p):
+        '''
+        ACTION_FILL_JUMP_END_IF :
+        '''
+        print('FILL ALL THE JUMPS')
+        for goto_index in self.__ifs_stack[-1]:
+            print('Before filling the jump: ', self.__quadruplets[goto_index - 1])
+            self.fill_jump(goto_index - 1, self.__quadruplets_index)
+            print('Before filling the jump: ', self.__quadruplets[goto_index - 1])
+        self.__ifs_stack.pop()
 
     def p_error(self, p):
         raise Exception('\nIncorrecto\n')

@@ -31,11 +31,11 @@ Rule 13    variable -> dim id as variable_type open_brackets word_value close_br
 Rule 14    variable_type -> word
 Rule 15    variable_type -> float
 Rule 16    variable_type -> bool
-Rule 17    conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-Rule 18    conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-Rule 19    conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-Rule 20    conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
-Rule 21    else_ifs -> elsif open_parenthesis logic_expression close_parenthesis then inside_logic
+Rule 17    conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+Rule 18    conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+Rule 19    conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+Rule 20    conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+Rule 21    else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 Rule 22    else_ifs -> else_ifs else_ifs
 Rule 23    loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend
 Rule 24    loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis
@@ -117,6 +117,11 @@ Rule 99    ACTION_ADD_QUADRUPLET -> <empty>
 Rule 100   ACTION_ADD_ONE_DIM_OPERAND -> <empty>
 Rule 101   ACTION_ADD_TWO_DIM_OPERAND -> <empty>
 Rule 102   ACTION_ADD_THREE_DIM_OPERAND -> <empty>
+Rule 103   ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> <empty>
+Rule 104   ACTION_NEW_IF -> <empty>
+Rule 105   ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> <empty>
+Rule 106   ACTION_FILL_JUMP -> <empty>
+Rule 107   ACTION_FILL_JUMP_END_IF -> <empty>
 
 Terminals, with rules where they appear
 
@@ -198,10 +203,15 @@ ACTION_ADD_ONE_DIM_OPERAND : 52
 ACTION_ADD_OPERATOR  : 29 30 31 32 33 34 35 36 40 41 42 43 44
 ACTION_ADD_PARAMETERS : 73
 ACTION_ADD_QUADRUPLET : 27 38
+ACTION_ADD_QUADRUPLET_EMPTY_JUMP : 17 18 19 20 21
 ACTION_ADD_THREE_DIM_OPERAND : 54
 ACTION_ADD_TWO_DIM_OPERAND : 53
 ACTION_ADD_VAR_VALUE : 51 52 53 54 59
 ACTION_ADD_WORD_VALUE : 56
+ACTION_FILL_JUMP     : 17 18 20 21
+ACTION_FILL_JUMP_END_IF : 17 18 19 20
+ACTION_NEW_IF        : 17 18 19 20
+ACTION_QUADRUPLET_EMPTY_JUMP_END_IF : 17 18 19 20 21
 arguments            : 73 76 76
 arithmetic_expression : 25 25 25 26 38 39 52 53 53 54 54 54 69 83
 arithmetic_operator  : 38
@@ -247,10 +257,10 @@ state 0
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -321,10 +331,10 @@ state 3
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -386,10 +396,10 @@ state 4
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -451,10 +461,10 @@ state 5
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -516,10 +526,10 @@ state 6
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -581,10 +591,10 @@ state 7
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -646,10 +656,10 @@ state 8
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -719,10 +729,10 @@ state 10
 
 state 11
 
-    (17) conditions -> if . open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> if . open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> if . open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> if . open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> if . open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if . open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if . open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if . open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
 
     open_parenthesis shift and go to state 32
 
@@ -748,10 +758,10 @@ state 13
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -1098,10 +1108,10 @@ state 31
 
 state 32
 
-    (17) conditions -> if open_parenthesis . logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> if open_parenthesis . logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> if open_parenthesis . logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> if open_parenthesis . logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> if open_parenthesis . logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if open_parenthesis . logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if open_parenthesis . logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis . logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (26) logic_expression -> . arithmetic_expression
     (27) logic_expression -> . logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET
     (28) logic_expression -> . open_parenthesis logic_expression close_parenthesis
@@ -1993,10 +2003,10 @@ state 61
 
 state 62
 
-    (17) conditions -> if open_parenthesis logic_expression . close_parenthesis then inside_logic end if
-    (18) conditions -> if open_parenthesis logic_expression . close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> if open_parenthesis logic_expression . close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> if open_parenthesis logic_expression . close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> if open_parenthesis logic_expression . close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if open_parenthesis logic_expression . close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if open_parenthesis logic_expression . close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis logic_expression . close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (27) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
     (29) logic_operator -> . and ACTION_ADD_OPERATOR
     (30) logic_operator -> . or ACTION_ADD_OPERATOR
@@ -3088,10 +3098,10 @@ state 101
 
 state 102
 
-    (17) conditions -> if open_parenthesis logic_expression close_parenthesis . then inside_logic end if
-    (18) conditions -> if open_parenthesis logic_expression close_parenthesis . then inside_logic else inside_logic end if
-    (19) conditions -> if open_parenthesis logic_expression close_parenthesis . then inside_logic else_ifs end if
-    (20) conditions -> if open_parenthesis logic_expression close_parenthesis . then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis . then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis . then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis . then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis . then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
 
     then            shift and go to state 143
 
@@ -3264,10 +3274,10 @@ state 112
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -4021,10 +4031,10 @@ state 135
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -4159,67 +4169,28 @@ state 142
 
 state 143
 
-    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then . inside_logic end if
-    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then . inside_logic else inside_logic end if
-    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then . inside_logic else_ifs end if
-    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then . inside_logic else_ifs else inside_logic end if
-    (3) inside_logic -> . variable inside_logic
-    (4) inside_logic -> . conditions inside_logic
-    (5) inside_logic -> . loops inside_logic
-    (6) inside_logic -> . calls inside_logic
-    (7) inside_logic -> . read_or_write inside_logic
-    (8) inside_logic -> . assign inside_logic
-    (9) inside_logic -> .
-    (10) variable -> . dim id as variable_type
-    (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
-    (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
-    (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
-    (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
-    (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
-    (60) calls -> . gosub id
-    (61) calls -> . functions
-    (77) read_or_write -> . print
-    (78) read_or_write -> . read
-    (79) read_or_write -> . dunkelCls
-    (68) assign -> . let ids_access equals logic_expression
-    (69) assign -> . let ids_access equals arithmetic_expression
-    (72) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
-    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
-    (80) print -> . dunkelPrint multiple_print
-    (81) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis
-    (85) read -> . dunkelRead multiple_read
-    (86) read -> . dunkelRead string comma multiple_read
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then . ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then . ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then . ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then . ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (103) ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .
 
-    end             reduce using rule 9 (inside_logic -> .)
-    else            reduce using rule 9 (inside_logic -> .)
-    elsif           reduce using rule 9 (inside_logic -> .)
-    dim             shift and go to state 9
-    if              shift and go to state 11
-    while           shift and go to state 12
-    do              shift and go to state 13
-    for             shift and go to state 14
-    gosub           shift and go to state 15
-    dunkelCls       shift and go to state 19
-    let             shift and go to state 20
-    id              shift and go to state 10
-    dunkelPrint     shift and go to state 21
-    dunkelRead      shift and go to state 22
+    dim             reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    if              reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    while           reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    do              reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    for             reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    gosub           reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    dunkelCls       reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    let             reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    id              reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    dunkelPrint     reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    dunkelRead      reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    else            reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    elsif           reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+    end             reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
 
-    inside_logic                   shift and go to state 166
-    variable                       shift and go to state 3
-    conditions                     shift and go to state 4
-    loops                          shift and go to state 5
-    calls                          shift and go to state 6
-    read_or_write                  shift and go to state 7
-    assign                         shift and go to state 8
-    functions                      shift and go to state 16
-    print                          shift and go to state 17
-    read                           shift and go to state 18
+    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 166
 
 state 144
 
@@ -4624,18 +4595,67 @@ state 165
 
 state 166
 
-    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic . end if
-    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic . else inside_logic end if
-    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic . else_ifs end if
-    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic . else_ifs else inside_logic end if
-    (21) else_ifs -> . elsif open_parenthesis logic_expression close_parenthesis then inside_logic
-    (22) else_ifs -> . else_ifs else_ifs
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP . inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP . inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP . inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP . inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (3) inside_logic -> . variable inside_logic
+    (4) inside_logic -> . conditions inside_logic
+    (5) inside_logic -> . loops inside_logic
+    (6) inside_logic -> . calls inside_logic
+    (7) inside_logic -> . read_or_write inside_logic
+    (8) inside_logic -> . assign inside_logic
+    (9) inside_logic -> .
+    (10) variable -> . dim id as variable_type
+    (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
+    (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
+    (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
+    (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
+    (60) calls -> . gosub id
+    (61) calls -> . functions
+    (77) read_or_write -> . print
+    (78) read_or_write -> . read
+    (79) read_or_write -> . dunkelCls
+    (68) assign -> . let ids_access equals logic_expression
+    (69) assign -> . let ids_access equals arithmetic_expression
+    (72) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
+    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
+    (80) print -> . dunkelPrint multiple_print
+    (81) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis
+    (85) read -> . dunkelRead multiple_read
+    (86) read -> . dunkelRead string comma multiple_read
 
-    end             shift and go to state 177
-    else            shift and go to state 178
-    elsif           shift and go to state 180
+    else            reduce using rule 9 (inside_logic -> .)
+    elsif           reduce using rule 9 (inside_logic -> .)
+    end             reduce using rule 9 (inside_logic -> .)
+    dim             shift and go to state 9
+    if              shift and go to state 11
+    while           shift and go to state 12
+    do              shift and go to state 13
+    for             shift and go to state 14
+    gosub           shift and go to state 15
+    dunkelCls       shift and go to state 19
+    let             shift and go to state 20
+    id              shift and go to state 10
+    dunkelPrint     shift and go to state 21
+    dunkelRead      shift and go to state 22
 
-    else_ifs                       shift and go to state 179
+    inside_logic                   shift and go to state 177
+    variable                       shift and go to state 3
+    conditions                     shift and go to state 4
+    loops                          shift and go to state 5
+    calls                          shift and go to state 6
+    read_or_write                  shift and go to state 7
+    assign                         shift and go to state 8
+    functions                      shift and go to state 16
+    print                          shift and go to state 17
+    read                           shift and go to state 18
 
 state 167
 
@@ -4707,7 +4727,7 @@ state 169
     (35) logic_operator -> . less_than ACTION_ADD_OPERATOR
     (36) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 181
+    close_parenthesis shift and go to state 178
     and             shift and go to state 104
     or              shift and go to state 105
     is_equal        shift and go to state 106
@@ -4750,7 +4770,7 @@ state 170
     bool_value      shift and go to state 52
     id              shift and go to state 53
 
-    arithmetic_expression          shift and go to state 182
+    arithmetic_expression          shift and go to state 179
     value                          shift and go to state 44
     possible_values                shift and go to state 45
     real_value                     shift and go to state 47
@@ -4764,7 +4784,7 @@ state 171
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets . open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (100) ACTION_ADD_ONE_DIM_OPERAND -> .
 
-    open_brackets   shift and go to state 183
+    open_brackets   shift and go to state 180
     equals          reduce using rule 100 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     sum             reduce using rule 100 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     substraction    reduce using rule 100 (ACTION_ADD_ONE_DIM_OPERAND -> .)
@@ -4803,7 +4823,7 @@ state 171
     close_brackets  reduce using rule 100 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     step            reduce using rule 100 (ACTION_ADD_ONE_DIM_OPERAND -> .)
 
-    ACTION_ADD_ONE_DIM_OPERAND     shift and go to state 184
+    ACTION_ADD_ONE_DIM_OPERAND     shift and go to state 181
 
 state 172
 
@@ -4818,7 +4838,7 @@ state 172
     sub             shift and go to state 58
     $end            reduce using rule 67 (subroutines -> .)
 
-    subroutines                    shift and go to state 185
+    subroutines                    shift and go to state 182
 
 state 173
 
@@ -4835,10 +4855,10 @@ state 173
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -4856,7 +4876,7 @@ state 173
     (85) read -> . dunkelRead multiple_read
     (86) read -> . dunkelRead string comma multiple_read
 
-    as              shift and go to state 187
+    as              shift and go to state 184
     end             reduce using rule 9 (inside_logic -> .)
     dim             shift and go to state 9
     if              shift and go to state 11
@@ -4870,7 +4890,7 @@ state 173
     dunkelPrint     shift and go to state 21
     dunkelRead      shift and go to state 22
 
-    inside_logic                   shift and go to state 186
+    inside_logic                   shift and go to state 183
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -4887,8 +4907,8 @@ state 174
     (66) subroutines -> sub function id open_parenthesis parameters . close_parenthesis as variable_type inside_logic end sub subroutines
     (71) parameters -> parameters . comma parameters
 
-    close_parenthesis shift and go to state 188
-    comma           shift and go to state 189
+    close_parenthesis shift and go to state 185
+    comma           shift and go to state 186
 
 
 state 175
@@ -4925,97 +4945,24 @@ state 176
     next            reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     close_parenthesis reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     comma           reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
-    open_brackets   shift and go to state 190
+    open_brackets   shift and go to state 187
 
 
 state 177
 
-    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end . if
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic . ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic . ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic . ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic . ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (104) ACTION_NEW_IF -> .
 
-    if              shift and go to state 191
+    else            reduce using rule 104 (ACTION_NEW_IF -> .)
+    elsif           reduce using rule 104 (ACTION_NEW_IF -> .)
+    end             reduce using rule 104 (ACTION_NEW_IF -> .)
 
+    ACTION_NEW_IF                  shift and go to state 188
 
 state 178
-
-    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else . inside_logic end if
-    (3) inside_logic -> . variable inside_logic
-    (4) inside_logic -> . conditions inside_logic
-    (5) inside_logic -> . loops inside_logic
-    (6) inside_logic -> . calls inside_logic
-    (7) inside_logic -> . read_or_write inside_logic
-    (8) inside_logic -> . assign inside_logic
-    (9) inside_logic -> .
-    (10) variable -> . dim id as variable_type
-    (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
-    (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
-    (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
-    (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
-    (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
-    (60) calls -> . gosub id
-    (61) calls -> . functions
-    (77) read_or_write -> . print
-    (78) read_or_write -> . read
-    (79) read_or_write -> . dunkelCls
-    (68) assign -> . let ids_access equals logic_expression
-    (69) assign -> . let ids_access equals arithmetic_expression
-    (72) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
-    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
-    (80) print -> . dunkelPrint multiple_print
-    (81) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis
-    (85) read -> . dunkelRead multiple_read
-    (86) read -> . dunkelRead string comma multiple_read
-
-    end             reduce using rule 9 (inside_logic -> .)
-    dim             shift and go to state 9
-    if              shift and go to state 11
-    while           shift and go to state 12
-    do              shift and go to state 13
-    for             shift and go to state 14
-    gosub           shift and go to state 15
-    dunkelCls       shift and go to state 19
-    let             shift and go to state 20
-    id              shift and go to state 10
-    dunkelPrint     shift and go to state 21
-    dunkelRead      shift and go to state 22
-
-    inside_logic                   shift and go to state 192
-    variable                       shift and go to state 3
-    conditions                     shift and go to state 4
-    loops                          shift and go to state 5
-    calls                          shift and go to state 6
-    read_or_write                  shift and go to state 7
-    assign                         shift and go to state 8
-    functions                      shift and go to state 16
-    print                          shift and go to state 17
-    read                           shift and go to state 18
-
-state 179
-
-    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs . end if
-    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs . else inside_logic end if
-    (22) else_ifs -> else_ifs . else_ifs
-    (21) else_ifs -> . elsif open_parenthesis logic_expression close_parenthesis then inside_logic
-    (22) else_ifs -> . else_ifs else_ifs
-
-    end             shift and go to state 194
-    else            shift and go to state 195
-    elsif           shift and go to state 180
-
-    else_ifs                       shift and go to state 193
-
-state 180
-
-    (21) else_ifs -> elsif . open_parenthesis logic_expression close_parenthesis then inside_logic
-
-    open_parenthesis shift and go to state 196
-
-
-state 181
 
     (24) loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .
 
@@ -5039,7 +4986,7 @@ state 181
     next            reduce using rule 24 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
 
 
-state 182
+state 179
 
     (25) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression . step arithmetic_expression inside_logic next id
     (38) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -5049,7 +4996,7 @@ state 182
     (43) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (44) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    step            shift and go to state 197
+    step            shift and go to state 189
     sum             shift and go to state 78
     substraction    shift and go to state 79
     multiplication  shift and go to state 80
@@ -5058,7 +5005,7 @@ state 182
 
     arithmetic_operator            shift and go to state 77
 
-state 183
+state 180
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
@@ -5090,14 +5037,14 @@ state 183
     bool_value      shift and go to state 52
     id              shift and go to state 53
 
-    arithmetic_expression          shift and go to state 198
+    arithmetic_expression          shift and go to state 190
     value                          shift and go to state 44
     possible_values                shift and go to state 45
     real_value                     shift and go to state 47
     functions                      shift and go to state 48
     ids_access                     shift and go to state 49
 
-state 184
+state 181
 
     (52) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .
 
@@ -5140,21 +5087,21 @@ state 184
     step            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
 
 
-state 185
+state 182
 
     (62) subroutines -> sub procedure id inside_logic return subroutines .
 
     $end            reduce using rule 62 (subroutines -> sub procedure id inside_logic return subroutines .)
 
 
-state 186
+state 183
 
     (63) subroutines -> sub function id open_parenthesis close_parenthesis inside_logic . end sub subroutines
 
-    end             shift and go to state 199
+    end             shift and go to state 191
 
 
-state 187
+state 184
 
     (65) subroutines -> sub function id open_parenthesis close_parenthesis as . variable_type inside_logic end sub subroutines
     (14) variable_type -> . word
@@ -5165,9 +5112,9 @@ state 187
     float           shift and go to state 94
     bool            shift and go to state 95
 
-    variable_type                  shift and go to state 200
+    variable_type                  shift and go to state 192
 
-state 188
+state 185
 
     (64) subroutines -> sub function id open_parenthesis parameters close_parenthesis . inside_logic end sub subroutines
     (66) subroutines -> sub function id open_parenthesis parameters close_parenthesis . as variable_type inside_logic end sub subroutines
@@ -5182,10 +5129,10 @@ state 188
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -5203,7 +5150,7 @@ state 188
     (85) read -> . dunkelRead multiple_read
     (86) read -> . dunkelRead string comma multiple_read
 
-    as              shift and go to state 202
+    as              shift and go to state 194
     end             reduce using rule 9 (inside_logic -> .)
     dim             shift and go to state 9
     if              shift and go to state 11
@@ -5217,7 +5164,7 @@ state 188
     dunkelPrint     shift and go to state 21
     dunkelRead      shift and go to state 22
 
-    inside_logic                   shift and go to state 201
+    inside_logic                   shift and go to state 193
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5228,7 +5175,7 @@ state 188
     print                          shift and go to state 17
     read                           shift and go to state 18
 
-state 189
+state 186
 
     (71) parameters -> parameters comma . parameters
     (70) parameters -> . variable
@@ -5240,173 +5187,32 @@ state 189
 
     dim             shift and go to state 9
 
-    parameters                     shift and go to state 203
+    parameters                     shift and go to state 195
     variable                       shift and go to state 175
 
-state 190
+state 187
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets . word_value close_brackets
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets . word_value close_brackets open_brackets word_value close_brackets
 
-    word_value      shift and go to state 204
+    word_value      shift and go to state 196
 
 
-state 191
+state 188
 
-    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (105) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
 
-    dim             reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    if              reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    while           reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    do              reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    for             reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    gosub           reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    dunkelCls       reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    let             reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    id              reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    dunkelPrint     reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    dunkelRead      reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    end             reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    loop            reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    wend            reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    return          reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    else            reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    elsif           reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
-    next            reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic end if .)
+    else            reduce using rule 105 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    elsif           reduce using rule 105 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    end             reduce using rule 105 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
 
+    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 197
 
-state 192
-
-    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic . end if
-
-    end             shift and go to state 205
-
-
-state 193
-
-    (22) else_ifs -> else_ifs else_ifs .
-    (22) else_ifs -> else_ifs . else_ifs
-    (21) else_ifs -> . elsif open_parenthesis logic_expression close_parenthesis then inside_logic
-    (22) else_ifs -> . else_ifs else_ifs
-
-  ! shift/reduce conflict for elsif resolved as shift
-    end             reduce using rule 22 (else_ifs -> else_ifs else_ifs .)
-    else            reduce using rule 22 (else_ifs -> else_ifs else_ifs .)
-    elsif           shift and go to state 180
-
-  ! elsif           [ reduce using rule 22 (else_ifs -> else_ifs else_ifs .) ]
-
-    else_ifs                       shift and go to state 193
-
-state 194
-
-    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end . if
-
-    if              shift and go to state 206
-
-
-state 195
-
-    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else . inside_logic end if
-    (3) inside_logic -> . variable inside_logic
-    (4) inside_logic -> . conditions inside_logic
-    (5) inside_logic -> . loops inside_logic
-    (6) inside_logic -> . calls inside_logic
-    (7) inside_logic -> . read_or_write inside_logic
-    (8) inside_logic -> . assign inside_logic
-    (9) inside_logic -> .
-    (10) variable -> . dim id as variable_type
-    (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
-    (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
-    (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
-    (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
-    (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
-    (60) calls -> . gosub id
-    (61) calls -> . functions
-    (77) read_or_write -> . print
-    (78) read_or_write -> . read
-    (79) read_or_write -> . dunkelCls
-    (68) assign -> . let ids_access equals logic_expression
-    (69) assign -> . let ids_access equals arithmetic_expression
-    (72) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
-    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
-    (80) print -> . dunkelPrint multiple_print
-    (81) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis
-    (85) read -> . dunkelRead multiple_read
-    (86) read -> . dunkelRead string comma multiple_read
-
-    end             reduce using rule 9 (inside_logic -> .)
-    dim             shift and go to state 9
-    if              shift and go to state 11
-    while           shift and go to state 12
-    do              shift and go to state 13
-    for             shift and go to state 14
-    gosub           shift and go to state 15
-    dunkelCls       shift and go to state 19
-    let             shift and go to state 20
-    id              shift and go to state 10
-    dunkelPrint     shift and go to state 21
-    dunkelRead      shift and go to state 22
-
-    inside_logic                   shift and go to state 207
-    variable                       shift and go to state 3
-    conditions                     shift and go to state 4
-    loops                          shift and go to state 5
-    calls                          shift and go to state 6
-    read_or_write                  shift and go to state 7
-    assign                         shift and go to state 8
-    functions                      shift and go to state 16
-    print                          shift and go to state 17
-    read                           shift and go to state 18
-
-state 196
-
-    (21) else_ifs -> elsif open_parenthesis . logic_expression close_parenthesis then inside_logic
-    (26) logic_expression -> . arithmetic_expression
-    (27) logic_expression -> . logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET
-    (28) logic_expression -> . open_parenthesis logic_expression close_parenthesis
-    (37) arithmetic_expression -> . value
-    (38) arithmetic_expression -> . arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET
-    (39) arithmetic_expression -> . open_parenthesis arithmetic_expression close_parenthesis
-    (48) value -> . possible_values
-    (49) value -> . not possible_values ACTION_ADD_NOT_OPERAND
-    (50) value -> . open_parenthesis value close_parenthesis
-    (45) possible_values -> . real_value
-    (46) possible_values -> . functions
-    (47) possible_values -> . ids_access
-    (56) real_value -> . word_value ACTION_ADD_WORD_VALUE
-    (57) real_value -> . float_value ACTION_ADD_FLOAT_VALUE
-    (58) real_value -> . bool_value ACTION_ADD_BOOL_VALUE
-    (59) real_value -> . id ACTION_ADD_VAR_VALUE
-    (72) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
-    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
-    (51) ids_access -> . id ACTION_ADD_VAR_VALUE
-    (52) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND
-    (53) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
-    (54) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
-    (55) ids_access -> . open_parenthesis ids_access close_parenthesis
-
-    open_parenthesis shift and go to state 61
-    not             shift and go to state 46
-    word_value      shift and go to state 50
-    float_value     shift and go to state 51
-    bool_value      shift and go to state 52
-    id              shift and go to state 53
-
-    logic_expression               shift and go to state 208
-    arithmetic_expression          shift and go to state 63
-    value                          shift and go to state 44
-    possible_values                shift and go to state 45
-    real_value                     shift and go to state 47
-    functions                      shift and go to state 48
-    ids_access                     shift and go to state 49
-
-state 197
+state 189
 
     (25) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step . arithmetic_expression inside_logic next id
     (37) arithmetic_expression -> . value
@@ -5437,14 +5243,14 @@ state 197
     bool_value      shift and go to state 52
     id              shift and go to state 53
 
-    arithmetic_expression          shift and go to state 209
+    arithmetic_expression          shift and go to state 198
     value                          shift and go to state 44
     possible_values                shift and go to state 45
     real_value                     shift and go to state 47
     functions                      shift and go to state 48
     ids_access                     shift and go to state 49
 
-state 198
+state 190
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets ACTION_ADD_TWO_DIM_OPERAND
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
@@ -5455,7 +5261,7 @@ state 198
     (43) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (44) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    close_brackets  shift and go to state 210
+    close_brackets  shift and go to state 199
     sum             shift and go to state 78
     substraction    shift and go to state 79
     multiplication  shift and go to state 80
@@ -5464,14 +5270,14 @@ state 198
 
     arithmetic_operator            shift and go to state 77
 
-state 199
+state 191
 
     (63) subroutines -> sub function id open_parenthesis close_parenthesis inside_logic end . sub subroutines
 
-    sub             shift and go to state 211
+    sub             shift and go to state 200
 
 
-state 200
+state 192
 
     (65) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type . inside_logic end sub subroutines
     (3) inside_logic -> . variable inside_logic
@@ -5485,10 +5291,10 @@ state 200
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -5519,7 +5325,7 @@ state 200
     dunkelPrint     shift and go to state 21
     dunkelRead      shift and go to state 22
 
-    inside_logic                   shift and go to state 212
+    inside_logic                   shift and go to state 201
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5530,14 +5336,14 @@ state 200
     print                          shift and go to state 17
     read                           shift and go to state 18
 
-state 201
+state 193
 
     (64) subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic . end sub subroutines
 
-    end             shift and go to state 213
+    end             shift and go to state 202
 
 
-state 202
+state 194
 
     (66) subroutines -> sub function id open_parenthesis parameters close_parenthesis as . variable_type inside_logic end sub subroutines
     (14) variable_type -> . word
@@ -5548,92 +5354,46 @@ state 202
     float           shift and go to state 94
     bool            shift and go to state 95
 
-    variable_type                  shift and go to state 214
+    variable_type                  shift and go to state 203
 
-state 203
+state 195
 
     (71) parameters -> parameters comma parameters .
     (71) parameters -> parameters . comma parameters
 
   ! shift/reduce conflict for comma resolved as shift
     close_parenthesis reduce using rule 71 (parameters -> parameters comma parameters .)
-    comma           shift and go to state 189
+    comma           shift and go to state 186
 
   ! comma           [ reduce using rule 71 (parameters -> parameters comma parameters .) ]
 
 
-state 204
+state 196
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value . close_brackets
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value . close_brackets open_brackets word_value close_brackets
 
-    close_brackets  shift and go to state 215
+    close_brackets  shift and go to state 204
 
 
-state 205
+state 197
 
-    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end . if
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF . ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF . else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF . else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF . else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (106) ACTION_FILL_JUMP -> .
+    (21) else_ifs -> . elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (22) else_ifs -> . else_ifs else_ifs
 
-    if              shift and go to state 216
+    else            shift and go to state 206
+    end             reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    elsif           shift and go to state 208
 
+    ACTION_FILL_JUMP               shift and go to state 205
+    else_ifs                       shift and go to state 207
 
-state 206
-
-    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .
-
-    dim             reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    if              reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    while           reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    do              reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    for             reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    gosub           reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    dunkelCls       reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    let             reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    id              reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    dunkelPrint     reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    dunkelRead      reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    end             reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    loop            reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    wend            reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    return          reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    else            reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    elsif           reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-    next            reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if .)
-
-
-state 207
-
-    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic . end if
-
-    end             shift and go to state 217
-
-
-state 208
-
-    (21) else_ifs -> elsif open_parenthesis logic_expression . close_parenthesis then inside_logic
-    (27) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
-    (29) logic_operator -> . and ACTION_ADD_OPERATOR
-    (30) logic_operator -> . or ACTION_ADD_OPERATOR
-    (31) logic_operator -> . is_equal ACTION_ADD_OPERATOR
-    (32) logic_operator -> . is_not_equal ACTION_ADD_OPERATOR
-    (33) logic_operator -> . greater_than ACTION_ADD_OPERATOR
-    (34) logic_operator -> . greater_or_equal_than ACTION_ADD_OPERATOR
-    (35) logic_operator -> . less_than ACTION_ADD_OPERATOR
-    (36) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
-
-    close_parenthesis shift and go to state 218
-    and             shift and go to state 104
-    or              shift and go to state 105
-    is_equal        shift and go to state 106
-    is_not_equal    shift and go to state 107
-    greater_than    shift and go to state 108
-    greater_or_equal_than shift and go to state 109
-    less_than       shift and go to state 110
-    less_or_equal_than shift and go to state 111
-
-    logic_operator                 shift and go to state 103
-
-state 209
+state 198
 
     (25) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression . inside_logic next id
     (38) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -5653,10 +5413,10 @@ state 209
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -5692,7 +5452,7 @@ state 209
     dunkelPrint     shift and go to state 21
     dunkelRead      shift and go to state 22
 
-    inside_logic                   shift and go to state 219
+    inside_logic                   shift and go to state 209
     arithmetic_operator            shift and go to state 77
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
@@ -5704,13 +5464,13 @@ state 209
     print                          shift and go to state 17
     read                           shift and go to state 18
 
-state 210
+state 199
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . ACTION_ADD_TWO_DIM_OPERAND
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (101) ACTION_ADD_TWO_DIM_OPERAND -> .
 
-    open_brackets   shift and go to state 220
+    open_brackets   shift and go to state 210
     equals          reduce using rule 101 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     sum             reduce using rule 101 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     substraction    reduce using rule 101 (ACTION_ADD_TWO_DIM_OPERAND -> .)
@@ -5749,9 +5509,9 @@ state 210
     close_brackets  reduce using rule 101 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     step            reduce using rule 101 (ACTION_ADD_TWO_DIM_OPERAND -> .)
 
-    ACTION_ADD_TWO_DIM_OPERAND     shift and go to state 221
+    ACTION_ADD_TWO_DIM_OPERAND     shift and go to state 211
 
-state 211
+state 200
 
     (63) subroutines -> sub function id open_parenthesis close_parenthesis inside_logic end sub . subroutines
     (62) subroutines -> . sub procedure id inside_logic return subroutines
@@ -5764,23 +5524,23 @@ state 211
     sub             shift and go to state 58
     $end            reduce using rule 67 (subroutines -> .)
 
-    subroutines                    shift and go to state 222
+    subroutines                    shift and go to state 212
 
-state 212
+state 201
 
     (65) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic . end sub subroutines
 
-    end             shift and go to state 223
+    end             shift and go to state 213
 
 
-state 213
+state 202
 
     (64) subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic end . sub subroutines
 
-    sub             shift and go to state 224
+    sub             shift and go to state 214
 
 
-state 214
+state 203
 
     (66) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type . inside_logic end sub subroutines
     (3) inside_logic -> . variable inside_logic
@@ -5794,10 +5554,10 @@ state 214
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -5828,7 +5588,7 @@ state 214
     dunkelPrint     shift and go to state 21
     dunkelRead      shift and go to state 22
 
-    inside_logic                   shift and go to state 225
+    inside_logic                   shift and go to state 215
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5839,7 +5599,7 @@ state 214
     print                          shift and go to state 17
     read                           shift and go to state 18
 
-state 215
+state 204
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets . open_brackets word_value close_brackets
@@ -5864,55 +5624,67 @@ state 215
     next            reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     close_parenthesis reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     comma           reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
-    open_brackets   shift and go to state 226
+    open_brackets   shift and go to state 216
 
 
-state 216
+state 205
 
-    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP . end if ACTION_FILL_JUMP_END_IF
 
-    dim             reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    if              reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    while           reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    do              reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    for             reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    gosub           reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    dunkelCls       reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    let             reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    id              reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    dunkelPrint     reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    dunkelRead      reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    end             reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    loop            reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    wend            reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    return          reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    else            reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    elsif           reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
-    next            reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if .)
+    end             shift and go to state 217
 
 
-state 217
+state 206
 
-    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end . if
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else . ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (106) ACTION_FILL_JUMP -> .
 
-    if              shift and go to state 227
+    dim             reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    if              reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    while           reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    do              reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    for             reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    gosub           reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    dunkelCls       reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    let             reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    id              reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    dunkelPrint     reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    dunkelRead      reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    end             reduce using rule 106 (ACTION_FILL_JUMP -> .)
 
+    ACTION_FILL_JUMP               shift and go to state 218
 
-state 218
+state 207
 
-    (21) else_ifs -> elsif open_parenthesis logic_expression close_parenthesis . then inside_logic
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs . end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs . else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (22) else_ifs -> else_ifs . else_ifs
+    (21) else_ifs -> . elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (22) else_ifs -> . else_ifs else_ifs
 
-    then            shift and go to state 228
+    end             shift and go to state 220
+    else            shift and go to state 221
+    elsif           shift and go to state 208
 
+    else_ifs                       shift and go to state 219
 
-state 219
+state 208
+
+    (21) else_ifs -> elsif . ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (106) ACTION_FILL_JUMP -> .
+
+    open_parenthesis reduce using rule 106 (ACTION_FILL_JUMP -> .)
+
+    ACTION_FILL_JUMP               shift and go to state 222
+
+state 209
 
     (25) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic . next id
 
-    next            shift and go to state 229
+    next            shift and go to state 223
 
 
-state 220
+state 210
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (37) arithmetic_expression -> . value
@@ -5943,14 +5715,14 @@ state 220
     bool_value      shift and go to state 52
     id              shift and go to state 53
 
-    arithmetic_expression          shift and go to state 230
+    arithmetic_expression          shift and go to state 224
     value                          shift and go to state 44
     possible_values                shift and go to state 45
     real_value                     shift and go to state 47
     functions                      shift and go to state 48
     ids_access                     shift and go to state 49
 
-state 221
+state 211
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .
 
@@ -5993,21 +5765,21 @@ state 221
     step            reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
 
 
-state 222
+state 212
 
     (63) subroutines -> sub function id open_parenthesis close_parenthesis inside_logic end sub subroutines .
 
     $end            reduce using rule 63 (subroutines -> sub function id open_parenthesis close_parenthesis inside_logic end sub subroutines .)
 
 
-state 223
+state 213
 
     (65) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic end . sub subroutines
 
-    sub             shift and go to state 231
+    sub             shift and go to state 225
 
 
-state 224
+state 214
 
     (64) subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic end sub . subroutines
     (62) subroutines -> . sub procedure id inside_logic return subroutines
@@ -6020,49 +5792,32 @@ state 224
     sub             shift and go to state 58
     $end            reduce using rule 67 (subroutines -> .)
 
-    subroutines                    shift and go to state 232
+    subroutines                    shift and go to state 226
 
-state 225
+state 215
 
     (66) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic . end sub subroutines
 
-    end             shift and go to state 233
+    end             shift and go to state 227
 
 
-state 226
+state 216
 
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets . word_value close_brackets
 
-    word_value      shift and go to state 234
+    word_value      shift and go to state 228
 
 
-state 227
+state 217
 
-    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end . if ACTION_FILL_JUMP_END_IF
 
-    dim             reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    if              reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    while           reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    do              reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    for             reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    gosub           reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    dunkelCls       reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    let             reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    id              reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    dunkelPrint     reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    dunkelRead      reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    end             reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    loop            reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    wend            reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    return          reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    else            reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    elsif           reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
-    next            reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if .)
+    if              shift and go to state 229
 
 
-state 228
+state 218
 
-    (21) else_ifs -> elsif open_parenthesis logic_expression close_parenthesis then . inside_logic
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP . inside_logic end if ACTION_FILL_JUMP_END_IF
     (3) inside_logic -> . variable inside_logic
     (4) inside_logic -> . conditions inside_logic
     (5) inside_logic -> . loops inside_logic
@@ -6074,10 +5829,10 @@ state 228
     (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic end if
-    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else inside_logic end if
-    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs end if
-    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then inside_logic else_ifs else inside_logic end if
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
     (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
@@ -6096,8 +5851,6 @@ state 228
     (86) read -> . dunkelRead string comma multiple_read
 
     end             reduce using rule 9 (inside_logic -> .)
-    else            reduce using rule 9 (inside_logic -> .)
-    elsif           reduce using rule 9 (inside_logic -> .)
     dim             shift and go to state 9
     if              shift and go to state 11
     while           shift and go to state 12
@@ -6110,7 +5863,7 @@ state 228
     dunkelPrint     shift and go to state 21
     dunkelRead      shift and go to state 22
 
-    inside_logic                   shift and go to state 235
+    inside_logic                   shift and go to state 230
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6121,14 +5874,64 @@ state 228
     print                          shift and go to state 17
     read                           shift and go to state 18
 
-state 229
+state 219
+
+    (22) else_ifs -> else_ifs else_ifs .
+    (22) else_ifs -> else_ifs . else_ifs
+    (21) else_ifs -> . elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (22) else_ifs -> . else_ifs else_ifs
+
+  ! shift/reduce conflict for elsif resolved as shift
+    end             reduce using rule 22 (else_ifs -> else_ifs else_ifs .)
+    else            reduce using rule 22 (else_ifs -> else_ifs else_ifs .)
+    elsif           shift and go to state 208
+
+  ! elsif           [ reduce using rule 22 (else_ifs -> else_ifs else_ifs .) ]
+
+    else_ifs                       shift and go to state 219
+
+state 220
+
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end . if ACTION_FILL_JUMP_END_IF
+
+    if              shift and go to state 231
+
+
+state 221
+
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else . ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (106) ACTION_FILL_JUMP -> .
+
+    dim             reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    if              reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    while           reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    do              reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    for             reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    gosub           reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    dunkelCls       reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    let             reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    id              reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    dunkelPrint     reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    dunkelRead      reduce using rule 106 (ACTION_FILL_JUMP -> .)
+    end             reduce using rule 106 (ACTION_FILL_JUMP -> .)
+
+    ACTION_FILL_JUMP               shift and go to state 232
+
+state 222
+
+    (21) else_ifs -> elsif ACTION_FILL_JUMP . open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+
+    open_parenthesis shift and go to state 233
+
+
+state 223
 
     (25) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next . id
 
-    id              shift and go to state 236
+    id              shift and go to state 234
 
 
-state 230
+state 224
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (38) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -6138,7 +5941,7 @@ state 230
     (43) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (44) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    close_brackets  shift and go to state 237
+    close_brackets  shift and go to state 235
     sum             shift and go to state 78
     substraction    shift and go to state 79
     multiplication  shift and go to state 80
@@ -6147,7 +5950,7 @@ state 230
 
     arithmetic_operator            shift and go to state 77
 
-state 231
+state 225
 
     (65) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic end sub . subroutines
     (62) subroutines -> . sub procedure id inside_logic return subroutines
@@ -6160,39 +5963,190 @@ state 231
     sub             shift and go to state 58
     $end            reduce using rule 67 (subroutines -> .)
 
-    subroutines                    shift and go to state 238
+    subroutines                    shift and go to state 236
 
-state 232
+state 226
 
     (64) subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic end sub subroutines .
 
     $end            reduce using rule 64 (subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic end sub subroutines .)
 
 
-state 233
+state 227
 
     (66) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end . sub subroutines
 
-    sub             shift and go to state 239
+    sub             shift and go to state 237
 
 
-state 234
+state 228
 
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value . close_brackets
 
-    close_brackets  shift and go to state 240
+    close_brackets  shift and go to state 238
 
 
-state 235
+state 229
 
-    (21) else_ifs -> elsif open_parenthesis logic_expression close_parenthesis then inside_logic .
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if . ACTION_FILL_JUMP_END_IF
+    (107) ACTION_FILL_JUMP_END_IF -> .
 
-    end             reduce using rule 21 (else_ifs -> elsif open_parenthesis logic_expression close_parenthesis then inside_logic .)
-    else            reduce using rule 21 (else_ifs -> elsif open_parenthesis logic_expression close_parenthesis then inside_logic .)
-    elsif           reduce using rule 21 (else_ifs -> elsif open_parenthesis logic_expression close_parenthesis then inside_logic .)
+    dim             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    if              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    while           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    do              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    for             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    gosub           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelCls       reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    let             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    id              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelPrint     reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelRead      reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    end             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    loop            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    wend            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    return          reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    else            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    elsif           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    next            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+
+    ACTION_FILL_JUMP_END_IF        shift and go to state 239
+
+state 230
+
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic . end if ACTION_FILL_JUMP_END_IF
+
+    end             shift and go to state 240
 
 
-state 236
+state 231
+
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if . ACTION_FILL_JUMP_END_IF
+    (107) ACTION_FILL_JUMP_END_IF -> .
+
+    dim             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    if              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    while           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    do              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    for             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    gosub           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelCls       reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    let             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    id              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelPrint     reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelRead      reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    end             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    loop            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    wend            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    return          reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    else            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    elsif           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    next            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+
+    ACTION_FILL_JUMP_END_IF        shift and go to state 241
+
+state 232
+
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP . inside_logic end if ACTION_FILL_JUMP_END_IF
+    (3) inside_logic -> . variable inside_logic
+    (4) inside_logic -> . conditions inside_logic
+    (5) inside_logic -> . loops inside_logic
+    (6) inside_logic -> . calls inside_logic
+    (7) inside_logic -> . read_or_write inside_logic
+    (8) inside_logic -> . assign inside_logic
+    (9) inside_logic -> .
+    (10) variable -> . dim id as variable_type
+    (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
+    (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
+    (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
+    (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
+    (60) calls -> . gosub id
+    (61) calls -> . functions
+    (77) read_or_write -> . print
+    (78) read_or_write -> . read
+    (79) read_or_write -> . dunkelCls
+    (68) assign -> . let ids_access equals logic_expression
+    (69) assign -> . let ids_access equals arithmetic_expression
+    (72) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
+    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
+    (80) print -> . dunkelPrint multiple_print
+    (81) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis
+    (85) read -> . dunkelRead multiple_read
+    (86) read -> . dunkelRead string comma multiple_read
+
+    end             reduce using rule 9 (inside_logic -> .)
+    dim             shift and go to state 9
+    if              shift and go to state 11
+    while           shift and go to state 12
+    do              shift and go to state 13
+    for             shift and go to state 14
+    gosub           shift and go to state 15
+    dunkelCls       shift and go to state 19
+    let             shift and go to state 20
+    id              shift and go to state 10
+    dunkelPrint     shift and go to state 21
+    dunkelRead      shift and go to state 22
+
+    inside_logic                   shift and go to state 242
+    variable                       shift and go to state 3
+    conditions                     shift and go to state 4
+    loops                          shift and go to state 5
+    calls                          shift and go to state 6
+    read_or_write                  shift and go to state 7
+    assign                         shift and go to state 8
+    functions                      shift and go to state 16
+    print                          shift and go to state 17
+    read                           shift and go to state 18
+
+state 233
+
+    (21) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis . logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (26) logic_expression -> . arithmetic_expression
+    (27) logic_expression -> . logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET
+    (28) logic_expression -> . open_parenthesis logic_expression close_parenthesis
+    (37) arithmetic_expression -> . value
+    (38) arithmetic_expression -> . arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET
+    (39) arithmetic_expression -> . open_parenthesis arithmetic_expression close_parenthesis
+    (48) value -> . possible_values
+    (49) value -> . not possible_values ACTION_ADD_NOT_OPERAND
+    (50) value -> . open_parenthesis value close_parenthesis
+    (45) possible_values -> . real_value
+    (46) possible_values -> . functions
+    (47) possible_values -> . ids_access
+    (56) real_value -> . word_value ACTION_ADD_WORD_VALUE
+    (57) real_value -> . float_value ACTION_ADD_FLOAT_VALUE
+    (58) real_value -> . bool_value ACTION_ADD_BOOL_VALUE
+    (59) real_value -> . id ACTION_ADD_VAR_VALUE
+    (72) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
+    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
+    (51) ids_access -> . id ACTION_ADD_VAR_VALUE
+    (52) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND
+    (53) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
+    (54) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
+    (55) ids_access -> . open_parenthesis ids_access close_parenthesis
+
+    open_parenthesis shift and go to state 61
+    not             shift and go to state 46
+    word_value      shift and go to state 50
+    float_value     shift and go to state 51
+    bool_value      shift and go to state 52
+    id              shift and go to state 53
+
+    logic_expression               shift and go to state 243
+    arithmetic_expression          shift and go to state 63
+    value                          shift and go to state 44
+    possible_values                shift and go to state 45
+    real_value                     shift and go to state 47
+    functions                      shift and go to state 48
+    ids_access                     shift and go to state 49
+
+state 234
 
     (25) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id .
 
@@ -6216,7 +6170,7 @@ state 236
     next            reduce using rule 25 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id .)
 
 
-state 237
+state 235
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . ACTION_ADD_THREE_DIM_OPERAND
     (102) ACTION_ADD_THREE_DIM_OPERAND -> .
@@ -6259,16 +6213,16 @@ state 237
     close_brackets  reduce using rule 102 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     step            reduce using rule 102 (ACTION_ADD_THREE_DIM_OPERAND -> .)
 
-    ACTION_ADD_THREE_DIM_OPERAND   shift and go to state 241
+    ACTION_ADD_THREE_DIM_OPERAND   shift and go to state 244
 
-state 238
+state 236
 
     (65) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic end sub subroutines .
 
     $end            reduce using rule 65 (subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic end sub subroutines .)
 
 
-state 239
+state 237
 
     (66) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub . subroutines
     (62) subroutines -> . sub procedure id inside_logic return subroutines
@@ -6281,9 +6235,9 @@ state 239
     sub             shift and go to state 58
     $end            reduce using rule 67 (subroutines -> .)
 
-    subroutines                    shift and go to state 242
+    subroutines                    shift and go to state 245
 
-state 240
+state 238
 
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .
 
@@ -6309,7 +6263,94 @@ state 240
     comma           reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
 
 
+state 239
+
+    (17) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .
+
+    dim             reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    if              reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    while           reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    do              reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    for             reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    gosub           reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    dunkelCls       reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    let             reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    id              reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    dunkelPrint     reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    dunkelRead      reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    end             reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    loop            reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    wend            reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    return          reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    else            reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    elsif           reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    next            reduce using rule 17 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+
+
+state 240
+
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end . if ACTION_FILL_JUMP_END_IF
+
+    if              shift and go to state 246
+
+
 state 241
+
+    (19) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .
+
+    dim             reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    if              reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    while           reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    do              reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    for             reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    gosub           reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    dunkelCls       reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    let             reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    id              reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    dunkelPrint     reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    dunkelRead      reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    end             reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    loop            reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    wend            reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    return          reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    else            reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    elsif           reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    next            reduce using rule 19 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF .)
+
+
+state 242
+
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic . end if ACTION_FILL_JUMP_END_IF
+
+    end             shift and go to state 247
+
+
+state 243
+
+    (21) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression . close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (27) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
+    (29) logic_operator -> . and ACTION_ADD_OPERATOR
+    (30) logic_operator -> . or ACTION_ADD_OPERATOR
+    (31) logic_operator -> . is_equal ACTION_ADD_OPERATOR
+    (32) logic_operator -> . is_not_equal ACTION_ADD_OPERATOR
+    (33) logic_operator -> . greater_than ACTION_ADD_OPERATOR
+    (34) logic_operator -> . greater_or_equal_than ACTION_ADD_OPERATOR
+    (35) logic_operator -> . less_than ACTION_ADD_OPERATOR
+    (36) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
+
+    close_parenthesis shift and go to state 248
+    and             shift and go to state 104
+    or              shift and go to state 105
+    is_equal        shift and go to state 106
+    is_not_equal    shift and go to state 107
+    greater_than    shift and go to state 108
+    greater_or_equal_than shift and go to state 109
+    less_than       shift and go to state 110
+    less_or_equal_than shift and go to state 111
+
+    logic_operator                 shift and go to state 103
+
+state 244
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .
 
@@ -6352,11 +6393,215 @@ state 241
     step            reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
 
 
-state 242
+state 245
 
     (66) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub subroutines .
 
     $end            reduce using rule 66 (subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub subroutines .)
+
+
+state 246
+
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if . ACTION_FILL_JUMP_END_IF
+    (107) ACTION_FILL_JUMP_END_IF -> .
+
+    dim             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    if              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    while           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    do              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    for             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    gosub           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelCls       reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    let             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    id              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelPrint     reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelRead      reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    end             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    loop            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    wend            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    return          reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    else            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    elsif           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    next            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+
+    ACTION_FILL_JUMP_END_IF        shift and go to state 249
+
+state 247
+
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end . if ACTION_FILL_JUMP_END_IF
+
+    if              shift and go to state 250
+
+
+state 248
+
+    (21) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis . ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (103) ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .
+
+    then            reduce using rule 103 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
+
+    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 251
+
+state 249
+
+    (18) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .
+
+    dim             reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    if              reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    while           reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    do              reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    for             reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    gosub           reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    dunkelCls       reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    let             reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    id              reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    dunkelPrint     reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    dunkelRead      reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    end             reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    loop            reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    wend            reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    return          reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    else            reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    elsif           reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    next            reduce using rule 18 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+
+
+state 250
+
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if . ACTION_FILL_JUMP_END_IF
+    (107) ACTION_FILL_JUMP_END_IF -> .
+
+    dim             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    if              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    while           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    do              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    for             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    gosub           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelCls       reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    let             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    id              reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelPrint     reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelRead      reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    end             reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    loop            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    wend            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    return          reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    else            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    elsif           reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+    next            reduce using rule 107 (ACTION_FILL_JUMP_END_IF -> .)
+
+    ACTION_FILL_JUMP_END_IF        shift and go to state 252
+
+state 251
+
+    (21) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP . then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+
+    then            shift and go to state 253
+
+
+state 252
+
+    (20) conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .
+
+    dim             reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    if              reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    while           reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    do              reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    for             reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    gosub           reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    dunkelCls       reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    let             reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    id              reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    dunkelPrint     reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    dunkelRead      reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    end             reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    loop            reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    wend            reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    return          reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    else            reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    elsif           reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    next            reduce using rule 20 (conditions -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+
+
+state 253
+
+    (21) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then . inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (3) inside_logic -> . variable inside_logic
+    (4) inside_logic -> . conditions inside_logic
+    (5) inside_logic -> . loops inside_logic
+    (6) inside_logic -> . calls inside_logic
+    (7) inside_logic -> . read_or_write inside_logic
+    (8) inside_logic -> . assign inside_logic
+    (9) inside_logic -> .
+    (10) variable -> . dim id as variable_type
+    (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
+    (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
+    (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
+    (17) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (18) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (23) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
+    (25) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression to arithmetic_expression step arithmetic_expression inside_logic next id
+    (60) calls -> . gosub id
+    (61) calls -> . functions
+    (77) read_or_write -> . print
+    (78) read_or_write -> . read
+    (79) read_or_write -> . dunkelCls
+    (68) assign -> . let ids_access equals logic_expression
+    (69) assign -> . let ids_access equals arithmetic_expression
+    (72) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
+    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
+    (80) print -> . dunkelPrint multiple_print
+    (81) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis
+    (85) read -> . dunkelRead multiple_read
+    (86) read -> . dunkelRead string comma multiple_read
+
+    end             reduce using rule 9 (inside_logic -> .)
+    else            reduce using rule 9 (inside_logic -> .)
+    elsif           reduce using rule 9 (inside_logic -> .)
+    dim             shift and go to state 9
+    if              shift and go to state 11
+    while           shift and go to state 12
+    do              shift and go to state 13
+    for             shift and go to state 14
+    gosub           shift and go to state 15
+    dunkelCls       shift and go to state 19
+    let             shift and go to state 20
+    id              shift and go to state 10
+    dunkelPrint     shift and go to state 21
+    dunkelRead      shift and go to state 22
+
+    inside_logic                   shift and go to state 254
+    variable                       shift and go to state 3
+    conditions                     shift and go to state 4
+    loops                          shift and go to state 5
+    calls                          shift and go to state 6
+    read_or_write                  shift and go to state 7
+    assign                         shift and go to state 8
+    functions                      shift and go to state 16
+    print                          shift and go to state 17
+    read                           shift and go to state 18
+
+state 254
+
+    (21) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (105) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
+
+    end             reduce using rule 105 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    else            reduce using rule 105 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    elsif           reduce using rule 105 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+
+    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 255
+
+state 255
+
+    (21) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .
+
+    end             reduce using rule 21 (else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
+    else            reduce using rule 21 (else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
+    elsif           reduce using rule 21 (else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
 
 WARNING: 
 WARNING: Conflicts:
@@ -6375,8 +6620,8 @@ WARNING: shift/reduce conflict for greater_or_equal_than in state 144 resolved a
 WARNING: shift/reduce conflict for less_than in state 144 resolved as shift
 WARNING: shift/reduce conflict for less_or_equal_than in state 144 resolved as shift
 WARNING: shift/reduce conflict for comma in state 163 resolved as shift
-WARNING: shift/reduce conflict for elsif in state 193 resolved as shift
-WARNING: shift/reduce conflict for comma in state 203 resolved as shift
+WARNING: shift/reduce conflict for comma in state 195 resolved as shift
+WARNING: shift/reduce conflict for elsif in state 219 resolved as shift
 WARNING: reduce/reduce conflict in state 23 resolved using rule (program -> inside_logic end)
 WARNING: rejected rule (subroutines -> <empty>) in state 23
 WARNING: reduce/reduce conflict in state 87 resolved using rule (ids_access -> id ACTION_ADD_VAR_VALUE)
