@@ -20,6 +20,7 @@ class Parser:
         self.__operators_stack = []
         self.__types_stack = []
         self.__jumps_stack = []
+        self.__while_jump_stack = []
         self.__ifs_stack = []
         self.__for_increment_stack = []
         self.__for_id_stack = []
@@ -62,6 +63,39 @@ class Parser:
         while(not goto_str in self.__quadruplets[empty_jump_quadruplet_index]):
             empty_jump_quadruplet_index += 1
         self.__quadruplets[empty_jump_quadruplet_index] += ' ' + str(goto_index)
+
+    def is_valid_for_condition(self, operator):
+        # Ugly but works for then the variable to check on a while is not
+        # a condition.
+        if(operator == '<'):
+            return True
+        if(operator == '<='):
+            return True
+        if(operator == '>'):
+            return True
+        if(operator == '>='):
+            return True
+        if(operator == '=='):
+            return True
+        if(operator == '<>'):
+            return True
+        if(operator == 'and'):
+            return True
+        if(operator == 'or'):
+            return True
+        if(operator == 'not'):
+            return True
+        if(operator == '+'):
+            return True
+        if(operator == '-'):
+            return True
+        if(operator == '/'):
+            return True
+        if(operator == '*'):
+            return True
+        if(operator == '^'):
+            return True
+        return False
 
     def p_program(self, p):
         '''
@@ -139,7 +173,7 @@ class Parser:
 
     def p_loops(self, p):
         '''
-        loops : while open_parenthesis logic_expression close_parenthesis inside_logic wend
+        loops : while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
         loops : do inside_logic loop until open_parenthesis logic_expression close_parenthesis
         loops : for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
         '''
@@ -464,6 +498,27 @@ class Parser:
 
         print('I added a jump and qudruplet with condition: ', logical_expression_result)
 
+    def p_action_add_while_quadruplet_empty_jump(self, p):
+        '''
+        ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP :
+        '''
+        logical_expression_result = str(self.__operands_stack.pop())
+        print('MY LAST QUADRUPLET IS: ', self.__quadruplets[-1])
+        last_operator = (self.__quadruplets[-1].split())[0]
+        no_condition = 0
+        if(not self.is_valid_for_condition(last_operator)):
+            print('IT WAS NOT VALID: ', last_operator)
+            no_condition = 1
+        if(logical_expression_result[0] != '#' and logical_expression_result[0] != '*'):
+            logical_expression_result = 'L ' + logical_expression_result
+        self.__quadruplets.append('gotoF ' + logical_expression_result)
+        self.__jumps_stack.append(self.__quadruplets_index)
+        self.__while_jump_stack.append(self.__quadruplets_index + no_condition)
+
+        self.__quadruplets_index += 1
+
+        print('I added a jump and qudruplet with condition: ', logical_expression_result)
+
     def p_action_new_if(self, p):
         '''
         ACTION_NEW_IF :
@@ -547,6 +602,18 @@ class Parser:
         self.__quadruplets_index += 1
         self.__quadruplets.append('goto ' + str(empty_jump_quadruplet_index))
         self.__quadruplets_index += 1
+        self.fill_jump(empty_jump_quadruplet_index, self.__quadruplets_index, 'gotoF')
+
+    def p_action_while_goto(self, p):
+        '''
+        ACTION_WHILE_GOTO :
+        '''
+        empty_jump_quadruplet_index = self.__jumps_stack.pop() - 1
+        empty_while_jump_quadruplet_index = self.__while_jump_stack.pop() - 1
+
+        self.__quadruplets.append('goto ' + str(empty_while_jump_quadruplet_index))
+        self.__quadruplets_index += 1
+
         self.fill_jump(empty_jump_quadruplet_index, self.__quadruplets_index, 'gotoF')
 
     def p_error(self, p):

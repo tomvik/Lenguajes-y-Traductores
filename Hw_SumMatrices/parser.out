@@ -38,7 +38,7 @@ Rule 20    conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF
 Rule 21    conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
 Rule 22    else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 Rule 23    else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-Rule 24    loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend
+Rule 24    loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
 Rule 25    loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis
 Rule 26    loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
 Rule 27    logic_expression -> arithmetic_expression
@@ -120,14 +120,16 @@ Rule 102   ACTION_ADD_ONE_DIM_OPERAND -> <empty>
 Rule 103   ACTION_ADD_TWO_DIM_OPERAND -> <empty>
 Rule 104   ACTION_ADD_THREE_DIM_OPERAND -> <empty>
 Rule 105   ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> <empty>
-Rule 106   ACTION_NEW_IF -> <empty>
-Rule 107   ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> <empty>
-Rule 108   ACTION_FILL_JUMP -> <empty>
-Rule 109   ACTION_FILL_JUMP_END_IF -> <empty>
-Rule 110   ACTION_FOR_JUMP_BACK -> <empty>
-Rule 111   ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP -> <empty>
-Rule 112   ACTION_FOR_INCREMENT -> <empty>
-Rule 113   ACTION_FOR_GOTO -> <empty>
+Rule 106   ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> <empty>
+Rule 107   ACTION_NEW_IF -> <empty>
+Rule 108   ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> <empty>
+Rule 109   ACTION_FILL_JUMP -> <empty>
+Rule 110   ACTION_FILL_JUMP_END_IF -> <empty>
+Rule 111   ACTION_FOR_JUMP_BACK -> <empty>
+Rule 112   ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP -> <empty>
+Rule 113   ACTION_FOR_INCREMENT -> <empty>
+Rule 114   ACTION_FOR_GOTO -> <empty>
+Rule 115   ACTION_WHILE_GOTO -> <empty>
 
 Terminals, with rules where they appear
 
@@ -214,6 +216,7 @@ ACTION_ADD_QUADRUPLET_EMPTY_JUMP : 17 22 23
 ACTION_ADD_THREE_DIM_OPERAND : 55
 ACTION_ADD_TWO_DIM_OPERAND : 54
 ACTION_ADD_VAR_VALUE : 52 53 54 55 60
+ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP : 24
 ACTION_ADD_WORD_VALUE : 57
 ACTION_ASSIGN_VALUE  : 26 69 70
 ACTION_FILL_JUMP     : 18 19 21 22 23
@@ -223,6 +226,7 @@ ACTION_FOR_INCREMENT : 26
 ACTION_FOR_JUMP_BACK : 26
 ACTION_NEW_IF        : 17
 ACTION_QUADRUPLET_EMPTY_JUMP_END_IF : 17 22 23
+ACTION_WHILE_GOTO    : 24
 arguments            : 74 77 77
 arithmetic_expression : 26 26 26 27 39 40 53 54 54 55 55 55 70 84
 arithmetic_operator  : 39
@@ -273,7 +277,7 @@ state 0
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -349,7 +353,7 @@ state 3
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -369,8 +373,8 @@ state 3
 
     end             reduce using rule 9 (inside_logic -> .)
     loop            reduce using rule 9 (inside_logic -> .)
-    wend            reduce using rule 9 (inside_logic -> .)
     return          reduce using rule 9 (inside_logic -> .)
+    wend            reduce using rule 9 (inside_logic -> .)
     else            reduce using rule 9 (inside_logic -> .)
     elsif           reduce using rule 9 (inside_logic -> .)
     next            reduce using rule 9 (inside_logic -> .)
@@ -416,7 +420,7 @@ state 4
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -436,8 +440,8 @@ state 4
 
     end             reduce using rule 9 (inside_logic -> .)
     loop            reduce using rule 9 (inside_logic -> .)
-    wend            reduce using rule 9 (inside_logic -> .)
     return          reduce using rule 9 (inside_logic -> .)
+    wend            reduce using rule 9 (inside_logic -> .)
     else            reduce using rule 9 (inside_logic -> .)
     elsif           reduce using rule 9 (inside_logic -> .)
     next            reduce using rule 9 (inside_logic -> .)
@@ -483,7 +487,7 @@ state 5
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -503,8 +507,8 @@ state 5
 
     end             reduce using rule 9 (inside_logic -> .)
     loop            reduce using rule 9 (inside_logic -> .)
-    wend            reduce using rule 9 (inside_logic -> .)
     return          reduce using rule 9 (inside_logic -> .)
+    wend            reduce using rule 9 (inside_logic -> .)
     else            reduce using rule 9 (inside_logic -> .)
     elsif           reduce using rule 9 (inside_logic -> .)
     next            reduce using rule 9 (inside_logic -> .)
@@ -550,7 +554,7 @@ state 6
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -570,8 +574,8 @@ state 6
 
     end             reduce using rule 9 (inside_logic -> .)
     loop            reduce using rule 9 (inside_logic -> .)
-    wend            reduce using rule 9 (inside_logic -> .)
     return          reduce using rule 9 (inside_logic -> .)
+    wend            reduce using rule 9 (inside_logic -> .)
     else            reduce using rule 9 (inside_logic -> .)
     elsif           reduce using rule 9 (inside_logic -> .)
     next            reduce using rule 9 (inside_logic -> .)
@@ -617,7 +621,7 @@ state 7
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -637,8 +641,8 @@ state 7
 
     end             reduce using rule 9 (inside_logic -> .)
     loop            reduce using rule 9 (inside_logic -> .)
-    wend            reduce using rule 9 (inside_logic -> .)
     return          reduce using rule 9 (inside_logic -> .)
+    wend            reduce using rule 9 (inside_logic -> .)
     else            reduce using rule 9 (inside_logic -> .)
     elsif           reduce using rule 9 (inside_logic -> .)
     next            reduce using rule 9 (inside_logic -> .)
@@ -684,7 +688,7 @@ state 8
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -704,8 +708,8 @@ state 8
 
     end             reduce using rule 9 (inside_logic -> .)
     loop            reduce using rule 9 (inside_logic -> .)
-    wend            reduce using rule 9 (inside_logic -> .)
     return          reduce using rule 9 (inside_logic -> .)
+    wend            reduce using rule 9 (inside_logic -> .)
     else            reduce using rule 9 (inside_logic -> .)
     elsif           reduce using rule 9 (inside_logic -> .)
     next            reduce using rule 9 (inside_logic -> .)
@@ -759,12 +763,12 @@ state 11
     (19) conditions -> base_if . else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> base_if . else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> base_if . else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (108) ACTION_FILL_JUMP -> .
+    (109) ACTION_FILL_JUMP -> .
     (22) else_ifs -> . elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (23) else_ifs -> . else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
     else            shift and go to state 34
-    end             reduce using rule 108 (ACTION_FILL_JUMP -> .)
+    end             reduce using rule 109 (ACTION_FILL_JUMP -> .)
     elsif           shift and go to state 36
 
     ACTION_FILL_JUMP               shift and go to state 33
@@ -779,7 +783,7 @@ state 12
 
 state 13
 
-    (24) loops -> while . open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> while . open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
 
     open_parenthesis shift and go to state 38
 
@@ -802,7 +806,7 @@ state 14
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -876,8 +880,8 @@ state 17
     dunkelRead      reduce using rule 62 (calls -> functions .)
     end             reduce using rule 62 (calls -> functions .)
     loop            reduce using rule 62 (calls -> functions .)
-    wend            reduce using rule 62 (calls -> functions .)
     return          reduce using rule 62 (calls -> functions .)
+    wend            reduce using rule 62 (calls -> functions .)
     else            reduce using rule 62 (calls -> functions .)
     elsif           reduce using rule 62 (calls -> functions .)
     next            reduce using rule 62 (calls -> functions .)
@@ -900,8 +904,8 @@ state 18
     dunkelRead      reduce using rule 78 (read_or_write -> print .)
     end             reduce using rule 78 (read_or_write -> print .)
     loop            reduce using rule 78 (read_or_write -> print .)
-    wend            reduce using rule 78 (read_or_write -> print .)
     return          reduce using rule 78 (read_or_write -> print .)
+    wend            reduce using rule 78 (read_or_write -> print .)
     else            reduce using rule 78 (read_or_write -> print .)
     elsif           reduce using rule 78 (read_or_write -> print .)
     next            reduce using rule 78 (read_or_write -> print .)
@@ -924,8 +928,8 @@ state 19
     dunkelRead      reduce using rule 79 (read_or_write -> read .)
     end             reduce using rule 79 (read_or_write -> read .)
     loop            reduce using rule 79 (read_or_write -> read .)
-    wend            reduce using rule 79 (read_or_write -> read .)
     return          reduce using rule 79 (read_or_write -> read .)
+    wend            reduce using rule 79 (read_or_write -> read .)
     else            reduce using rule 79 (read_or_write -> read .)
     elsif           reduce using rule 79 (read_or_write -> read .)
     next            reduce using rule 79 (read_or_write -> read .)
@@ -948,8 +952,8 @@ state 20
     dunkelRead      reduce using rule 80 (read_or_write -> dunkelCls .)
     end             reduce using rule 80 (read_or_write -> dunkelCls .)
     loop            reduce using rule 80 (read_or_write -> dunkelCls .)
-    wend            reduce using rule 80 (read_or_write -> dunkelCls .)
     return          reduce using rule 80 (read_or_write -> dunkelCls .)
+    wend            reduce using rule 80 (read_or_write -> dunkelCls .)
     else            reduce using rule 80 (read_or_write -> dunkelCls .)
     elsif           reduce using rule 80 (read_or_write -> dunkelCls .)
     next            reduce using rule 80 (read_or_write -> dunkelCls .)
@@ -1058,8 +1062,8 @@ state 25
 
     end             reduce using rule 3 (inside_logic -> variable inside_logic .)
     loop            reduce using rule 3 (inside_logic -> variable inside_logic .)
-    wend            reduce using rule 3 (inside_logic -> variable inside_logic .)
     return          reduce using rule 3 (inside_logic -> variable inside_logic .)
+    wend            reduce using rule 3 (inside_logic -> variable inside_logic .)
     else            reduce using rule 3 (inside_logic -> variable inside_logic .)
     elsif           reduce using rule 3 (inside_logic -> variable inside_logic .)
     next            reduce using rule 3 (inside_logic -> variable inside_logic .)
@@ -1071,8 +1075,8 @@ state 26
 
     end             reduce using rule 4 (inside_logic -> conditions inside_logic .)
     loop            reduce using rule 4 (inside_logic -> conditions inside_logic .)
-    wend            reduce using rule 4 (inside_logic -> conditions inside_logic .)
     return          reduce using rule 4 (inside_logic -> conditions inside_logic .)
+    wend            reduce using rule 4 (inside_logic -> conditions inside_logic .)
     else            reduce using rule 4 (inside_logic -> conditions inside_logic .)
     elsif           reduce using rule 4 (inside_logic -> conditions inside_logic .)
     next            reduce using rule 4 (inside_logic -> conditions inside_logic .)
@@ -1084,8 +1088,8 @@ state 27
 
     end             reduce using rule 5 (inside_logic -> loops inside_logic .)
     loop            reduce using rule 5 (inside_logic -> loops inside_logic .)
-    wend            reduce using rule 5 (inside_logic -> loops inside_logic .)
     return          reduce using rule 5 (inside_logic -> loops inside_logic .)
+    wend            reduce using rule 5 (inside_logic -> loops inside_logic .)
     else            reduce using rule 5 (inside_logic -> loops inside_logic .)
     elsif           reduce using rule 5 (inside_logic -> loops inside_logic .)
     next            reduce using rule 5 (inside_logic -> loops inside_logic .)
@@ -1097,8 +1101,8 @@ state 28
 
     end             reduce using rule 6 (inside_logic -> calls inside_logic .)
     loop            reduce using rule 6 (inside_logic -> calls inside_logic .)
-    wend            reduce using rule 6 (inside_logic -> calls inside_logic .)
     return          reduce using rule 6 (inside_logic -> calls inside_logic .)
+    wend            reduce using rule 6 (inside_logic -> calls inside_logic .)
     else            reduce using rule 6 (inside_logic -> calls inside_logic .)
     elsif           reduce using rule 6 (inside_logic -> calls inside_logic .)
     next            reduce using rule 6 (inside_logic -> calls inside_logic .)
@@ -1110,8 +1114,8 @@ state 29
 
     end             reduce using rule 7 (inside_logic -> read_or_write inside_logic .)
     loop            reduce using rule 7 (inside_logic -> read_or_write inside_logic .)
-    wend            reduce using rule 7 (inside_logic -> read_or_write inside_logic .)
     return          reduce using rule 7 (inside_logic -> read_or_write inside_logic .)
+    wend            reduce using rule 7 (inside_logic -> read_or_write inside_logic .)
     else            reduce using rule 7 (inside_logic -> read_or_write inside_logic .)
     elsif           reduce using rule 7 (inside_logic -> read_or_write inside_logic .)
     next            reduce using rule 7 (inside_logic -> read_or_write inside_logic .)
@@ -1123,8 +1127,8 @@ state 30
 
     end             reduce using rule 8 (inside_logic -> assign inside_logic .)
     loop            reduce using rule 8 (inside_logic -> assign inside_logic .)
-    wend            reduce using rule 8 (inside_logic -> assign inside_logic .)
     return          reduce using rule 8 (inside_logic -> assign inside_logic .)
+    wend            reduce using rule 8 (inside_logic -> assign inside_logic .)
     else            reduce using rule 8 (inside_logic -> assign inside_logic .)
     elsif           reduce using rule 8 (inside_logic -> assign inside_logic .)
     next            reduce using rule 8 (inside_logic -> assign inside_logic .)
@@ -1158,20 +1162,20 @@ state 33
 state 34
 
     (19) conditions -> base_if else . ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (108) ACTION_FILL_JUMP -> .
+    (109) ACTION_FILL_JUMP -> .
 
-    dim             reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    while           reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    do              reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    for             reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    gosub           reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    dunkelCls       reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    let             reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    if              reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    id              reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    dunkelPrint     reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    dunkelRead      reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    end             reduce using rule 108 (ACTION_FILL_JUMP -> .)
+    dim             reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    while           reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    do              reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    for             reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    gosub           reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    dunkelCls       reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    let             reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    if              reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    id              reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    dunkelPrint     reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    dunkelRead      reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    end             reduce using rule 109 (ACTION_FILL_JUMP -> .)
 
     ACTION_FILL_JUMP               shift and go to state 67
 
@@ -1189,9 +1193,9 @@ state 35
 state 36
 
     (22) else_ifs -> elsif . ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-    (108) ACTION_FILL_JUMP -> .
+    (109) ACTION_FILL_JUMP -> .
 
-    open_parenthesis reduce using rule 108 (ACTION_FILL_JUMP -> .)
+    open_parenthesis reduce using rule 109 (ACTION_FILL_JUMP -> .)
 
     ACTION_FILL_JUMP               shift and go to state 71
 
@@ -1239,7 +1243,7 @@ state 37
 
 state 38
 
-    (24) loops -> while open_parenthesis . logic_expression close_parenthesis inside_logic wend
+    (24) loops -> while open_parenthesis . logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (27) logic_expression -> . arithmetic_expression
     (28) logic_expression -> . logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET
     (29) logic_expression -> . open_parenthesis logic_expression close_parenthesis
@@ -1312,8 +1316,8 @@ state 41
     dunkelRead      reduce using rule 61 (calls -> gosub id .)
     end             reduce using rule 61 (calls -> gosub id .)
     loop            reduce using rule 61 (calls -> gosub id .)
-    wend            reduce using rule 61 (calls -> gosub id .)
     return          reduce using rule 61 (calls -> gosub id .)
+    wend            reduce using rule 61 (calls -> gosub id .)
     else            reduce using rule 61 (calls -> gosub id .)
     elsif           reduce using rule 61 (calls -> gosub id .)
     next            reduce using rule 61 (calls -> gosub id .)
@@ -1351,8 +1355,8 @@ state 43
     dunkelRead      reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     end             reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     loop            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
-    wend            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     return          reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
+    wend            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     else            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     elsif           reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     next            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
@@ -1392,8 +1396,8 @@ state 45
     dunkelRead      reduce using rule 81 (print -> dunkelPrint multiple_print .)
     end             reduce using rule 81 (print -> dunkelPrint multiple_print .)
     loop            reduce using rule 81 (print -> dunkelPrint multiple_print .)
-    wend            reduce using rule 81 (print -> dunkelPrint multiple_print .)
     return          reduce using rule 81 (print -> dunkelPrint multiple_print .)
+    wend            reduce using rule 81 (print -> dunkelPrint multiple_print .)
     else            reduce using rule 81 (print -> dunkelPrint multiple_print .)
     elsif           reduce using rule 81 (print -> dunkelPrint multiple_print .)
     next            reduce using rule 81 (print -> dunkelPrint multiple_print .)
@@ -1464,8 +1468,8 @@ state 47
     dunkelRead      reduce using rule 83 (multiple_print -> string .)
     end             reduce using rule 83 (multiple_print -> string .)
     loop            reduce using rule 83 (multiple_print -> string .)
-    wend            reduce using rule 83 (multiple_print -> string .)
     return          reduce using rule 83 (multiple_print -> string .)
+    wend            reduce using rule 83 (multiple_print -> string .)
     else            reduce using rule 83 (multiple_print -> string .)
     elsif           reduce using rule 83 (multiple_print -> string .)
     next            reduce using rule 83 (multiple_print -> string .)
@@ -1496,8 +1500,8 @@ state 48
     dunkelRead      reduce using rule 84 (multiple_print -> arithmetic_expression .)
     end             reduce using rule 84 (multiple_print -> arithmetic_expression .)
     loop            reduce using rule 84 (multiple_print -> arithmetic_expression .)
-    wend            reduce using rule 84 (multiple_print -> arithmetic_expression .)
     return          reduce using rule 84 (multiple_print -> arithmetic_expression .)
+    wend            reduce using rule 84 (multiple_print -> arithmetic_expression .)
     else            reduce using rule 84 (multiple_print -> arithmetic_expression .)
     elsif           reduce using rule 84 (multiple_print -> arithmetic_expression .)
     next            reduce using rule 84 (multiple_print -> arithmetic_expression .)
@@ -1533,8 +1537,8 @@ state 49
     dunkelRead      reduce using rule 38 (arithmetic_expression -> value .)
     end             reduce using rule 38 (arithmetic_expression -> value .)
     loop            reduce using rule 38 (arithmetic_expression -> value .)
-    wend            reduce using rule 38 (arithmetic_expression -> value .)
     return          reduce using rule 38 (arithmetic_expression -> value .)
+    wend            reduce using rule 38 (arithmetic_expression -> value .)
     else            reduce using rule 38 (arithmetic_expression -> value .)
     elsif           reduce using rule 38 (arithmetic_expression -> value .)
     next            reduce using rule 38 (arithmetic_expression -> value .)
@@ -1575,8 +1579,8 @@ state 50
     dunkelRead      reduce using rule 49 (value -> possible_values .)
     end             reduce using rule 49 (value -> possible_values .)
     loop            reduce using rule 49 (value -> possible_values .)
-    wend            reduce using rule 49 (value -> possible_values .)
     return          reduce using rule 49 (value -> possible_values .)
+    wend            reduce using rule 49 (value -> possible_values .)
     else            reduce using rule 49 (value -> possible_values .)
     elsif           reduce using rule 49 (value -> possible_values .)
     next            reduce using rule 49 (value -> possible_values .)
@@ -1646,8 +1650,8 @@ state 52
     dunkelRead      reduce using rule 46 (possible_values -> real_value .)
     end             reduce using rule 46 (possible_values -> real_value .)
     loop            reduce using rule 46 (possible_values -> real_value .)
-    wend            reduce using rule 46 (possible_values -> real_value .)
     return          reduce using rule 46 (possible_values -> real_value .)
+    wend            reduce using rule 46 (possible_values -> real_value .)
     else            reduce using rule 46 (possible_values -> real_value .)
     elsif           reduce using rule 46 (possible_values -> real_value .)
     next            reduce using rule 46 (possible_values -> real_value .)
@@ -1688,8 +1692,8 @@ state 53
     dunkelRead      reduce using rule 47 (possible_values -> functions .)
     end             reduce using rule 47 (possible_values -> functions .)
     loop            reduce using rule 47 (possible_values -> functions .)
-    wend            reduce using rule 47 (possible_values -> functions .)
     return          reduce using rule 47 (possible_values -> functions .)
+    wend            reduce using rule 47 (possible_values -> functions .)
     else            reduce using rule 47 (possible_values -> functions .)
     elsif           reduce using rule 47 (possible_values -> functions .)
     next            reduce using rule 47 (possible_values -> functions .)
@@ -1730,8 +1734,8 @@ state 54
     dunkelRead      reduce using rule 48 (possible_values -> ids_access .)
     end             reduce using rule 48 (possible_values -> ids_access .)
     loop            reduce using rule 48 (possible_values -> ids_access .)
-    wend            reduce using rule 48 (possible_values -> ids_access .)
     return          reduce using rule 48 (possible_values -> ids_access .)
+    wend            reduce using rule 48 (possible_values -> ids_access .)
     else            reduce using rule 48 (possible_values -> ids_access .)
     elsif           reduce using rule 48 (possible_values -> ids_access .)
     next            reduce using rule 48 (possible_values -> ids_access .)
@@ -1773,8 +1777,8 @@ state 55
     dunkelRead      reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
     end             reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
     loop            reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
-    wend            reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
     return          reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
+    wend            reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
     else            reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
     elsif           reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
     next            reduce using rule 92 (ACTION_ADD_WORD_VALUE -> .)
@@ -1817,8 +1821,8 @@ state 56
     dunkelRead      reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
     end             reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
     loop            reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
-    wend            reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
     return          reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
+    wend            reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
     else            reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
     elsif           reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
     next            reduce using rule 93 (ACTION_ADD_FLOAT_VALUE -> .)
@@ -1861,8 +1865,8 @@ state 57
     dunkelRead      reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
     end             reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
     loop            reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
-    wend            reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
     return          reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
+    wend            reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
     else            reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
     elsif           reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
     next            reduce using rule 94 (ACTION_ADD_BOOL_VALUE -> .)
@@ -1913,8 +1917,8 @@ state 58
     dunkelRead      reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     end             reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     loop            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
-    wend            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     return          reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
+    wend            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     else            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     elsif           reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
     next            reduce using rule 91 (ACTION_ADD_VAR_VALUE -> .)
@@ -1953,8 +1957,8 @@ state 59
     dunkelRead      reduce using rule 86 (read -> dunkelRead multiple_read .)
     end             reduce using rule 86 (read -> dunkelRead multiple_read .)
     loop            reduce using rule 86 (read -> dunkelRead multiple_read .)
-    wend            reduce using rule 86 (read -> dunkelRead multiple_read .)
     return          reduce using rule 86 (read -> dunkelRead multiple_read .)
+    wend            reduce using rule 86 (read -> dunkelRead multiple_read .)
     else            reduce using rule 86 (read -> dunkelRead multiple_read .)
     elsif           reduce using rule 86 (read -> dunkelRead multiple_read .)
     next            reduce using rule 86 (read -> dunkelRead multiple_read .)
@@ -1986,8 +1990,8 @@ state 61
     dunkelRead      reduce using rule 88 (multiple_read -> ids_access .)
     end             reduce using rule 88 (multiple_read -> ids_access .)
     loop            reduce using rule 88 (multiple_read -> ids_access .)
-    wend            reduce using rule 88 (multiple_read -> ids_access .)
     return          reduce using rule 88 (multiple_read -> ids_access .)
+    wend            reduce using rule 88 (multiple_read -> ids_access .)
     else            reduce using rule 88 (multiple_read -> ids_access .)
     elsif           reduce using rule 88 (multiple_read -> ids_access .)
     next            reduce using rule 88 (multiple_read -> ids_access .)
@@ -2067,7 +2071,7 @@ state 67
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -2120,29 +2124,29 @@ state 68
 state 69
 
     (21) conditions -> base_if else_ifs else . ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (108) ACTION_FILL_JUMP -> .
+    (109) ACTION_FILL_JUMP -> .
 
-    dim             reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    while           reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    do              reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    for             reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    gosub           reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    dunkelCls       reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    let             reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    if              reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    id              reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    dunkelPrint     reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    dunkelRead      reduce using rule 108 (ACTION_FILL_JUMP -> .)
-    end             reduce using rule 108 (ACTION_FILL_JUMP -> .)
+    dim             reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    while           reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    do              reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    for             reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    gosub           reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    dunkelCls       reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    let             reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    if              reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    id              reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    dunkelPrint     reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    dunkelRead      reduce using rule 109 (ACTION_FILL_JUMP -> .)
+    end             reduce using rule 109 (ACTION_FILL_JUMP -> .)
 
     ACTION_FILL_JUMP               shift and go to state 114
 
 state 70
 
     (23) else_ifs -> else_ifs elsif . ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-    (108) ACTION_FILL_JUMP -> .
+    (109) ACTION_FILL_JUMP -> .
 
-    open_parenthesis reduce using rule 108 (ACTION_FILL_JUMP -> .)
+    open_parenthesis reduce using rule 109 (ACTION_FILL_JUMP -> .)
 
     ACTION_FILL_JUMP               shift and go to state 115
 
@@ -2255,8 +2259,8 @@ state 74
     dunkelRead      reduce using rule 27 (logic_expression -> arithmetic_expression .)
     end             reduce using rule 27 (logic_expression -> arithmetic_expression .)
     loop            reduce using rule 27 (logic_expression -> arithmetic_expression .)
-    wend            reduce using rule 27 (logic_expression -> arithmetic_expression .)
     return          reduce using rule 27 (logic_expression -> arithmetic_expression .)
+    wend            reduce using rule 27 (logic_expression -> arithmetic_expression .)
     else            reduce using rule 27 (logic_expression -> arithmetic_expression .)
     elsif           reduce using rule 27 (logic_expression -> arithmetic_expression .)
     next            reduce using rule 27 (logic_expression -> arithmetic_expression .)
@@ -2270,7 +2274,7 @@ state 74
 
 state 75
 
-    (24) loops -> while open_parenthesis logic_expression . close_parenthesis inside_logic wend
+    (24) loops -> while open_parenthesis logic_expression . close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
     (30) logic_operator -> . and ACTION_ADD_OPERATOR
     (31) logic_operator -> . or ACTION_ADD_OPERATOR
@@ -2372,8 +2376,8 @@ state 79
     dunkelRead      reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     end             reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     loop            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
-    wend            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     return          reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
+    wend            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     else            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     elsif           reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     next            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
@@ -2715,8 +2719,8 @@ state 94
     dunkelRead      reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
     end             reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
     loop            reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
-    wend            reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
     return          reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
+    wend            reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
     else            reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
     elsif           reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
     next            reduce using rule 100 (ACTION_ADD_NOT_OPERAND -> .)
@@ -2758,8 +2762,8 @@ state 95
     dunkelRead      reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
     end             reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
     loop            reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
-    wend            reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
     return          reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
+    wend            reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
     else            reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
     elsif           reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
     next            reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
@@ -2800,8 +2804,8 @@ state 96
     dunkelRead      reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
     end             reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
     loop            reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
-    wend            reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
     return          reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
+    wend            reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
     else            reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
     elsif           reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
     next            reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
@@ -2842,8 +2846,8 @@ state 97
     dunkelRead      reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
     end             reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
     loop            reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
-    wend            reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
     return          reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
+    wend            reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
     else            reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
     elsif           reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
     next            reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
@@ -2888,8 +2892,8 @@ state 98
   ! reduce/reduce conflict for dunkelRead resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
   ! reduce/reduce conflict for end resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
   ! reduce/reduce conflict for loop resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
-  ! reduce/reduce conflict for wend resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
   ! reduce/reduce conflict for return resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
+  ! reduce/reduce conflict for wend resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
   ! reduce/reduce conflict for else resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
   ! reduce/reduce conflict for elsif resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
   ! reduce/reduce conflict for next resolved using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
@@ -2924,8 +2928,8 @@ state 98
     dunkelRead      reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     end             reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     loop            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
-    wend            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     return          reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
+    wend            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     else            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     elsif           reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     next            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
@@ -2962,8 +2966,8 @@ state 98
   ! dunkelRead      [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
   ! end             [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
   ! loop            [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
-  ! wend            [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
   ! return          [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
+  ! wend            [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
   ! else            [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
   ! elsif           [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
   ! next            [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
@@ -3049,8 +3053,8 @@ state 103
     dunkelRead      reduce using rule 10 (variable -> dim id as variable_type .)
     end             reduce using rule 10 (variable -> dim id as variable_type .)
     loop            reduce using rule 10 (variable -> dim id as variable_type .)
-    wend            reduce using rule 10 (variable -> dim id as variable_type .)
     return          reduce using rule 10 (variable -> dim id as variable_type .)
+    wend            reduce using rule 10 (variable -> dim id as variable_type .)
     else            reduce using rule 10 (variable -> dim id as variable_type .)
     elsif           reduce using rule 10 (variable -> dim id as variable_type .)
     next            reduce using rule 10 (variable -> dim id as variable_type .)
@@ -3077,8 +3081,8 @@ state 104
     dunkelRead      reduce using rule 14 (variable_type -> word .)
     end             reduce using rule 14 (variable_type -> word .)
     loop            reduce using rule 14 (variable_type -> word .)
-    wend            reduce using rule 14 (variable_type -> word .)
     return          reduce using rule 14 (variable_type -> word .)
+    wend            reduce using rule 14 (variable_type -> word .)
     else            reduce using rule 14 (variable_type -> word .)
     elsif           reduce using rule 14 (variable_type -> word .)
     next            reduce using rule 14 (variable_type -> word .)
@@ -3104,8 +3108,8 @@ state 105
     dunkelRead      reduce using rule 15 (variable_type -> float .)
     end             reduce using rule 15 (variable_type -> float .)
     loop            reduce using rule 15 (variable_type -> float .)
-    wend            reduce using rule 15 (variable_type -> float .)
     return          reduce using rule 15 (variable_type -> float .)
+    wend            reduce using rule 15 (variable_type -> float .)
     else            reduce using rule 15 (variable_type -> float .)
     elsif           reduce using rule 15 (variable_type -> float .)
     next            reduce using rule 15 (variable_type -> float .)
@@ -3131,8 +3135,8 @@ state 106
     dunkelRead      reduce using rule 16 (variable_type -> bool .)
     end             reduce using rule 16 (variable_type -> bool .)
     loop            reduce using rule 16 (variable_type -> bool .)
-    wend            reduce using rule 16 (variable_type -> bool .)
     return          reduce using rule 16 (variable_type -> bool .)
+    wend            reduce using rule 16 (variable_type -> bool .)
     else            reduce using rule 16 (variable_type -> bool .)
     elsif           reduce using rule 16 (variable_type -> bool .)
     next            reduce using rule 16 (variable_type -> bool .)
@@ -3157,8 +3161,8 @@ state 107
     dunkelRead      reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
     end             reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
     loop            reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
-    wend            reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
     return          reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
+    wend            reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
     else            reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
     elsif           reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
     next            reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis .)
@@ -3237,26 +3241,26 @@ state 110
 state 111
 
     (18) conditions -> base_if ACTION_FILL_JUMP end if . ACTION_FILL_JUMP_END_IF
-    (109) ACTION_FILL_JUMP_END_IF -> .
+    (110) ACTION_FILL_JUMP_END_IF -> .
 
-    dim             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    while           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    do              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    for             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    gosub           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelCls       reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    let             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    if              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    id              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelPrint     reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelRead      reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    end             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    loop            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    wend            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    return          reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    else            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    elsif           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    next            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
+    dim             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    while           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    do              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    for             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    gosub           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelCls       reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    let             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    if              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    id              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelPrint     reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelRead      reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    end             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    loop            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    return          reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    wend            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    else            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    elsif           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    next            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
 
     ACTION_FILL_JUMP_END_IF        shift and go to state 159
 
@@ -3270,26 +3274,26 @@ state 112
 state 113
 
     (20) conditions -> base_if else_ifs end if . ACTION_FILL_JUMP_END_IF
-    (109) ACTION_FILL_JUMP_END_IF -> .
+    (110) ACTION_FILL_JUMP_END_IF -> .
 
-    dim             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    while           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    do              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    for             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    gosub           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelCls       reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    let             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    if              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    id              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelPrint     reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelRead      reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    end             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    loop            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    wend            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    return          reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    else            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    elsif           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    next            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
+    dim             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    while           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    do              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    for             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    gosub           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelCls       reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    let             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    if              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    id              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelPrint     reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelRead      reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    end             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    loop            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    return          reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    wend            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    else            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    elsif           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    next            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
 
     ACTION_FILL_JUMP_END_IF        shift and go to state 161
 
@@ -3311,7 +3315,7 @@ state 114
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -3622,64 +3626,23 @@ state 128
 
 state 129
 
-    (24) loops -> while open_parenthesis logic_expression close_parenthesis . inside_logic wend
-    (3) inside_logic -> . variable inside_logic
-    (4) inside_logic -> . conditions inside_logic
-    (5) inside_logic -> . loops inside_logic
-    (6) inside_logic -> . calls inside_logic
-    (7) inside_logic -> . read_or_write inside_logic
-    (8) inside_logic -> . assign inside_logic
-    (9) inside_logic -> .
-    (10) variable -> . dim id as variable_type
-    (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
-    (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
-    (18) conditions -> . base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
-    (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
-    (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
-    (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
-    (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
-    (61) calls -> . gosub id
-    (62) calls -> . functions
-    (78) read_or_write -> . print
-    (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
-    (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
-    (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
-    (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
-    (74) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
-    (81) print -> . dunkelPrint multiple_print
-    (82) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis
-    (86) read -> . dunkelRead multiple_read
-    (87) read -> . dunkelRead string comma multiple_read
+    (24) loops -> while open_parenthesis logic_expression close_parenthesis . ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
+    (106) ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .
 
-    wend            reduce using rule 9 (inside_logic -> .)
-    dim             shift and go to state 9
-    while           shift and go to state 13
-    do              shift and go to state 14
-    for             shift and go to state 15
-    gosub           shift and go to state 16
-    dunkelCls       shift and go to state 20
-    let             shift and go to state 21
-    if              shift and go to state 12
-    id              shift and go to state 10
-    dunkelPrint     shift and go to state 22
-    dunkelRead      shift and go to state 23
+    dim             reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    while           reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    do              reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    for             reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    gosub           reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    dunkelCls       reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    let             reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    if              reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    id              reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    dunkelPrint     reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    dunkelRead      reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
+    wend            reduce using rule 106 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
 
-    inside_logic                   shift and go to state 176
-    variable                       shift and go to state 3
-    conditions                     shift and go to state 4
-    loops                          shift and go to state 5
-    calls                          shift and go to state 6
-    read_or_write                  shift and go to state 7
-    assign                         shift and go to state 8
-    base_if                        shift and go to state 11
-    functions                      shift and go to state 17
-    print                          shift and go to state 18
-    read                           shift and go to state 19
+    ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP shift and go to state 176
 
 state 130
 
@@ -3753,8 +3716,8 @@ state 132
     dunkelRead      reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
     end             reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
     loop            reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
-    wend            reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
     return          reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
+    wend            reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
     else            reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
     elsif           reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
     next            reduce using rule 98 (ACTION_ASSIGN_VALUE -> .)
@@ -3795,8 +3758,8 @@ state 133
   ! reduce/reduce conflict for dunkelRead resolved using rule 27 (logic_expression -> arithmetic_expression .)
   ! reduce/reduce conflict for end resolved using rule 27 (logic_expression -> arithmetic_expression .)
   ! reduce/reduce conflict for loop resolved using rule 27 (logic_expression -> arithmetic_expression .)
-  ! reduce/reduce conflict for wend resolved using rule 27 (logic_expression -> arithmetic_expression .)
   ! reduce/reduce conflict for return resolved using rule 27 (logic_expression -> arithmetic_expression .)
+  ! reduce/reduce conflict for wend resolved using rule 27 (logic_expression -> arithmetic_expression .)
   ! reduce/reduce conflict for else resolved using rule 27 (logic_expression -> arithmetic_expression .)
   ! reduce/reduce conflict for elsif resolved using rule 27 (logic_expression -> arithmetic_expression .)
   ! reduce/reduce conflict for next resolved using rule 27 (logic_expression -> arithmetic_expression .)
@@ -3821,8 +3784,8 @@ state 133
     dunkelRead      reduce using rule 27 (logic_expression -> arithmetic_expression .)
     end             reduce using rule 27 (logic_expression -> arithmetic_expression .)
     loop            reduce using rule 27 (logic_expression -> arithmetic_expression .)
-    wend            reduce using rule 27 (logic_expression -> arithmetic_expression .)
     return          reduce using rule 27 (logic_expression -> arithmetic_expression .)
+    wend            reduce using rule 27 (logic_expression -> arithmetic_expression .)
     else            reduce using rule 27 (logic_expression -> arithmetic_expression .)
     elsif           reduce using rule 27 (logic_expression -> arithmetic_expression .)
     next            reduce using rule 27 (logic_expression -> arithmetic_expression .)
@@ -3845,8 +3808,8 @@ state 133
   ! dunkelRead      [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
   ! end             [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
   ! loop            [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
-  ! wend            [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
   ! return          [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
+  ! wend            [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
   ! else            [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
   ! elsif           [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
   ! next            [ reduce using rule 98 (ACTION_ASSIGN_VALUE -> .) ]
@@ -3918,8 +3881,8 @@ state 135
     dunkelRead      reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
     end             reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
     loop            reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
-    wend            reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
     return          reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
+    wend            reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
     else            reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
     elsif           reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
     next            reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
@@ -3956,8 +3919,8 @@ state 136
     dunkelRead      reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
     end             reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
     loop            reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
-    wend            reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
     return          reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
+    wend            reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
     else            reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
     elsif           reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
     next            reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
@@ -4003,8 +3966,8 @@ state 138
     dunkelRead      reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
     end             reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
     loop            reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
-    wend            reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
     return          reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
+    wend            reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
     else            reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
     elsif           reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
     next            reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis .)
@@ -4033,8 +3996,8 @@ state 139
     dunkelRead      reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
     end             reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
     loop            reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
-    wend            reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
     return          reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
+    wend            reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
     else            reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
     elsif           reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
     next            reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
@@ -4075,8 +4038,8 @@ state 140
     dunkelRead      reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
     end             reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
     loop            reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
-    wend            reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
     return          reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
+    wend            reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
     else            reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
     elsif           reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
     next            reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
@@ -4175,8 +4138,8 @@ state 142
     dunkelRead      reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     end             reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     loop            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
-    wend            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     return          reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
+    wend            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     else            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     elsif           reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     next            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
@@ -4313,8 +4276,8 @@ state 149
     dunkelRead      reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
     end             reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
     loop            reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
-    wend            reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
     return          reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
+    wend            reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
     else            reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
     elsif           reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
     next            reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
@@ -4350,8 +4313,8 @@ state 150
     dunkelRead      reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
     end             reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
     loop            reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
-    wend            reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
     return          reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
+    wend            reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
     else            reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
     elsif           reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
     next            reduce using rule 89 (multiple_read -> multiple_read comma ids_access .)
@@ -4375,8 +4338,8 @@ state 151
     dunkelRead      reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
     end             reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
     loop            reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
-    wend            reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
     return          reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
+    wend            reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
     else            reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
     elsif           reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
     next            reduce using rule 87 (read -> dunkelRead string comma multiple_read .)
@@ -4401,7 +4364,7 @@ state 152
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -4519,8 +4482,8 @@ state 159
     dunkelRead      reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
     end             reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
     loop            reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
-    wend            reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
     return          reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
+    wend            reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
     else            reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
     elsif           reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
     next            reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
@@ -4550,8 +4513,8 @@ state 161
     dunkelRead      reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
     end             reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
     loop            reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
-    wend            reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
     return          reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
+    wend            reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
     else            reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
     elsif           reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
     next            reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
@@ -4657,8 +4620,8 @@ state 165
     dunkelRead      reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
     end             reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
     loop            reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
-    wend            reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
     return          reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
+    wend            reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
     else            reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
     elsif           reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
     next            reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
@@ -4722,8 +4685,8 @@ state 167
     dunkelRead      reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     end             reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     loop            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
-    wend            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     return          reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
+    wend            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     else            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     elsif           reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
     next            reduce using rule 101 (ACTION_ADD_QUADRUPLET -> .)
@@ -4846,10 +4809,64 @@ state 175
 
 state 176
 
-    (24) loops -> while open_parenthesis logic_expression close_parenthesis inside_logic . wend
+    (24) loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP . inside_logic wend ACTION_WHILE_GOTO
+    (3) inside_logic -> . variable inside_logic
+    (4) inside_logic -> . conditions inside_logic
+    (5) inside_logic -> . loops inside_logic
+    (6) inside_logic -> . calls inside_logic
+    (7) inside_logic -> . read_or_write inside_logic
+    (8) inside_logic -> . assign inside_logic
+    (9) inside_logic -> .
+    (10) variable -> . dim id as variable_type
+    (11) variable -> . dim id as variable_type open_brackets word_value close_brackets
+    (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
+    (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
+    (18) conditions -> . base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF
+    (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
+    (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
+    (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
+    (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
+    (61) calls -> . gosub id
+    (62) calls -> . functions
+    (78) read_or_write -> . print
+    (79) read_or_write -> . read
+    (80) read_or_write -> . dunkelCls
+    (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
+    (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
+    (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
+    (73) functions -> . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
+    (74) functions -> . id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
+    (81) print -> . dunkelPrint multiple_print
+    (82) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis
+    (86) read -> . dunkelRead multiple_read
+    (87) read -> . dunkelRead string comma multiple_read
 
-    wend            shift and go to state 197
+    wend            reduce using rule 9 (inside_logic -> .)
+    dim             shift and go to state 9
+    while           shift and go to state 13
+    do              shift and go to state 14
+    for             shift and go to state 15
+    gosub           shift and go to state 16
+    dunkelCls       shift and go to state 20
+    let             shift and go to state 21
+    if              shift and go to state 12
+    id              shift and go to state 10
+    dunkelPrint     shift and go to state 22
+    dunkelRead      shift and go to state 23
 
+    inside_logic                   shift and go to state 197
+    variable                       shift and go to state 3
+    conditions                     shift and go to state 4
+    loops                          shift and go to state 5
+    calls                          shift and go to state 6
+    read_or_write                  shift and go to state 7
+    assign                         shift and go to state 8
+    base_if                        shift and go to state 11
+    functions                      shift and go to state 17
+    print                          shift and go to state 18
+    read                           shift and go to state 19
 
 state 177
 
@@ -4931,8 +4948,8 @@ state 179
     dunkelRead      reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
     end             reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
     loop            reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
-    wend            reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
     return          reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
+    wend            reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
     else            reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
     elsif           reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
     next            reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
@@ -4955,8 +4972,8 @@ state 180
     dunkelRead      reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
     end             reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
     loop            reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
-    wend            reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
     return          reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
+    wend            reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
     else            reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
     elsif           reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
     next            reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
@@ -5006,8 +5023,8 @@ state 182
     dunkelRead      reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
     end             reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
     loop            reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
-    wend            reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
     return          reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
+    wend            reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
     else            reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
     elsif           reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
     next            reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
@@ -5084,8 +5101,8 @@ state 187
     dunkelRead      reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
     end             reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
     loop            reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
-    wend            reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
     return          reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
+    wend            reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
     else            reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
     elsif           reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
     next            reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
@@ -5140,26 +5157,26 @@ state 190
 state 191
 
     (19) conditions -> base_if else ACTION_FILL_JUMP inside_logic end if . ACTION_FILL_JUMP_END_IF
-    (109) ACTION_FILL_JUMP_END_IF -> .
+    (110) ACTION_FILL_JUMP_END_IF -> .
 
-    dim             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    while           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    do              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    for             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    gosub           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelCls       reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    let             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    if              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    id              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelPrint     reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelRead      reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    end             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    loop            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    wend            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    return          reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    else            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    elsif           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    next            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
+    dim             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    while           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    do              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    for             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    gosub           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelCls       reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    let             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    if              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    id              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelPrint     reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelRead      reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    end             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    loop            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    return          reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    wend            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    else            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    elsif           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    next            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
 
     ACTION_FILL_JUMP_END_IF        shift and go to state 206
 
@@ -5222,7 +5239,7 @@ state 195
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -5293,8 +5310,8 @@ state 196
     dunkelRead      reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
     end             reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
     loop            reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
-    wend            reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
     return          reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
+    wend            reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
     else            reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
     elsif           reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
     next            reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
@@ -5302,26 +5319,9 @@ state 196
 
 state 197
 
-    (24) loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .
+    (24) loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic . wend ACTION_WHILE_GOTO
 
-    dim             reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    while           reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    do              reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    for             reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    gosub           reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    dunkelCls       reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    let             reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    if              reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    id              reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    dunkelPrint     reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    dunkelRead      reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    end             reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    loop            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    wend            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    return          reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    else            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    elsif           reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
-    next            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis inside_logic wend .)
+    wend            shift and go to state 211
 
 
 state 198
@@ -5337,7 +5337,7 @@ state 198
     (36) logic_operator -> . less_than ACTION_ADD_OPERATOR
     (37) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 211
+    close_parenthesis shift and go to state 212
     and             shift and go to state 121
     or              shift and go to state 122
     is_equal        shift and go to state 123
@@ -5353,7 +5353,7 @@ state 199
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE . to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
 
-    to              shift and go to state 212
+    to              shift and go to state 213
 
 
 state 200
@@ -5363,7 +5363,7 @@ state 200
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets . open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (102) ACTION_ADD_ONE_DIM_OPERAND -> .
 
-    open_brackets   shift and go to state 213
+    open_brackets   shift and go to state 214
     equals          reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     sum             reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     substraction    reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
@@ -5384,8 +5384,8 @@ state 200
     dunkelRead      reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     end             reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     loop            reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
-    wend            reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     return          reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
+    wend            reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     else            reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     elsif           reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     next            reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
@@ -5402,7 +5402,7 @@ state 200
     close_brackets  reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     step            reduce using rule 102 (ACTION_ADD_ONE_DIM_OPERAND -> .)
 
-    ACTION_ADD_ONE_DIM_OPERAND     shift and go to state 214
+    ACTION_ADD_ONE_DIM_OPERAND     shift and go to state 215
 
 state 201
 
@@ -5417,7 +5417,7 @@ state 201
     sub             shift and go to state 63
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 215
+    subroutines                    shift and go to state 216
 
 state 202
 
@@ -5438,7 +5438,7 @@ state 202
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -5456,7 +5456,7 @@ state 202
     (86) read -> . dunkelRead multiple_read
     (87) read -> . dunkelRead string comma multiple_read
 
-    as              shift and go to state 217
+    as              shift and go to state 218
     end             reduce using rule 9 (inside_logic -> .)
     dim             shift and go to state 9
     while           shift and go to state 13
@@ -5470,7 +5470,7 @@ state 202
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 216
+    inside_logic                   shift and go to state 217
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5488,8 +5488,8 @@ state 203
     (67) subroutines -> sub function id open_parenthesis parameters . close_parenthesis as variable_type inside_logic end sub subroutines
     (72) parameters -> parameters . comma parameters
 
-    close_parenthesis shift and go to state 218
-    comma           shift and go to state 219
+    close_parenthesis shift and go to state 219
+    comma           shift and go to state 220
 
 
 state 204
@@ -5519,14 +5519,14 @@ state 205
     dunkelRead      reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     end             reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     loop            reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
-    wend            reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     return          reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
+    wend            reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     else            reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     elsif           reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     next            reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     close_parenthesis reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     comma           reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
-    open_brackets   shift and go to state 220
+    open_brackets   shift and go to state 221
 
 
 state 206
@@ -5546,8 +5546,8 @@ state 206
     dunkelRead      reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     end             reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     loop            reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
-    wend            reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     return          reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    wend            reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     else            reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     elsif           reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     next            reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
@@ -5556,28 +5556,28 @@ state 206
 state 207
 
     (21) conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if . ACTION_FILL_JUMP_END_IF
-    (109) ACTION_FILL_JUMP_END_IF -> .
+    (110) ACTION_FILL_JUMP_END_IF -> .
 
-    dim             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    while           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    do              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    for             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    gosub           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelCls       reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    let             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    if              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    id              reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelPrint     reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    dunkelRead      reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    end             reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    loop            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    wend            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    return          reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    else            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    elsif           reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
-    next            reduce using rule 109 (ACTION_FILL_JUMP_END_IF -> .)
+    dim             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    while           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    do              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    for             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    gosub           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelCls       reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    let             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    if              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    id              reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelPrint     reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    dunkelRead      reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    end             reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    loop            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    return          reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    wend            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    else            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    elsif           reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
+    next            reduce using rule 110 (ACTION_FILL_JUMP_END_IF -> .)
 
-    ACTION_FILL_JUMP_END_IF        shift and go to state 221
+    ACTION_FILL_JUMP_END_IF        shift and go to state 222
 
 state 208
 
@@ -5586,27 +5586,53 @@ state 208
 
     then            reduce using rule 105 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
 
-    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 222
+    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 223
 
 state 209
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP . then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
-    then            shift and go to state 223
+    then            shift and go to state 224
 
 
 state 210
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic . ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-    (106) ACTION_NEW_IF -> .
+    (107) ACTION_NEW_IF -> .
 
-    else            reduce using rule 106 (ACTION_NEW_IF -> .)
-    elsif           reduce using rule 106 (ACTION_NEW_IF -> .)
-    end             reduce using rule 106 (ACTION_NEW_IF -> .)
+    else            reduce using rule 107 (ACTION_NEW_IF -> .)
+    elsif           reduce using rule 107 (ACTION_NEW_IF -> .)
+    end             reduce using rule 107 (ACTION_NEW_IF -> .)
 
-    ACTION_NEW_IF                  shift and go to state 224
+    ACTION_NEW_IF                  shift and go to state 225
 
 state 211
+
+    (24) loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend . ACTION_WHILE_GOTO
+    (115) ACTION_WHILE_GOTO -> .
+
+    dim             reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    while           reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    do              reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    for             reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    gosub           reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    dunkelCls       reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    let             reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    if              reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    id              reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    dunkelPrint     reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    dunkelRead      reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    end             reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    loop            reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    return          reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    wend            reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    else            reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    elsif           reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+    next            reduce using rule 115 (ACTION_WHILE_GOTO -> .)
+
+    ACTION_WHILE_GOTO              shift and go to state 226
+
+state 212
 
     (25) loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .
 
@@ -5623,28 +5649,28 @@ state 211
     dunkelRead      reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
     end             reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
     loop            reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
-    wend            reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
     return          reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
+    wend            reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
     else            reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
     elsif           reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
     next            reduce using rule 25 (loops -> do inside_logic loop until open_parenthesis logic_expression close_parenthesis .)
 
 
-state 212
+state 213
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to . ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
-    (110) ACTION_FOR_JUMP_BACK -> .
+    (111) ACTION_FOR_JUMP_BACK -> .
 
-    open_parenthesis reduce using rule 110 (ACTION_FOR_JUMP_BACK -> .)
-    not             reduce using rule 110 (ACTION_FOR_JUMP_BACK -> .)
-    word_value      reduce using rule 110 (ACTION_FOR_JUMP_BACK -> .)
-    float_value     reduce using rule 110 (ACTION_FOR_JUMP_BACK -> .)
-    bool_value      reduce using rule 110 (ACTION_FOR_JUMP_BACK -> .)
-    id              reduce using rule 110 (ACTION_FOR_JUMP_BACK -> .)
+    open_parenthesis reduce using rule 111 (ACTION_FOR_JUMP_BACK -> .)
+    not             reduce using rule 111 (ACTION_FOR_JUMP_BACK -> .)
+    word_value      reduce using rule 111 (ACTION_FOR_JUMP_BACK -> .)
+    float_value     reduce using rule 111 (ACTION_FOR_JUMP_BACK -> .)
+    bool_value      reduce using rule 111 (ACTION_FOR_JUMP_BACK -> .)
+    id              reduce using rule 111 (ACTION_FOR_JUMP_BACK -> .)
 
-    ACTION_FOR_JUMP_BACK           shift and go to state 225
+    ACTION_FOR_JUMP_BACK           shift and go to state 227
 
-state 213
+state 214
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
@@ -5676,14 +5702,14 @@ state 213
     bool_value      shift and go to state 57
     id              shift and go to state 58
 
-    arithmetic_expression          shift and go to state 226
+    arithmetic_expression          shift and go to state 228
     value                          shift and go to state 49
     possible_values                shift and go to state 50
     real_value                     shift and go to state 52
     functions                      shift and go to state 53
     ids_access                     shift and go to state 54
 
-state 214
+state 215
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .
 
@@ -5707,8 +5733,8 @@ state 214
     dunkelRead      reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
     end             reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
     loop            reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
-    wend            reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
     return          reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
+    wend            reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
     else            reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
     elsif           reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
     next            reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
@@ -5726,21 +5752,21 @@ state 214
     step            reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
 
 
-state 215
+state 216
 
     (63) subroutines -> sub procedure id inside_logic return subroutines .
 
     $end            reduce using rule 63 (subroutines -> sub procedure id inside_logic return subroutines .)
 
 
-state 216
+state 217
 
     (64) subroutines -> sub function id open_parenthesis close_parenthesis inside_logic . end sub subroutines
 
-    end             shift and go to state 227
+    end             shift and go to state 229
 
 
-state 217
+state 218
 
     (66) subroutines -> sub function id open_parenthesis close_parenthesis as . variable_type inside_logic end sub subroutines
     (14) variable_type -> . word
@@ -5751,9 +5777,9 @@ state 217
     float           shift and go to state 105
     bool            shift and go to state 106
 
-    variable_type                  shift and go to state 228
+    variable_type                  shift and go to state 230
 
-state 218
+state 219
 
     (65) subroutines -> sub function id open_parenthesis parameters close_parenthesis . inside_logic end sub subroutines
     (67) subroutines -> sub function id open_parenthesis parameters close_parenthesis . as variable_type inside_logic end sub subroutines
@@ -5772,7 +5798,7 @@ state 218
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -5790,7 +5816,7 @@ state 218
     (86) read -> . dunkelRead multiple_read
     (87) read -> . dunkelRead string comma multiple_read
 
-    as              shift and go to state 230
+    as              shift and go to state 232
     end             reduce using rule 9 (inside_logic -> .)
     dim             shift and go to state 9
     while           shift and go to state 13
@@ -5804,7 +5830,7 @@ state 218
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 229
+    inside_logic                   shift and go to state 231
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5816,7 +5842,7 @@ state 218
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 219
+state 220
 
     (72) parameters -> parameters comma . parameters
     (71) parameters -> . variable
@@ -5828,18 +5854,18 @@ state 219
 
     dim             shift and go to state 9
 
-    parameters                     shift and go to state 231
+    parameters                     shift and go to state 233
     variable                       shift and go to state 204
 
-state 220
+state 221
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets . word_value close_brackets
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets . word_value close_brackets open_brackets word_value close_brackets
 
-    word_value      shift and go to state 232
+    word_value      shift and go to state 234
 
 
-state 221
+state 222
 
     (21) conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .
 
@@ -5856,21 +5882,21 @@ state 221
     dunkelRead      reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     end             reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     loop            reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
-    wend            reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     return          reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
+    wend            reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     else            reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     elsif           reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
     next            reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
 
 
-state 222
+state 223
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP . then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
-    then            shift and go to state 233
+    then            shift and go to state 235
 
 
-state 223
+state 224
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then . inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (3) inside_logic -> . variable inside_logic
@@ -5888,7 +5914,7 @@ state 223
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -5921,7 +5947,7 @@ state 223
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 234
+    inside_logic                   shift and go to state 236
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5933,18 +5959,42 @@ state 223
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 224
+state 225
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-    (107) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
+    (108) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
 
-    else            reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
-    elsif           reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
-    end             reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    else            reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    elsif           reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    end             reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
 
-    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 235
+    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 237
 
-state 225
+state 226
+
+    (24) loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .
+
+    dim             reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    while           reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    do              reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    for             reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    gosub           reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    dunkelCls       reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    let             reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    if              reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    id              reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    dunkelPrint     reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    dunkelRead      reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    end             reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    loop            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    return          reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    wend            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    else            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    elsif           reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+    next            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
+
+
+state 227
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK . arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (38) arithmetic_expression -> . value
@@ -5975,14 +6025,14 @@ state 225
     bool_value      shift and go to state 57
     id              shift and go to state 58
 
-    arithmetic_expression          shift and go to state 236
+    arithmetic_expression          shift and go to state 238
     value                          shift and go to state 49
     possible_values                shift and go to state 50
     real_value                     shift and go to state 52
     functions                      shift and go to state 53
     ids_access                     shift and go to state 54
 
-state 226
+state 228
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets ACTION_ADD_TWO_DIM_OPERAND
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
@@ -5993,7 +6043,7 @@ state 226
     (44) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    close_brackets  shift and go to state 237
+    close_brackets  shift and go to state 239
     sum             shift and go to state 89
     substraction    shift and go to state 90
     multiplication  shift and go to state 91
@@ -6002,14 +6052,14 @@ state 226
 
     arithmetic_operator            shift and go to state 88
 
-state 227
+state 229
 
     (64) subroutines -> sub function id open_parenthesis close_parenthesis inside_logic end . sub subroutines
 
-    sub             shift and go to state 238
+    sub             shift and go to state 240
 
 
-state 228
+state 230
 
     (66) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type . inside_logic end sub subroutines
     (3) inside_logic -> . variable inside_logic
@@ -6027,7 +6077,7 @@ state 228
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -6058,7 +6108,7 @@ state 228
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 239
+    inside_logic                   shift and go to state 241
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6070,14 +6120,14 @@ state 228
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 229
+state 231
 
     (65) subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic . end sub subroutines
 
-    end             shift and go to state 240
+    end             shift and go to state 242
 
 
-state 230
+state 232
 
     (67) subroutines -> sub function id open_parenthesis parameters close_parenthesis as . variable_type inside_logic end sub subroutines
     (14) variable_type -> . word
@@ -6088,29 +6138,29 @@ state 230
     float           shift and go to state 105
     bool            shift and go to state 106
 
-    variable_type                  shift and go to state 241
+    variable_type                  shift and go to state 243
 
-state 231
+state 233
 
     (72) parameters -> parameters comma parameters .
     (72) parameters -> parameters . comma parameters
 
   ! shift/reduce conflict for comma resolved as shift
     close_parenthesis reduce using rule 72 (parameters -> parameters comma parameters .)
-    comma           shift and go to state 219
+    comma           shift and go to state 220
 
   ! comma           [ reduce using rule 72 (parameters -> parameters comma parameters .) ]
 
 
-state 232
+state 234
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value . close_brackets
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value . close_brackets open_brackets word_value close_brackets
 
-    close_brackets  shift and go to state 242
+    close_brackets  shift and go to state 244
 
 
-state 233
+state 235
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then . inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (3) inside_logic -> . variable inside_logic
@@ -6128,7 +6178,7 @@ state 233
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -6161,7 +6211,7 @@ state 233
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 243
+    inside_logic                   shift and go to state 245
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6173,18 +6223,18 @@ state 233
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 234
+state 236
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-    (107) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
+    (108) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
 
-    end             reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
-    else            reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
-    elsif           reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    end             reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    else            reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    elsif           reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
 
-    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 244
+    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 246
 
-state 235
+state 237
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .
 
@@ -6193,34 +6243,34 @@ state 235
     end             reduce using rule 17 (base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
 
 
-state 236
+state 238
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression . ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
-    (111) ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP -> .
+    (112) ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP -> .
     (41) arithmetic_operator -> . sum ACTION_ADD_OPERATOR
     (42) arithmetic_operator -> . substraction ACTION_ADD_OPERATOR
     (43) arithmetic_operator -> . multiplication ACTION_ADD_OPERATOR
     (44) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    step            reduce using rule 111 (ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP -> .)
+    step            reduce using rule 112 (ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP -> .)
     sum             shift and go to state 89
     substraction    shift and go to state 90
     multiplication  shift and go to state 91
     division        shift and go to state 92
     exponent        shift and go to state 93
 
-    ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP shift and go to state 245
+    ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP shift and go to state 247
     arithmetic_operator            shift and go to state 88
 
-state 237
+state 239
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . ACTION_ADD_TWO_DIM_OPERAND
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (103) ACTION_ADD_TWO_DIM_OPERAND -> .
 
-    open_brackets   shift and go to state 246
+    open_brackets   shift and go to state 248
     equals          reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     sum             reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     substraction    reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
@@ -6241,8 +6291,8 @@ state 237
     dunkelRead      reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     end             reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     loop            reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
-    wend            reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     return          reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
+    wend            reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     else            reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     elsif           reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     next            reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
@@ -6259,9 +6309,9 @@ state 237
     close_brackets  reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     step            reduce using rule 103 (ACTION_ADD_TWO_DIM_OPERAND -> .)
 
-    ACTION_ADD_TWO_DIM_OPERAND     shift and go to state 247
+    ACTION_ADD_TWO_DIM_OPERAND     shift and go to state 249
 
-state 238
+state 240
 
     (64) subroutines -> sub function id open_parenthesis close_parenthesis inside_logic end sub . subroutines
     (63) subroutines -> . sub procedure id inside_logic return subroutines
@@ -6274,23 +6324,23 @@ state 238
     sub             shift and go to state 63
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 248
+    subroutines                    shift and go to state 250
 
-state 239
+state 241
 
     (66) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic . end sub subroutines
 
-    end             shift and go to state 249
+    end             shift and go to state 251
 
 
-state 240
+state 242
 
     (65) subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic end . sub subroutines
 
-    sub             shift and go to state 250
+    sub             shift and go to state 252
 
 
-state 241
+state 243
 
     (67) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type . inside_logic end sub subroutines
     (3) inside_logic -> . variable inside_logic
@@ -6308,7 +6358,7 @@ state 241
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -6339,7 +6389,7 @@ state 241
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 251
+    inside_logic                   shift and go to state 253
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6351,7 +6401,7 @@ state 241
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 242
+state 244
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets . open_brackets word_value close_brackets
@@ -6369,28 +6419,28 @@ state 242
     dunkelRead      reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     end             reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     loop            reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
-    wend            reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     return          reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
+    wend            reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     else            reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     elsif           reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     next            reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     close_parenthesis reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     comma           reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
-    open_brackets   shift and go to state 252
+    open_brackets   shift and go to state 254
 
 
-state 243
+state 245
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
-    (107) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
+    (108) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
 
-    end             reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
-    else            reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
-    elsif           reduce using rule 107 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    end             reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    else            reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
+    elsif           reduce using rule 108 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
 
-    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 253
+    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 255
 
-state 244
+state 246
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .
 
@@ -6399,14 +6449,14 @@ state 244
     elsif           reduce using rule 22 (else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
 
 
-state 245
+state 247
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP . step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
 
-    step            shift and go to state 254
+    step            shift and go to state 256
 
 
-state 246
+state 248
 
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (38) arithmetic_expression -> . value
@@ -6437,14 +6487,14 @@ state 246
     bool_value      shift and go to state 57
     id              shift and go to state 58
 
-    arithmetic_expression          shift and go to state 255
+    arithmetic_expression          shift and go to state 257
     value                          shift and go to state 49
     possible_values                shift and go to state 50
     real_value                     shift and go to state 52
     functions                      shift and go to state 53
     ids_access                     shift and go to state 54
 
-state 247
+state 249
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .
 
@@ -6468,8 +6518,8 @@ state 247
     dunkelRead      reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
     end             reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
     loop            reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
-    wend            reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
     return          reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
+    wend            reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
     else            reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
     elsif           reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
     next            reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
@@ -6487,21 +6537,21 @@ state 247
     step            reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
 
 
-state 248
+state 250
 
     (64) subroutines -> sub function id open_parenthesis close_parenthesis inside_logic end sub subroutines .
 
     $end            reduce using rule 64 (subroutines -> sub function id open_parenthesis close_parenthesis inside_logic end sub subroutines .)
 
 
-state 249
+state 251
 
     (66) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic end . sub subroutines
 
-    sub             shift and go to state 256
+    sub             shift and go to state 258
 
 
-state 250
+state 252
 
     (65) subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic end sub . subroutines
     (63) subroutines -> . sub procedure id inside_logic return subroutines
@@ -6514,23 +6564,23 @@ state 250
     sub             shift and go to state 63
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 257
+    subroutines                    shift and go to state 259
 
-state 251
+state 253
 
     (67) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic . end sub subroutines
 
-    end             shift and go to state 258
+    end             shift and go to state 260
 
 
-state 252
+state 254
 
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets . word_value close_brackets
 
-    word_value      shift and go to state 259
+    word_value      shift and go to state 261
 
 
-state 253
+state 255
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .
 
@@ -6539,7 +6589,7 @@ state 253
     elsif           reduce using rule 23 (else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
 
 
-state 254
+state 256
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step . arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (38) arithmetic_expression -> . value
@@ -6570,14 +6620,14 @@ state 254
     bool_value      shift and go to state 57
     id              shift and go to state 58
 
-    arithmetic_expression          shift and go to state 260
+    arithmetic_expression          shift and go to state 262
     value                          shift and go to state 49
     possible_values                shift and go to state 50
     real_value                     shift and go to state 52
     functions                      shift and go to state 53
     ids_access                     shift and go to state 54
 
-state 255
+state 257
 
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -6587,7 +6637,7 @@ state 255
     (44) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    close_brackets  shift and go to state 261
+    close_brackets  shift and go to state 263
     sum             shift and go to state 89
     substraction    shift and go to state 90
     multiplication  shift and go to state 91
@@ -6596,7 +6646,7 @@ state 255
 
     arithmetic_operator            shift and go to state 88
 
-state 256
+state 258
 
     (66) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic end sub . subroutines
     (63) subroutines -> . sub procedure id inside_logic return subroutines
@@ -6609,62 +6659,62 @@ state 256
     sub             shift and go to state 63
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 262
+    subroutines                    shift and go to state 264
 
-state 257
+state 259
 
     (65) subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic end sub subroutines .
 
     $end            reduce using rule 65 (subroutines -> sub function id open_parenthesis parameters close_parenthesis inside_logic end sub subroutines .)
 
 
-state 258
+state 260
 
     (67) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end . sub subroutines
 
-    sub             shift and go to state 263
+    sub             shift and go to state 265
 
 
-state 259
+state 261
 
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value . close_brackets
 
-    close_brackets  shift and go to state 264
+    close_brackets  shift and go to state 266
 
 
-state 260
+state 262
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression . ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
-    (112) ACTION_FOR_INCREMENT -> .
+    (113) ACTION_FOR_INCREMENT -> .
     (41) arithmetic_operator -> . sum ACTION_ADD_OPERATOR
     (42) arithmetic_operator -> . substraction ACTION_ADD_OPERATOR
     (43) arithmetic_operator -> . multiplication ACTION_ADD_OPERATOR
     (44) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    dim             reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    while           reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    do              reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    for             reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    gosub           reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    dunkelCls       reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    let             reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    if              reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    id              reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    dunkelPrint     reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    dunkelRead      reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
-    next            reduce using rule 112 (ACTION_FOR_INCREMENT -> .)
+    dim             reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    while           reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    do              reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    for             reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    gosub           reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    dunkelCls       reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    let             reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    if              reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    id              reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    dunkelPrint     reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    dunkelRead      reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
+    next            reduce using rule 113 (ACTION_FOR_INCREMENT -> .)
     sum             shift and go to state 89
     substraction    shift and go to state 90
     multiplication  shift and go to state 91
     division        shift and go to state 92
     exponent        shift and go to state 93
 
-    ACTION_FOR_INCREMENT           shift and go to state 265
+    ACTION_FOR_INCREMENT           shift and go to state 267
     arithmetic_operator            shift and go to state 88
 
-state 261
+state 263
 
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . ACTION_ADD_THREE_DIM_OPERAND
     (104) ACTION_ADD_THREE_DIM_OPERAND -> .
@@ -6689,8 +6739,8 @@ state 261
     dunkelRead      reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     end             reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     loop            reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
-    wend            reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     return          reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
+    wend            reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     else            reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     elsif           reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     next            reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
@@ -6707,16 +6757,16 @@ state 261
     close_brackets  reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     step            reduce using rule 104 (ACTION_ADD_THREE_DIM_OPERAND -> .)
 
-    ACTION_ADD_THREE_DIM_OPERAND   shift and go to state 266
+    ACTION_ADD_THREE_DIM_OPERAND   shift and go to state 268
 
-state 262
+state 264
 
     (66) subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic end sub subroutines .
 
     $end            reduce using rule 66 (subroutines -> sub function id open_parenthesis close_parenthesis as variable_type inside_logic end sub subroutines .)
 
 
-state 263
+state 265
 
     (67) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub . subroutines
     (63) subroutines -> . sub procedure id inside_logic return subroutines
@@ -6729,9 +6779,9 @@ state 263
     sub             shift and go to state 63
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 267
+    subroutines                    shift and go to state 269
 
-state 264
+state 266
 
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .
 
@@ -6748,8 +6798,8 @@ state 264
     dunkelRead      reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     end             reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     loop            reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
-    wend            reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     return          reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
+    wend            reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     else            reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     elsif           reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     next            reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
@@ -6757,7 +6807,7 @@ state 264
     comma           reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
 
 
-state 265
+state 267
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT . inside_logic next id ACTION_FOR_GOTO
     (3) inside_logic -> . variable inside_logic
@@ -6775,7 +6825,7 @@ state 265
     (19) conditions -> . base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (20) conditions -> . base_if else_ifs end if ACTION_FILL_JUMP_END_IF
     (21) conditions -> . base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
-    (24) loops -> . while open_parenthesis logic_expression close_parenthesis inside_logic wend
+    (24) loops -> . while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (25) loops -> . do inside_logic loop until open_parenthesis logic_expression close_parenthesis
     (26) loops -> . for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (61) calls -> . gosub id
@@ -6806,7 +6856,7 @@ state 265
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 268
+    inside_logic                   shift and go to state 270
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6818,7 +6868,7 @@ state 265
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 266
+state 268
 
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .
 
@@ -6842,8 +6892,8 @@ state 266
     dunkelRead      reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
     end             reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
     loop            reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
-    wend            reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
     return          reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
+    wend            reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
     else            reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
     elsif           reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
     next            reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
@@ -6861,54 +6911,54 @@ state 266
     step            reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
 
 
-state 267
+state 269
 
     (67) subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub subroutines .
 
     $end            reduce using rule 67 (subroutines -> sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub subroutines .)
 
 
-state 268
+state 270
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic . next id ACTION_FOR_GOTO
 
-    next            shift and go to state 269
+    next            shift and go to state 271
 
 
-state 269
+state 271
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next . id ACTION_FOR_GOTO
 
-    id              shift and go to state 270
+    id              shift and go to state 272
 
 
-state 270
+state 272
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id . ACTION_FOR_GOTO
-    (113) ACTION_FOR_GOTO -> .
+    (114) ACTION_FOR_GOTO -> .
 
-    dim             reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    while           reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    do              reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    for             reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    gosub           reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    dunkelCls       reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    let             reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    if              reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    id              reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    dunkelPrint     reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    dunkelRead      reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    end             reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    loop            reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    wend            reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    return          reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    else            reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    elsif           reduce using rule 113 (ACTION_FOR_GOTO -> .)
-    next            reduce using rule 113 (ACTION_FOR_GOTO -> .)
+    dim             reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    while           reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    do              reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    for             reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    gosub           reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    dunkelCls       reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    let             reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    if              reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    id              reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    dunkelPrint     reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    dunkelRead      reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    end             reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    loop            reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    return          reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    wend            reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    else            reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    elsif           reduce using rule 114 (ACTION_FOR_GOTO -> .)
+    next            reduce using rule 114 (ACTION_FOR_GOTO -> .)
 
-    ACTION_FOR_GOTO                shift and go to state 271
+    ACTION_FOR_GOTO                shift and go to state 273
 
-state 271
+state 273
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .
 
@@ -6925,8 +6975,8 @@ state 271
     dunkelRead      reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
     end             reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
     loop            reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
-    wend            reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
     return          reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
+    wend            reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
     else            reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
     elsif           reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
     next            reduce using rule 26 (loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .)
@@ -6948,7 +6998,7 @@ WARNING: shift/reduce conflict for greater_or_equal_than in state 167 resolved a
 WARNING: shift/reduce conflict for less_than in state 167 resolved as shift
 WARNING: shift/reduce conflict for less_or_equal_than in state 167 resolved as shift
 WARNING: shift/reduce conflict for comma in state 188 resolved as shift
-WARNING: shift/reduce conflict for comma in state 231 resolved as shift
+WARNING: shift/reduce conflict for comma in state 233 resolved as shift
 WARNING: reduce/reduce conflict in state 24 resolved using rule (program -> inside_logic end)
 WARNING: rejected rule (subroutines -> <empty>) in state 24
 WARNING: reduce/reduce conflict in state 98 resolved using rule (ids_access -> id ACTION_ADD_VAR_VALUE)

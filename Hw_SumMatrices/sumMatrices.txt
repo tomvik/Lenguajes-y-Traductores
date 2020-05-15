@@ -66,7 +66,7 @@ sub procedure tryWhileAndIfs
     let hola = true
     let hola = false
     
-    while (true)
+    while (not hola)
         if(not hola) then
             dunkelPrint "not hola"
         elsif(hola) then
@@ -81,4 +81,13 @@ sub procedure tryWhileAndIfs
             dunkelPrint "else"
         end if
     wend
+
+    while (hola)
+        let hola = false
+        while (true and hola)
+            let hola = false
+        wend
+        let hola = true
+    wend
+        let hola = true
 return
