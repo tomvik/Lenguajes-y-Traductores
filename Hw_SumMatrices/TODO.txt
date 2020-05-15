@@ -3,8 +3,7 @@ Quadruplets:
     goto
 
 Implementation:
-    Arithmetic
-    Logic
-    Ifs
-    Loops
-    Functions calls
+    Check loops
+    Check subroutines
+    Check functions
+    Check if else

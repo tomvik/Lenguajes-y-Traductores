@@ -7,97 +7,14 @@ dim max_row_and_col as word
 let max_row_and_col = 10
 
 dim matrices as word[2][10][10]
+dim dummy as word[2]
 
-gosub getVerifiedDimensions
-gosub getData
-gosub sumAndPrintData
+let matrices[1][0][0] = 1
+let dummy[0] = 1
+let dummy[1] = 0
 
+let result = (1 == 1) and (1 == 1)
+while (not result)
+    dunkelPrint "Hola"
+wend
 end
-
-sub procedure getVerifiedDimensions
-    do
-        gosub readDimensions
-    loop until(not dimensionsAreSumable(ByVal col_a, ByVal row_a, ByVal col_b, ByVal row_b))
-return
-
-sub procedure readDimensions
-    dunkelPrint "Input the dimensions one by one, remembering that they should match", col_a, matrices[1], matrices[1][2], matrices[1][2][3], "sup bitchs", col_a + 2, "what up", col_a + 2
-    dunkelRead "# of columns on A, less than 10", col_a, row_a, col_b
-    dunkelRead col_a, row_a
-    dunkelRead col_a
-    dunkelRead "# of row on A, less than 10", row_a
-    dunkelRead "# of columns on B, less than 10", col_b
-    dunkelRead "# of row on B, less than 10", row_b
-    dunkelCls
-return
-
-sub procedure getData
-    dunkelPrint "Input the data with a space or line in between"
-    for matrix = 0 to 1 step 1
-        for row = 0 to row_a - 1 step 1
-            for col = 0 to col_a - 1 step 1
-                let matrices[matrix][row][col] = row + col
-                dunkelRead matrices[matrix][row][col]
-            next col
-        next row
-    next matrix
-return
-
-sub procedure sumAndPrintData
-    for row = 0 to row_a - 1 step 1
-        for col = 0 to col_a - 1 step 1
-            dunkelPrint (matrices[0][row][col] + matrices[1][row][col])
-            dunkelPrint (" ")
-        next col
-        dunkelPrint " "
-    next row
-return
-
-sub function dimensionsAreSumable(dim col_a_ as word, dim row_a_ as word, dim col_b_ as word, dim row_b_ as word) as bool
-    let result = (col_a == col_b) and (row_a == row_b)
-    let result = result and (col_a <= max_row_and_col) and (row_a <= max_row_and_col)
-    if (not result) then
-        let result = true
-        dunkelPrint "Incorrect Dimensions, try again"
-    end if
-end sub
-
-sub procedure tryWhileAndIfs
-    dim hola as bool
-    dim adios as bool
-
-    let hola = true
-    let hola = false
-    
-    while (not hola)
-        if(not hola) then
-            dunkelPrint "not hola"
-        elsif(hola) then
-            dunkelPrint "hola"
-        elsif(hola and adios) then
-            dunkelPrint "hola and adios"
-        elsif(not hola or not adios) then
-            dunkelPrint "hola or not adios"
-        elsif(true) then
-            dunkelPrint "always"
-        else
-            dunkelPrint "else"
-        end if
-    wend
-
-    while (hola)
-        let hola = false
-        while (true and hola)
-            let hola = false
-        wend
-        let hola = true
-    wend
-
-    let hola = 5
-
-    do
-        do
-            let hola = true
-        loop until(hola and hola)
-    loop until (true)
-return

@@ -31,6 +31,9 @@ class Parser:
     def Parse(self, s):
         self.__parser.parse(s)
 
+    def get_executable(self):
+        return (self.__quadruplets, self.__symbols_table, self.__current_available_used, self.__max_available_in_memory)
+
     def add_symbol(self, name, data_type, index = 0, dimention_1 = 0, dimention_2 = 0, dimention_3 = 0):
         if (data_type == 'word_array' or data_type == 'bool_array' or data_type == 'double_array'):
             self.__symbols_table[name] = SymbolsElement(name, data_type, '*' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
@@ -70,35 +73,8 @@ class Parser:
         self.__quadruplets[empty_jump_quadruplet_index] += ' ' + str(goto_index)
 
     def is_valid_for_condition(self, operator):
-        # Ugly but works for then the variable to check on a while is not
-        # a condition.
-        if(operator == '<'):
-            return True
-        if(operator == '<='):
-            return True
-        if(operator == '>'):
-            return True
-        if(operator == '>='):
-            return True
-        if(operator == '=='):
-            return True
-        if(operator == '<>'):
-            return True
-        if(operator == 'and'):
-            return True
-        if(operator == 'or'):
-            return True
-        if(operator == 'not'):
-            return True
-        if(operator == '+'):
-            return True
-        if(operator == '-'):
-            return True
-        if(operator == '/'):
-            return True
-        if(operator == '*'):
-            return True
-        if(operator == '^'):
+        operators = ['<', '<=', '>', '>=', '==', '<>', 'and', 'or', 'not', '+', '-', '/', '*', '^']
+        if (operator in operators):
             return True
         return False
 
@@ -519,7 +495,7 @@ class Parser:
         first_dim = self.__operands_stack.pop()
         matrix = self.__operands_stack.pop()
 
-        self.__operands_stack.append('* ' + str(matrix) + ' ' + str(first_dim))
+        self.__operands_stack.append('*-' + str(matrix) + '-' + str(first_dim))
         print('I added the one dim operand: ', self.__operands_stack[-1])
 
     def p_action_add_two_dim_operand(self, p):
@@ -530,7 +506,7 @@ class Parser:
         first_dim = self.__operands_stack.pop()
         matrix = self.__operands_stack.pop()
 
-        self.__operands_stack.append('** ' + str(matrix) + ' ' + str(first_dim) + ' ' + str(second_dim))
+        self.__operands_stack.append('**-' + str(matrix) + '-' + str(first_dim) + '-' + str(second_dim))
         print('I added the two dim operand: ', self.__operands_stack[-1])
 
     def p_action_add_three_dim_operand(self, p):
@@ -542,7 +518,7 @@ class Parser:
         first_dim = self.__operands_stack.pop()
         matrix = self.__operands_stack.pop()
 
-        self.__operands_stack.append('*** ' + str(matrix) + ' ' + str(first_dim) + ' ' + str(second_dim) + ' ' + str(third_dim))
+        self.__operands_stack.append('***-' + str(matrix) + '-' + str(first_dim) + '-' + str(second_dim) + '-' + str(third_dim))
         print('I added the three dim operand: ', self.__operands_stack[-1])
 
     def p_action_add_quadruplet_empty_jump(self, p):
@@ -629,7 +605,7 @@ class Parser:
         ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP :
         '''
         limit = self.__operands_stack.pop()
-        address = self.__for_id_stack.pop()
+        address = self.__for_id_stack[-1]
 
         if(self.__current_available_used > self.__max_available_in_memory):
             raise Exception('\nNot enough memory\n')
@@ -650,7 +626,7 @@ class Parser:
         ACTION_FOR_INCREMENT :
         '''
         increment = self.__operands_stack.pop()
-        address = (self.__quadruplets[-1].split())[-1]
+        address = self.__for_id_stack.pop()
         self.__for_increment_stack.append('+ ' + address + ' ' + str(increment) + ' ' + address)
         print('I added to the for stack: ', self.__for_increment_stack[-1])
 

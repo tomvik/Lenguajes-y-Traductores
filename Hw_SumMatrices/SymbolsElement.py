@@ -34,4 +34,4 @@ class SymbolsElement:
                 return np.zeros(dimention_1)
 
     def print_element(self):
-        print('Id:', self.id, 'Type:', self.type, 'Address:', self.address, 'Index:', self.index, 'Value:', self.value)
+        print('Id:', (self.id).ljust(35), 'Type:', (self.type).ljust(25), 'Address:', (self.address).ljust(15), 'Index:', (str(self.index)).ljust(15), 'Value:', self.value)

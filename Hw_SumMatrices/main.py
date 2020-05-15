@@ -1,5 +1,6 @@
 import sys
 from Parser import Parser
+from Executer import execute
 
 if __name__ == "__main__":
     parser = Parser()
@@ -10,5 +11,7 @@ if __name__ == "__main__":
         program = program_file.read().replace('\\n', '\n')
         program_file.close()
         parser.Parse(program)
+
+        execute(parser.get_executable())
     else:
         print('''Test file not provided''')

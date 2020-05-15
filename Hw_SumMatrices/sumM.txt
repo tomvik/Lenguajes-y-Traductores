@@ -1,0 +1,60 @@
+dim col_a as word
+dim row_a as word
+dim col_b as word
+dim row_b as word
+dim max_row_and_col as word
+
+let max_row_and_col = 10
+
+dim matrices as word[2][10][10]
+
+gosub getVerifiedDimensions
+gosub getData
+gosub sumAndPrintData
+
+end
+
+sub procedure getVerifiedDimensions
+    do
+        gosub readDimensions
+    loop until(not dimensionsAreSumable(ByVal col_a, ByVal row_a, ByVal col_b, ByVal row_b))
+return
+
+sub procedure readDimensions 
+    dunkelPrint "Input the dimensions one by one, remembering that they should match"
+    dunkelRead "# of columns on A, less than 10", col_a
+    dunkelRead "# of row on A, less than 10", row_a
+    dunkelRead "# of columns on B, less than 10", col_b
+    dunkelRead "# of row on B, less than 10", row_b
+    dunkelPrint "Your input was:", col_a, row_a, col_b, row_b
+    dunkelCls
+return
+
+sub procedure getData
+    dunkelPrint "Input the data with a space or line in between"
+    for matrix = 0 to 1 step 1
+        for row = 0 to row_a step 1
+            for col = 0 to col_a step 1
+                dunkelRead matrices[matrix][row][col]
+            next col
+        next row
+    next matrix
+return
+
+sub procedure sumAndPrintData
+    for row = 0 to row_a step 1
+        for col = 0 to col_a step 1
+            dunkelPrint (matrices[0][row][col] + matrices[1][row][col])
+            dunkelPrint (" ")
+        next col
+        dunkelPrint " "
+    next row
+return
+
+sub function dimensionsAreSumable(dim col_a_ as word, dim row_a_ as word, dim col_b_ as word, dim row_b_ as word) as bool
+    let result = (col_a == col_b) and (row_a == row_b)
+    let result = result and (col_a <= max_row_and_col) and (row_a <= max_row_and_col)
+    if (not result) then
+        dunkelPrint "Incorrect Dimensions, try again"
+    end if
+end sub

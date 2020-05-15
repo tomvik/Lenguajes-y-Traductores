@@ -54,9 +54,9 @@ class Lexer:
     def t_bool_value(self, t):
         r'true | false'
         if t.value == 'true':
-            t.value = True
+            t.value = 1
         else:
-            t.value = False
+            t.value = 0
         return t
 
     def t_id(self, t):
