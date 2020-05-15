@@ -11,11 +11,11 @@ class Parser:
         self.tokens = self.__lexer.getTokens()
         self.__parser = yacc.yacc(module=self)
         self.__symbols_table = {}
-        self.__functions_table_index = 1
         self.__quadruplets_index = 1
         self.__max_available_in_memory = 50
         self.__current_available_used = 0
         self.__symbols_table_index = self.__max_available_in_memory + 1
+        self.__function_id_stack = []
         self.__operands_stack = []
         self.__operators_stack = []
         self.__types_stack = []
@@ -44,6 +44,9 @@ class Parser:
             self.__quadruplets[i] = self.__quadruplets[i].replace(name, '#' + str(self.__symbols_table_index))  
         
         self.__symbols_table_index += 1
+
+    def update_symbol(self, name, data_type):
+        self.__symbols_table[name].type = data_type
 
     def print_symbol_table(self):
         for key in self.__symbols_table:
@@ -246,17 +249,17 @@ class Parser:
 
     def p_calls(self, p):
         '''
-        calls : gosub id
+        calls : gosub id ACTION_ADD_SUBROUTINE_CALL
         calls : functions
         '''
 
     def p_subroutines(self, p):
         '''
-        subroutines : sub procedure id inside_logic return subroutines
-        subroutines : sub function id open_parenthesis close_parenthesis inside_logic end sub subroutines
-        subroutines : sub function id open_parenthesis parameters close_parenthesis inside_logic end sub subroutines
-        subroutines : sub function id open_parenthesis close_parenthesis as variable_type inside_logic end sub subroutines
-        subroutines : sub function id open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub subroutines
+        subroutines : sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines 
+        subroutines : sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
+        subroutines : sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
+        subroutines : sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
+        subroutines : sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
         |
         '''
 
@@ -267,10 +270,7 @@ class Parser:
                     close_parenthesis = i
                     break
             if(close_parenthesis < len(p) and p[close_parenthesis+1] == 'as'):
-                self.add_symbol(p[3], p[2] + ' ' + p[close_parenthesis+2], index=self.__functions_table_index)
-            else:
-                self.add_symbol(p[3], p[2], index=self.__functions_table_index)
-            self.__functions_table_index += 1
+                self.update_symbol(p[3], p[2] + ' ' + p[close_parenthesis+2])
 
     def p_assign(self, p):
         '''
@@ -286,8 +286,8 @@ class Parser:
     
     def p_functions(self, p):
         '''
-        functions : id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis
-        functions : id ACTION_ADD_FUNCTION open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
+        functions : id ACTION_ADD_FUNCTION_CALL open_parenthesis close_parenthesis
+        functions : id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
         '''
 
     def p_arguments(self, p):
@@ -382,14 +382,49 @@ class Parser:
         self.__operands_stack.append(p[-2] + ' ' + real_operand)
         print('I Added the function operand: ', self.__operands_stack[-1])
         
-    def p_action_add_function(self, p):
+    def p_action_add_function_call(self, p):
         '''
-        ACTION_ADD_FUNCTION :
+        ACTION_ADD_FUNCTION_CALL :
         '''
         self.__operands_stack.append(p[-1])
         self.__quadruplets.append('function_call ' + p[-1])
         self.__quadruplets_index += 1
         print('I Added the function call: ', self.__quadruplets[-1])
+        
+    def p_action_add_subroutine_call(self, p):
+        '''
+        ACTION_ADD_SUBROUTINE_CALL :
+        '''
+        self.__operands_stack.append(p[-1])
+        self.__quadruplets.append('subroutine_call ' + p[-1])
+        self.__quadruplets_index += 1
+        print('I Added the subroutine call: ', self.__quadruplets[-1])
+
+    def p_action_add_function(self, p):
+        '''
+        ACTION_ADD_FUNCTION :
+        '''
+        self.__function_id_stack.append(p[-1])
+        self.add_symbol(self.__function_id_stack[-1], 'function', index=self.__quadruplets_index)
+        self.__quadruplets.append('goto ')
+        self.__quadruplets_index += 1
+
+    def p_action_add_procedure(self, p):
+        '''
+        ACTION_ADD_PROCEDURE :
+        '''
+        self.__function_id_stack.append(p[-1])
+        self.add_symbol(self.__function_id_stack[-1], 'procedure', index=self.__quadruplets_index)
+        self.__quadruplets.append('goto ')
+        self.__quadruplets_index += 1
+
+    def p_action_add_end_function(self, p):
+        '''
+        ACTION_ADD_END_FUNCTION :
+        '''
+        self.fill_jump(self.__symbols_table[self.__function_id_stack.pop()].index-1, self.__quadruplets_index+1, 'goto')
+        self.__quadruplets.append('return')
+        self.__quadruplets_index += 1
 
     def p_action_assign_value(self, p):
         '''
