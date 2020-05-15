@@ -89,5 +89,12 @@ sub procedure tryWhileAndIfs
         wend
         let hola = true
     wend
-        let hola = true
+
+    let hola = 5
+
+    do
+        do
+            let hola = true
+        loop until(hola and hola)
+    loop until (true)
 return

@@ -174,7 +174,7 @@ class Parser:
     def p_loops(self, p):
         '''
         loops : while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
-        loops : do inside_logic loop until open_parenthesis logic_expression close_parenthesis
+        loops : do ACTION_DO_WHILE_INDEX inside_logic loop until open_parenthesis logic_expression close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE 
         loops : for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
         '''
     
@@ -615,6 +615,22 @@ class Parser:
         self.__quadruplets_index += 1
 
         self.fill_jump(empty_jump_quadruplet_index, self.__quadruplets_index, 'gotoF')
+
+    def p_action_do_while_jump_index(self, p):
+        '''
+        ACTION_DO_WHILE_INDEX :
+        '''
+        self.__jumps_stack.append(self.__quadruplets_index)
+
+    def p_action_quadruplet_empty_jump_do_while(self, p):
+        '''
+        ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE :
+        '''
+        statement_result = str(self.__operands_stack.pop())
+        if(statement_result[0] != '#' and statement_result[0] != '*'):
+            statement_result = 'L ' + statement_result
+        self.__quadruplets.append(str("gotoT") + ' ' + statement_result + ' ' + str(self.__jumps_stack.pop()))
+        self.__quadruplets_index += 1
 
     def p_error(self, p):
         raise Exception('\nIncorrecto\n')
