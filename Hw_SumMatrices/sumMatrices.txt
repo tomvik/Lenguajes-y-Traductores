@@ -28,6 +28,7 @@ sub procedure readDimensions
     dunkelRead "# of row on A, less than 10", row_a
     dunkelRead "# of columns on B, less than 10", col_b
     dunkelRead "# of row on B, less than 10", row_b
+    dunkelCls
 return
 
 sub procedure getData

@@ -94,7 +94,7 @@ Rule 76    arguments -> ByRef id ACTION_ADD_FUNCTION_OPERAND
 Rule 77    arguments -> arguments comma arguments
 Rule 78    read_or_write -> print
 Rule 79    read_or_write -> read
-Rule 80    read_or_write -> dunkelCls
+Rule 80    read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET
 Rule 81    print -> dunkelPrint multiple_print ACTION_CONSOLE_WRITE
 Rule 82    print -> dunkelPrint open_parenthesis multiple_print close_parenthesis ACTION_CONSOLE_WRITE
 Rule 83    multiple_print -> string
@@ -139,6 +139,7 @@ Rule 121   ACTION_DO_WHILE_INDEX -> <empty>
 Rule 122   ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE -> <empty>
 Rule 123   ACTION_CONSOLE_WRITE -> <empty>
 Rule 124   ACTION_CONSOLE_READ -> <empty>
+Rule 125   ACTION_ADD_CLS_QUADRUPLET -> <empty>
 
 Terminals, with rules where they appear
 
@@ -211,6 +212,7 @@ word_value           : 11 12 12 13 13 13 57
 Nonterminals, with rules where they appear
 
 ACTION_ADD_BOOL_VALUE : 59
+ACTION_ADD_CLS_QUADRUPLET : 80
 ACTION_ADD_END_FUNCTION : 63 64 65 66 67
 ACTION_ADD_FLOAT_VALUE : 58
 ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP : 26
@@ -302,7 +304,7 @@ state 0
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -377,7 +379,7 @@ state 3
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -443,7 +445,7 @@ state 4
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -509,7 +511,7 @@ state 5
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -575,7 +577,7 @@ state 6
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -641,7 +643,7 @@ state 7
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -707,7 +709,7 @@ state 8
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -907,27 +909,29 @@ state 19
 
 state 20
 
-    (80) read_or_write -> dunkelCls .
+    (80) read_or_write -> dunkelCls . ACTION_ADD_CLS_QUADRUPLET
+    (125) ACTION_ADD_CLS_QUADRUPLET -> .
 
-    dim             reduce using rule 80 (read_or_write -> dunkelCls .)
-    while           reduce using rule 80 (read_or_write -> dunkelCls .)
-    do              reduce using rule 80 (read_or_write -> dunkelCls .)
-    for             reduce using rule 80 (read_or_write -> dunkelCls .)
-    gosub           reduce using rule 80 (read_or_write -> dunkelCls .)
-    dunkelCls       reduce using rule 80 (read_or_write -> dunkelCls .)
-    let             reduce using rule 80 (read_or_write -> dunkelCls .)
-    if              reduce using rule 80 (read_or_write -> dunkelCls .)
-    id              reduce using rule 80 (read_or_write -> dunkelCls .)
-    dunkelPrint     reduce using rule 80 (read_or_write -> dunkelCls .)
-    dunkelRead      reduce using rule 80 (read_or_write -> dunkelCls .)
-    end             reduce using rule 80 (read_or_write -> dunkelCls .)
-    loop            reduce using rule 80 (read_or_write -> dunkelCls .)
-    wend            reduce using rule 80 (read_or_write -> dunkelCls .)
-    return          reduce using rule 80 (read_or_write -> dunkelCls .)
-    else            reduce using rule 80 (read_or_write -> dunkelCls .)
-    elsif           reduce using rule 80 (read_or_write -> dunkelCls .)
-    next            reduce using rule 80 (read_or_write -> dunkelCls .)
+    dim             reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    while           reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    do              reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    for             reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    gosub           reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    dunkelCls       reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    let             reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    if              reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    id              reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    dunkelPrint     reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    dunkelRead      reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    end             reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    loop            reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    wend            reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    return          reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    else            reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    elsif           reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
+    next            reduce using rule 125 (ACTION_ADD_CLS_QUADRUPLET -> .)
 
+    ACTION_ADD_CLS_QUADRUPLET      shift and go to state 42
 
 state 21
 
@@ -939,10 +943,10 @@ state 21
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    id              shift and go to state 43
-    open_parenthesis shift and go to state 44
+    id              shift and go to state 44
+    open_parenthesis shift and go to state 45
 
-    ids_access                     shift and go to state 42
+    ids_access                     shift and go to state 43
 
 state 22
 
@@ -972,21 +976,21 @@ state 22
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 46
-    string          shift and go to state 47
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 47
+    string          shift and go to state 48
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    multiple_print                 shift and go to state 45
-    arithmetic_expression          shift and go to state 48
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    multiple_print                 shift and go to state 46
+    arithmetic_expression          shift and go to state 49
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
 state 23
 
@@ -1001,13 +1005,13 @@ state 23
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    string          shift and go to state 60
-    id              shift and go to state 43
-    open_parenthesis shift and go to state 44
+    string          shift and go to state 61
+    id              shift and go to state 44
+    open_parenthesis shift and go to state 45
 
-    possible_read                  shift and go to state 59
-    multiple_read                  shift and go to state 61
-    ids_access                     shift and go to state 62
+    possible_read                  shift and go to state 60
+    multiple_read                  shift and go to state 62
+    ids_access                     shift and go to state 63
 
 state 24
 
@@ -1022,11 +1026,11 @@ state 24
 
   ! reduce/reduce conflict for $end resolved using rule 1 (program -> inside_logic end .)
     $end            reduce using rule 1 (program -> inside_logic end .)
-    sub             shift and go to state 64
+    sub             shift and go to state 65
 
   ! $end            [ reduce using rule 68 (subroutines -> .) ]
 
-    subroutines                    shift and go to state 63
+    subroutines                    shift and go to state 64
 
 state 25
 
@@ -1113,7 +1117,7 @@ state 31
     (12) variable -> dim id . as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> dim id . as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
 
-    as              shift and go to state 65
+    as              shift and go to state 66
 
 
 state 32
@@ -1121,14 +1125,14 @@ state 32
     (73) functions -> id ACTION_ADD_FUNCTION_CALL . open_parenthesis close_parenthesis
     (74) functions -> id ACTION_ADD_FUNCTION_CALL . open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
 
-    open_parenthesis shift and go to state 66
+    open_parenthesis shift and go to state 67
 
 
 state 33
 
     (18) conditions -> base_if ACTION_FILL_JUMP . end if ACTION_FILL_JUMP_END_IF
 
-    end             shift and go to state 67
+    end             shift and go to state 68
 
 
 state 34
@@ -1149,7 +1153,7 @@ state 34
     dunkelRead      reduce using rule 114 (ACTION_FILL_JUMP -> .)
     end             reduce using rule 114 (ACTION_FILL_JUMP -> .)
 
-    ACTION_FILL_JUMP               shift and go to state 68
+    ACTION_FILL_JUMP               shift and go to state 69
 
 state 35
 
@@ -1157,9 +1161,9 @@ state 35
     (21) conditions -> base_if else_ifs . else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (23) else_ifs -> else_ifs . elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
-    end             shift and go to state 69
-    else            shift and go to state 70
-    elsif           shift and go to state 71
+    end             shift and go to state 70
+    else            shift and go to state 71
+    elsif           shift and go to state 72
 
 
 state 36
@@ -1169,7 +1173,7 @@ state 36
 
     open_parenthesis reduce using rule 114 (ACTION_FILL_JUMP -> .)
 
-    ACTION_FILL_JUMP               shift and go to state 72
+    ACTION_FILL_JUMP               shift and go to state 73
 
 state 37
 
@@ -1198,20 +1202,20 @@ state 37
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 73
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 74
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    logic_expression               shift and go to state 74
-    arithmetic_expression          shift and go to state 75
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    logic_expression               shift and go to state 75
+    arithmetic_expression          shift and go to state 76
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
 state 38
 
@@ -1240,20 +1244,20 @@ state 38
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 73
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 74
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    logic_expression               shift and go to state 76
-    arithmetic_expression          shift and go to state 75
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    logic_expression               shift and go to state 77
+    arithmetic_expression          shift and go to state 76
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
 state 39
 
@@ -1280,7 +1284,7 @@ state 39
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -1303,7 +1307,7 @@ state 39
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 77
+    inside_logic                   shift and go to state 78
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -1322,7 +1326,7 @@ state 40
 
     equals          reduce using rule 91 (ACTION_ADD_FOR_VALUE -> .)
 
-    ACTION_ADD_FOR_VALUE           shift and go to state 78
+    ACTION_ADD_FOR_VALUE           shift and go to state 79
 
 state 41
 
@@ -1348,17 +1352,41 @@ state 41
     elsif           reduce using rule 99 (ACTION_ADD_SUBROUTINE_CALL -> .)
     next            reduce using rule 99 (ACTION_ADD_SUBROUTINE_CALL -> .)
 
-    ACTION_ADD_SUBROUTINE_CALL     shift and go to state 79
+    ACTION_ADD_SUBROUTINE_CALL     shift and go to state 80
 
 state 42
+
+    (80) read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .
+
+    dim             reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    while           reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    do              reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    for             reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    gosub           reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    dunkelCls       reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    let             reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    if              reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    id              reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    dunkelPrint     reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    dunkelRead      reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    end             reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    loop            reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    wend            reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    return          reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    else            reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    elsif           reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+    next            reduce using rule 80 (read_or_write -> dunkelCls ACTION_ADD_CLS_QUADRUPLET .)
+
+
+state 43
 
     (69) assign -> let ids_access . equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> let ids_access . equals arithmetic_expression ACTION_ASSIGN_VALUE
 
-    equals          shift and go to state 80
+    equals          shift and go to state 81
 
 
-state 43
+state 44
 
     (52) ids_access -> id . ACTION_ADD_VAR_VALUE
     (53) ids_access -> id . ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND
@@ -1389,9 +1417,9 @@ state 43
     next            reduce using rule 92 (ACTION_ADD_VAR_VALUE -> .)
     close_parenthesis reduce using rule 92 (ACTION_ADD_VAR_VALUE -> .)
 
-    ACTION_ADD_VAR_VALUE           shift and go to state 81
+    ACTION_ADD_VAR_VALUE           shift and go to state 82
 
-state 44
+state 45
 
     (56) ids_access -> open_parenthesis . ids_access close_parenthesis
     (52) ids_access -> . id ACTION_ADD_VAR_VALUE
@@ -1400,18 +1428,18 @@ state 44
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    id              shift and go to state 43
-    open_parenthesis shift and go to state 44
+    id              shift and go to state 44
+    open_parenthesis shift and go to state 45
 
-    ids_access                     shift and go to state 82
+    ids_access                     shift and go to state 83
 
-state 45
+state 46
 
     (81) print -> dunkelPrint multiple_print . ACTION_CONSOLE_WRITE
     (85) multiple_print -> multiple_print . comma multiple_print
     (123) ACTION_CONSOLE_WRITE -> .
 
-    comma           shift and go to state 84
+    comma           shift and go to state 85
     dim             reduce using rule 123 (ACTION_CONSOLE_WRITE -> .)
     while           reduce using rule 123 (ACTION_CONSOLE_WRITE -> .)
     do              reduce using rule 123 (ACTION_CONSOLE_WRITE -> .)
@@ -1431,9 +1459,9 @@ state 45
     elsif           reduce using rule 123 (ACTION_CONSOLE_WRITE -> .)
     next            reduce using rule 123 (ACTION_CONSOLE_WRITE -> .)
 
-    ACTION_CONSOLE_WRITE           shift and go to state 83
+    ACTION_CONSOLE_WRITE           shift and go to state 84
 
-state 46
+state 47
 
     (82) print -> dunkelPrint open_parenthesis . multiple_print close_parenthesis ACTION_CONSOLE_WRITE
     (40) arithmetic_expression -> open_parenthesis . arithmetic_expression close_parenthesis
@@ -1463,23 +1491,23 @@ state 46
     (73) functions -> . id ACTION_ADD_FUNCTION_CALL open_parenthesis close_parenthesis
     (74) functions -> . id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
 
-    string          shift and go to state 47
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    id              shift and go to state 90
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
+    string          shift and go to state 48
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    id              shift and go to state 91
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
 
-    multiple_print                 shift and go to state 86
-    arithmetic_expression          shift and go to state 87
-    value                          shift and go to state 88
-    ids_access                     shift and go to state 89
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
+    multiple_print                 shift and go to state 87
+    arithmetic_expression          shift and go to state 88
+    value                          shift and go to state 89
+    ids_access                     shift and go to state 90
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
 
-state 47
+state 48
 
     (83) multiple_print -> string .
 
@@ -1505,7 +1533,7 @@ state 47
     close_parenthesis reduce using rule 83 (multiple_print -> string .)
 
 
-state 48
+state 49
 
     (84) multiple_print -> arithmetic_expression .
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -1535,15 +1563,15 @@ state 48
     elsif           reduce using rule 84 (multiple_print -> arithmetic_expression .)
     next            reduce using rule 84 (multiple_print -> arithmetic_expression .)
     close_parenthesis reduce using rule 84 (multiple_print -> arithmetic_expression .)
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    arithmetic_operator            shift and go to state 91
+    arithmetic_operator            shift and go to state 92
 
-state 49
+state 50
 
     (38) arithmetic_expression -> value .
 
@@ -1585,7 +1613,7 @@ state 49
     step            reduce using rule 38 (arithmetic_expression -> value .)
 
 
-state 50
+state 51
 
     (49) value -> possible_values .
 
@@ -1627,7 +1655,7 @@ state 50
     step            reduce using rule 49 (value -> possible_values .)
 
 
-state 51
+state 52
 
     (50) value -> not . possible_values ACTION_ADD_NOT_OPERAND
     (46) possible_values -> . real_value
@@ -1645,18 +1673,18 @@ state 51
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
-    open_parenthesis shift and go to state 44
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
+    open_parenthesis shift and go to state 45
 
-    possible_values                shift and go to state 97
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    possible_values                shift and go to state 98
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 52
+state 53
 
     (46) possible_values -> real_value .
 
@@ -1698,7 +1726,7 @@ state 52
     step            reduce using rule 46 (possible_values -> real_value .)
 
 
-state 53
+state 54
 
     (47) possible_values -> functions .
 
@@ -1740,7 +1768,7 @@ state 53
     step            reduce using rule 47 (possible_values -> functions .)
 
 
-state 54
+state 55
 
     (48) possible_values -> ids_access .
 
@@ -1782,7 +1810,7 @@ state 54
     step            reduce using rule 48 (possible_values -> ids_access .)
 
 
-state 55
+state 56
 
     (57) real_value -> word_value . ACTION_ADD_WORD_VALUE
     (93) ACTION_ADD_WORD_VALUE -> .
@@ -1824,9 +1852,9 @@ state 55
     close_brackets  reduce using rule 93 (ACTION_ADD_WORD_VALUE -> .)
     step            reduce using rule 93 (ACTION_ADD_WORD_VALUE -> .)
 
-    ACTION_ADD_WORD_VALUE          shift and go to state 98
+    ACTION_ADD_WORD_VALUE          shift and go to state 99
 
-state 56
+state 57
 
     (58) real_value -> float_value . ACTION_ADD_FLOAT_VALUE
     (94) ACTION_ADD_FLOAT_VALUE -> .
@@ -1868,9 +1896,9 @@ state 56
     close_brackets  reduce using rule 94 (ACTION_ADD_FLOAT_VALUE -> .)
     step            reduce using rule 94 (ACTION_ADD_FLOAT_VALUE -> .)
 
-    ACTION_ADD_FLOAT_VALUE         shift and go to state 99
+    ACTION_ADD_FLOAT_VALUE         shift and go to state 100
 
-state 57
+state 58
 
     (59) real_value -> bool_value . ACTION_ADD_BOOL_VALUE
     (95) ACTION_ADD_BOOL_VALUE -> .
@@ -1912,9 +1940,9 @@ state 57
     close_brackets  reduce using rule 95 (ACTION_ADD_BOOL_VALUE -> .)
     step            reduce using rule 95 (ACTION_ADD_BOOL_VALUE -> .)
 
-    ACTION_ADD_BOOL_VALUE          shift and go to state 100
+    ACTION_ADD_BOOL_VALUE          shift and go to state 101
 
-state 58
+state 59
 
     (60) real_value -> id . ACTION_ADD_VAR_VALUE
     (73) functions -> id . ACTION_ADD_FUNCTION_CALL open_parenthesis close_parenthesis
@@ -1965,10 +1993,10 @@ state 58
     step            reduce using rule 92 (ACTION_ADD_VAR_VALUE -> .)
     open_parenthesis reduce using rule 98 (ACTION_ADD_FUNCTION_CALL -> .)
 
-    ACTION_ADD_VAR_VALUE           shift and go to state 101
+    ACTION_ADD_VAR_VALUE           shift and go to state 102
     ACTION_ADD_FUNCTION_CALL       shift and go to state 32
 
-state 59
+state 60
 
     (86) read -> dunkelRead possible_read . ACTION_CONSOLE_READ
     (124) ACTION_CONSOLE_READ -> .
@@ -1992,16 +2020,16 @@ state 59
     elsif           reduce using rule 124 (ACTION_CONSOLE_READ -> .)
     next            reduce using rule 124 (ACTION_CONSOLE_READ -> .)
 
-    ACTION_CONSOLE_READ            shift and go to state 102
+    ACTION_CONSOLE_READ            shift and go to state 103
 
-state 60
+state 61
 
     (87) possible_read -> string . comma multiple_read
 
-    comma           shift and go to state 103
+    comma           shift and go to state 104
 
 
-state 61
+state 62
 
     (88) possible_read -> multiple_read .
     (90) multiple_read -> multiple_read . comma ids_access
@@ -2024,10 +2052,10 @@ state 61
     else            reduce using rule 88 (possible_read -> multiple_read .)
     elsif           reduce using rule 88 (possible_read -> multiple_read .)
     next            reduce using rule 88 (possible_read -> multiple_read .)
-    comma           shift and go to state 104
+    comma           shift and go to state 105
 
 
-state 62
+state 63
 
     (89) multiple_read -> ids_access .
 
@@ -2052,14 +2080,14 @@ state 62
     next            reduce using rule 89 (multiple_read -> ids_access .)
 
 
-state 63
+state 64
 
     (2) program -> inside_logic end subroutines .
 
     $end            reduce using rule 2 (program -> inside_logic end subroutines .)
 
 
-state 64
+state 65
 
     (63) subroutines -> sub . procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines
     (64) subroutines -> sub . function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
@@ -2067,11 +2095,11 @@ state 64
     (66) subroutines -> sub . function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (67) subroutines -> sub . function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
 
-    procedure       shift and go to state 105
-    function        shift and go to state 106
+    procedure       shift and go to state 106
+    function        shift and go to state 107
 
 
-state 65
+state 66
 
     (10) variable -> dim id as . variable_type
     (11) variable -> dim id as . variable_type open_brackets word_value close_brackets
@@ -2081,13 +2109,13 @@ state 65
     (15) variable_type -> . float
     (16) variable_type -> . bool
 
-    word            shift and go to state 108
-    float           shift and go to state 109
-    bool            shift and go to state 110
+    word            shift and go to state 109
+    float           shift and go to state 110
+    bool            shift and go to state 111
 
-    variable_type                  shift and go to state 107
+    variable_type                  shift and go to state 108
 
-state 66
+state 67
 
     (73) functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis . close_parenthesis
     (74) functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis . arguments ACTION_ADD_PARAMETERS close_parenthesis
@@ -2095,20 +2123,20 @@ state 66
     (76) arguments -> . ByRef id ACTION_ADD_FUNCTION_OPERAND
     (77) arguments -> . arguments comma arguments
 
-    close_parenthesis shift and go to state 111
-    ByVal           shift and go to state 113
-    ByRef           shift and go to state 114
+    close_parenthesis shift and go to state 112
+    ByVal           shift and go to state 114
+    ByRef           shift and go to state 115
 
-    arguments                      shift and go to state 112
+    arguments                      shift and go to state 113
 
-state 67
+state 68
 
     (18) conditions -> base_if ACTION_FILL_JUMP end . if ACTION_FILL_JUMP_END_IF
 
-    if              shift and go to state 115
+    if              shift and go to state 116
 
 
-state 68
+state 69
 
     (19) conditions -> base_if else ACTION_FILL_JUMP . inside_logic end if ACTION_FILL_JUMP_END_IF
     (3) inside_logic -> . variable inside_logic
@@ -2133,7 +2161,7 @@ state 68
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -2157,7 +2185,7 @@ state 68
     dunkelRead      shift and go to state 23
 
     base_if                        shift and go to state 11
-    inside_logic                   shift and go to state 116
+    inside_logic                   shift and go to state 117
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -2168,14 +2196,14 @@ state 68
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 69
+state 70
 
     (20) conditions -> base_if else_ifs end . if ACTION_FILL_JUMP_END_IF
 
-    if              shift and go to state 117
+    if              shift and go to state 118
 
 
-state 70
+state 71
 
     (21) conditions -> base_if else_ifs else . ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF
     (114) ACTION_FILL_JUMP -> .
@@ -2193,25 +2221,25 @@ state 70
     dunkelRead      reduce using rule 114 (ACTION_FILL_JUMP -> .)
     end             reduce using rule 114 (ACTION_FILL_JUMP -> .)
 
-    ACTION_FILL_JUMP               shift and go to state 118
+    ACTION_FILL_JUMP               shift and go to state 119
 
-state 71
+state 72
 
     (23) else_ifs -> else_ifs elsif . ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (114) ACTION_FILL_JUMP -> .
 
     open_parenthesis reduce using rule 114 (ACTION_FILL_JUMP -> .)
 
-    ACTION_FILL_JUMP               shift and go to state 119
+    ACTION_FILL_JUMP               shift and go to state 120
 
-state 72
+state 73
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP . open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
-    open_parenthesis shift and go to state 120
+    open_parenthesis shift and go to state 121
 
 
-state 73
+state 74
 
     (29) logic_expression -> open_parenthesis . logic_expression close_parenthesis
     (40) arithmetic_expression -> open_parenthesis . arithmetic_expression close_parenthesis
@@ -2241,22 +2269,22 @@ state 73
     (73) functions -> . id ACTION_ADD_FUNCTION_CALL open_parenthesis close_parenthesis
     (74) functions -> . id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
 
-    open_parenthesis shift and go to state 73
-    not             shift and go to state 51
-    id              shift and go to state 90
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
+    open_parenthesis shift and go to state 74
+    not             shift and go to state 52
+    id              shift and go to state 91
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
 
-    logic_expression               shift and go to state 121
-    arithmetic_expression          shift and go to state 122
-    value                          shift and go to state 88
-    ids_access                     shift and go to state 89
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
+    logic_expression               shift and go to state 122
+    arithmetic_expression          shift and go to state 123
+    value                          shift and go to state 89
+    ids_access                     shift and go to state 90
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
 
-state 74
+state 75
 
     (17) base_if -> if open_parenthesis logic_expression . close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
@@ -2269,19 +2297,19 @@ state 74
     (36) logic_operator -> . less_than ACTION_ADD_OPERATOR
     (37) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 123
-    and             shift and go to state 125
-    or              shift and go to state 126
-    is_equal        shift and go to state 127
-    is_not_equal    shift and go to state 128
-    greater_than    shift and go to state 129
-    greater_or_equal_than shift and go to state 130
-    less_than       shift and go to state 131
-    less_or_equal_than shift and go to state 132
+    close_parenthesis shift and go to state 124
+    and             shift and go to state 126
+    or              shift and go to state 127
+    is_equal        shift and go to state 128
+    is_not_equal    shift and go to state 129
+    greater_than    shift and go to state 130
+    greater_or_equal_than shift and go to state 131
+    less_than       shift and go to state 132
+    less_or_equal_than shift and go to state 133
 
-    logic_operator                 shift and go to state 124
+    logic_operator                 shift and go to state 125
 
-state 75
+state 76
 
     (27) logic_expression -> arithmetic_expression .
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -2318,15 +2346,15 @@ state 75
     else            reduce using rule 27 (logic_expression -> arithmetic_expression .)
     elsif           reduce using rule 27 (logic_expression -> arithmetic_expression .)
     next            reduce using rule 27 (logic_expression -> arithmetic_expression .)
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    arithmetic_operator            shift and go to state 91
+    arithmetic_operator            shift and go to state 92
 
-state 76
+state 77
 
     (24) loops -> while open_parenthesis logic_expression . close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
@@ -2339,33 +2367,33 @@ state 76
     (36) logic_operator -> . less_than ACTION_ADD_OPERATOR
     (37) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 133
-    and             shift and go to state 125
-    or              shift and go to state 126
-    is_equal        shift and go to state 127
-    is_not_equal    shift and go to state 128
-    greater_than    shift and go to state 129
-    greater_or_equal_than shift and go to state 130
-    less_than       shift and go to state 131
-    less_or_equal_than shift and go to state 132
+    close_parenthesis shift and go to state 134
+    and             shift and go to state 126
+    or              shift and go to state 127
+    is_equal        shift and go to state 128
+    is_not_equal    shift and go to state 129
+    greater_than    shift and go to state 130
+    greater_or_equal_than shift and go to state 131
+    less_than       shift and go to state 132
+    less_or_equal_than shift and go to state 133
 
-    logic_operator                 shift and go to state 124
-
-state 77
-
-    (25) loops -> do ACTION_DO_WHILE_INDEX inside_logic . loop until open_parenthesis logic_expression close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE
-
-    loop            shift and go to state 134
-
+    logic_operator                 shift and go to state 125
 
 state 78
 
-    (26) loops -> for id ACTION_ADD_FOR_VALUE . equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
+    (25) loops -> do ACTION_DO_WHILE_INDEX inside_logic . loop until open_parenthesis logic_expression close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE
 
-    equals          shift and go to state 135
+    loop            shift and go to state 135
 
 
 state 79
+
+    (26) loops -> for id ACTION_ADD_FOR_VALUE . equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
+
+    equals          shift and go to state 136
+
+
+state 80
 
     (61) calls -> gosub id ACTION_ADD_SUBROUTINE_CALL .
 
@@ -2389,7 +2417,7 @@ state 79
     next            reduce using rule 61 (calls -> gosub id ACTION_ADD_SUBROUTINE_CALL .)
 
 
-state 80
+state 81
 
     (69) assign -> let ids_access equals . logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> let ids_access equals . arithmetic_expression ACTION_ASSIGN_VALUE
@@ -2417,22 +2445,22 @@ state 80
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 73
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 74
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    ids_access                     shift and go to state 54
-    logic_expression               shift and go to state 136
-    arithmetic_expression          shift and go to state 137
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
+    ids_access                     shift and go to state 55
+    logic_expression               shift and go to state 137
+    arithmetic_expression          shift and go to state 138
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
 
-state 81
+state 82
 
     (52) ids_access -> id ACTION_ADD_VAR_VALUE .
     (53) ids_access -> id ACTION_ADD_VAR_VALUE . open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND
@@ -2460,17 +2488,17 @@ state 81
     elsif           reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     next            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     close_parenthesis reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
-    open_brackets   shift and go to state 138
-
-
-state 82
-
-    (56) ids_access -> open_parenthesis ids_access . close_parenthesis
-
-    close_parenthesis shift and go to state 139
+    open_brackets   shift and go to state 139
 
 
 state 83
+
+    (56) ids_access -> open_parenthesis ids_access . close_parenthesis
+
+    close_parenthesis shift and go to state 140
+
+
+state 84
 
     (81) print -> dunkelPrint multiple_print ACTION_CONSOLE_WRITE .
 
@@ -2494,7 +2522,7 @@ state 83
     next            reduce using rule 81 (print -> dunkelPrint multiple_print ACTION_CONSOLE_WRITE .)
 
 
-state 84
+state 85
 
     (85) multiple_print -> multiple_print comma . multiple_print
     (83) multiple_print -> . string
@@ -2521,23 +2549,23 @@ state 84
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    string          shift and go to state 47
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    string          shift and go to state 48
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    multiple_print                 shift and go to state 140
-    arithmetic_expression          shift and go to state 48
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    multiple_print                 shift and go to state 141
+    arithmetic_expression          shift and go to state 49
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 85
+state 86
 
     (40) arithmetic_expression -> open_parenthesis . arithmetic_expression close_parenthesis
     (51) value -> open_parenthesis . value close_parenthesis
@@ -2563,30 +2591,30 @@ state 85
     (73) functions -> . id ACTION_ADD_FUNCTION_CALL open_parenthesis close_parenthesis
     (74) functions -> . id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
 
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    id              shift and go to state 90
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    id              shift and go to state 91
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
 
-    arithmetic_expression          shift and go to state 141
-    value                          shift and go to state 88
-    ids_access                     shift and go to state 89
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
+    arithmetic_expression          shift and go to state 142
+    value                          shift and go to state 89
+    ids_access                     shift and go to state 90
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
 
-state 86
+state 87
 
     (82) print -> dunkelPrint open_parenthesis multiple_print . close_parenthesis ACTION_CONSOLE_WRITE
     (85) multiple_print -> multiple_print . comma multiple_print
 
-    close_parenthesis shift and go to state 142
-    comma           shift and go to state 84
+    close_parenthesis shift and go to state 143
+    comma           shift and go to state 85
 
 
-state 87
+state 88
 
     (40) arithmetic_expression -> open_parenthesis arithmetic_expression . close_parenthesis
     (84) multiple_print -> arithmetic_expression .
@@ -2598,25 +2626,25 @@ state 87
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
   ! shift/reduce conflict for close_parenthesis resolved as shift
-    close_parenthesis shift and go to state 143
+    close_parenthesis shift and go to state 144
     comma           reduce using rule 84 (multiple_print -> arithmetic_expression .)
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
   ! close_parenthesis [ reduce using rule 84 (multiple_print -> arithmetic_expression .) ]
 
-    arithmetic_operator            shift and go to state 91
+    arithmetic_operator            shift and go to state 92
 
-state 88
+state 89
 
     (51) value -> open_parenthesis value . close_parenthesis
     (38) arithmetic_expression -> value .
 
   ! shift/reduce conflict for close_parenthesis resolved as shift
-    close_parenthesis shift and go to state 144
+    close_parenthesis shift and go to state 145
     sum             reduce using rule 38 (arithmetic_expression -> value .)
     substraction    reduce using rule 38 (arithmetic_expression -> value .)
     multiplication  reduce using rule 38 (arithmetic_expression -> value .)
@@ -2635,13 +2663,13 @@ state 88
   ! close_parenthesis [ reduce using rule 38 (arithmetic_expression -> value .) ]
 
 
-state 89
+state 90
 
     (56) ids_access -> open_parenthesis ids_access . close_parenthesis
     (48) possible_values -> ids_access .
 
   ! shift/reduce conflict for close_parenthesis resolved as shift
-    close_parenthesis shift and go to state 139
+    close_parenthesis shift and go to state 140
     sum             reduce using rule 48 (possible_values -> ids_access .)
     substraction    reduce using rule 48 (possible_values -> ids_access .)
     multiplication  reduce using rule 48 (possible_values -> ids_access .)
@@ -2660,7 +2688,7 @@ state 89
   ! close_parenthesis [ reduce using rule 48 (possible_values -> ids_access .) ]
 
 
-state 90
+state 91
 
     (52) ids_access -> id . ACTION_ADD_VAR_VALUE
     (53) ids_access -> id . ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND
@@ -2690,10 +2718,10 @@ state 90
     less_or_equal_than reduce using rule 92 (ACTION_ADD_VAR_VALUE -> .)
     open_parenthesis reduce using rule 98 (ACTION_ADD_FUNCTION_CALL -> .)
 
-    ACTION_ADD_VAR_VALUE           shift and go to state 145
+    ACTION_ADD_VAR_VALUE           shift and go to state 146
     ACTION_ADD_FUNCTION_CALL       shift and go to state 32
 
-state 91
+state 92
 
     (39) arithmetic_expression -> arithmetic_expression arithmetic_operator . value ACTION_ADD_QUADRUPLET
     (49) value -> . possible_values
@@ -2714,36 +2742,22 @@ state 91
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    not             shift and go to state 51
-    open_parenthesis shift and go to state 147
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    not             shift and go to state 52
+    open_parenthesis shift and go to state 148
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    value                          shift and go to state 146
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
-
-state 92
-
-    (41) arithmetic_operator -> sum . ACTION_ADD_OPERATOR
-    (96) ACTION_ADD_OPERATOR -> .
-
-    not             reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    word_value      reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    float_value     reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    bool_value      reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    id              reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-
-    ACTION_ADD_OPERATOR            shift and go to state 148
+    value                          shift and go to state 147
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
 state 93
 
-    (42) arithmetic_operator -> substraction . ACTION_ADD_OPERATOR
+    (41) arithmetic_operator -> sum . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     not             reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -2757,7 +2771,7 @@ state 93
 
 state 94
 
-    (43) arithmetic_operator -> multiplication . ACTION_ADD_OPERATOR
+    (42) arithmetic_operator -> substraction . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     not             reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -2771,7 +2785,7 @@ state 94
 
 state 95
 
-    (44) arithmetic_operator -> division . ACTION_ADD_OPERATOR
+    (43) arithmetic_operator -> multiplication . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     not             reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -2785,7 +2799,7 @@ state 95
 
 state 96
 
-    (45) arithmetic_operator -> exponent . ACTION_ADD_OPERATOR
+    (44) arithmetic_operator -> division . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     not             reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -2798,6 +2812,20 @@ state 96
     ACTION_ADD_OPERATOR            shift and go to state 152
 
 state 97
+
+    (45) arithmetic_operator -> exponent . ACTION_ADD_OPERATOR
+    (96) ACTION_ADD_OPERATOR -> .
+
+    not             reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    word_value      reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    float_value     reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    bool_value      reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    id              reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+
+    ACTION_ADD_OPERATOR            shift and go to state 153
+
+state 98
 
     (50) value -> not possible_values . ACTION_ADD_NOT_OPERAND
     (105) ACTION_ADD_NOT_OPERAND -> .
@@ -2839,9 +2867,9 @@ state 97
     close_brackets  reduce using rule 105 (ACTION_ADD_NOT_OPERAND -> .)
     step            reduce using rule 105 (ACTION_ADD_NOT_OPERAND -> .)
 
-    ACTION_ADD_NOT_OPERAND         shift and go to state 153
+    ACTION_ADD_NOT_OPERAND         shift and go to state 154
 
-state 98
+state 99
 
     (57) real_value -> word_value ACTION_ADD_WORD_VALUE .
 
@@ -2883,7 +2911,7 @@ state 98
     step            reduce using rule 57 (real_value -> word_value ACTION_ADD_WORD_VALUE .)
 
 
-state 99
+state 100
 
     (58) real_value -> float_value ACTION_ADD_FLOAT_VALUE .
 
@@ -2925,7 +2953,7 @@ state 99
     step            reduce using rule 58 (real_value -> float_value ACTION_ADD_FLOAT_VALUE .)
 
 
-state 100
+state 101
 
     (59) real_value -> bool_value ACTION_ADD_BOOL_VALUE .
 
@@ -2967,7 +2995,7 @@ state 100
     step            reduce using rule 59 (real_value -> bool_value ACTION_ADD_BOOL_VALUE .)
 
 
-state 101
+state 102
 
     (60) real_value -> id ACTION_ADD_VAR_VALUE .
     (52) ids_access -> id ACTION_ADD_VAR_VALUE .
@@ -3047,7 +3075,7 @@ state 101
     to              reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     close_brackets  reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     step            reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
-    open_brackets   shift and go to state 138
+    open_brackets   shift and go to state 139
 
   ! sum             [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
   ! substraction    [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
@@ -3087,7 +3115,7 @@ state 101
   ! step            [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
 
 
-state 102
+state 103
 
     (86) read -> dunkelRead possible_read ACTION_CONSOLE_READ .
 
@@ -3111,7 +3139,7 @@ state 102
     next            reduce using rule 86 (read -> dunkelRead possible_read ACTION_CONSOLE_READ .)
 
 
-state 103
+state 104
 
     (87) possible_read -> string comma . multiple_read
     (89) multiple_read -> . ids_access
@@ -3122,13 +3150,13 @@ state 103
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    id              shift and go to state 43
-    open_parenthesis shift and go to state 44
+    id              shift and go to state 44
+    open_parenthesis shift and go to state 45
 
-    multiple_read                  shift and go to state 154
-    ids_access                     shift and go to state 62
+    multiple_read                  shift and go to state 155
+    ids_access                     shift and go to state 63
 
-state 104
+state 105
 
     (90) multiple_read -> multiple_read comma . ids_access
     (52) ids_access -> . id ACTION_ADD_VAR_VALUE
@@ -3137,29 +3165,29 @@ state 104
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    id              shift and go to state 43
-    open_parenthesis shift and go to state 44
+    id              shift and go to state 44
+    open_parenthesis shift and go to state 45
 
-    ids_access                     shift and go to state 155
+    ids_access                     shift and go to state 156
 
-state 105
+state 106
 
     (63) subroutines -> sub procedure . id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines
 
-    id              shift and go to state 156
+    id              shift and go to state 157
 
 
-state 106
+state 107
 
     (64) subroutines -> sub function . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (65) subroutines -> sub function . id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (66) subroutines -> sub function . id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (67) subroutines -> sub function . id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
 
-    id              shift and go to state 157
+    id              shift and go to state 158
 
 
-state 107
+state 108
 
     (10) variable -> dim id as variable_type .
     (11) variable -> dim id as variable_type . open_brackets word_value close_brackets
@@ -3186,10 +3214,10 @@ state 107
     next            reduce using rule 10 (variable -> dim id as variable_type .)
     close_parenthesis reduce using rule 10 (variable -> dim id as variable_type .)
     comma           reduce using rule 10 (variable -> dim id as variable_type .)
-    open_brackets   shift and go to state 158
+    open_brackets   shift and go to state 159
 
 
-state 108
+state 109
 
     (14) variable_type -> word .
 
@@ -3216,7 +3244,7 @@ state 108
     comma           reduce using rule 14 (variable_type -> word .)
 
 
-state 109
+state 110
 
     (15) variable_type -> float .
 
@@ -3243,7 +3271,7 @@ state 109
     comma           reduce using rule 15 (variable_type -> float .)
 
 
-state 110
+state 111
 
     (16) variable_type -> bool .
 
@@ -3270,7 +3298,7 @@ state 110
     comma           reduce using rule 16 (variable_type -> bool .)
 
 
-state 111
+state 112
 
     (73) functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis close_parenthesis .
 
@@ -3312,18 +3340,18 @@ state 111
     step            reduce using rule 73 (functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis close_parenthesis .)
 
 
-state 112
+state 113
 
     (74) functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments . ACTION_ADD_PARAMETERS close_parenthesis
     (77) arguments -> arguments . comma arguments
     (104) ACTION_ADD_PARAMETERS -> .
 
-    comma           shift and go to state 160
+    comma           shift and go to state 161
     close_parenthesis reduce using rule 104 (ACTION_ADD_PARAMETERS -> .)
 
-    ACTION_ADD_PARAMETERS          shift and go to state 159
+    ACTION_ADD_PARAMETERS          shift and go to state 160
 
-state 113
+state 114
 
     (75) arguments -> ByVal . value ACTION_ADD_FUNCTION_OPERAND
     (49) value -> . possible_values
@@ -3344,27 +3372,27 @@ state 113
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    not             shift and go to state 51
-    open_parenthesis shift and go to state 147
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    not             shift and go to state 52
+    open_parenthesis shift and go to state 148
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    value                          shift and go to state 161
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    value                          shift and go to state 162
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 114
+state 115
 
     (76) arguments -> ByRef . id ACTION_ADD_FUNCTION_OPERAND
 
-    id              shift and go to state 162
+    id              shift and go to state 163
 
 
-state 115
+state 116
 
     (18) conditions -> base_if ACTION_FILL_JUMP end if . ACTION_FILL_JUMP_END_IF
     (115) ACTION_FILL_JUMP_END_IF -> .
@@ -3388,16 +3416,16 @@ state 115
     elsif           reduce using rule 115 (ACTION_FILL_JUMP_END_IF -> .)
     next            reduce using rule 115 (ACTION_FILL_JUMP_END_IF -> .)
 
-    ACTION_FILL_JUMP_END_IF        shift and go to state 163
+    ACTION_FILL_JUMP_END_IF        shift and go to state 164
 
-state 116
+state 117
 
     (19) conditions -> base_if else ACTION_FILL_JUMP inside_logic . end if ACTION_FILL_JUMP_END_IF
 
-    end             shift and go to state 164
+    end             shift and go to state 165
 
 
-state 117
+state 118
 
     (20) conditions -> base_if else_ifs end if . ACTION_FILL_JUMP_END_IF
     (115) ACTION_FILL_JUMP_END_IF -> .
@@ -3421,9 +3449,9 @@ state 117
     elsif           reduce using rule 115 (ACTION_FILL_JUMP_END_IF -> .)
     next            reduce using rule 115 (ACTION_FILL_JUMP_END_IF -> .)
 
-    ACTION_FILL_JUMP_END_IF        shift and go to state 165
+    ACTION_FILL_JUMP_END_IF        shift and go to state 166
 
-state 118
+state 119
 
     (21) conditions -> base_if else_ifs else ACTION_FILL_JUMP . inside_logic end if ACTION_FILL_JUMP_END_IF
     (3) inside_logic -> . variable inside_logic
@@ -3448,7 +3476,7 @@ state 118
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -3472,7 +3500,7 @@ state 118
     dunkelRead      shift and go to state 23
 
     base_if                        shift and go to state 11
-    inside_logic                   shift and go to state 166
+    inside_logic                   shift and go to state 167
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -3483,14 +3511,14 @@ state 118
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 119
+state 120
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP . open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
-    open_parenthesis shift and go to state 167
+    open_parenthesis shift and go to state 168
 
 
-state 120
+state 121
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis . logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (27) logic_expression -> . arithmetic_expression
@@ -3517,22 +3545,22 @@ state 120
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 73
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 74
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    logic_expression               shift and go to state 168
-    arithmetic_expression          shift and go to state 75
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    logic_expression               shift and go to state 169
+    arithmetic_expression          shift and go to state 76
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 121
+state 122
 
     (29) logic_expression -> open_parenthesis logic_expression . close_parenthesis
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
@@ -3545,19 +3573,19 @@ state 121
     (36) logic_operator -> . less_than ACTION_ADD_OPERATOR
     (37) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 169
-    and             shift and go to state 125
-    or              shift and go to state 126
-    is_equal        shift and go to state 127
-    is_not_equal    shift and go to state 128
-    greater_than    shift and go to state 129
-    greater_or_equal_than shift and go to state 130
-    less_than       shift and go to state 131
-    less_or_equal_than shift and go to state 132
+    close_parenthesis shift and go to state 170
+    and             shift and go to state 126
+    or              shift and go to state 127
+    is_equal        shift and go to state 128
+    is_not_equal    shift and go to state 129
+    greater_than    shift and go to state 130
+    greater_or_equal_than shift and go to state 131
+    less_than       shift and go to state 132
+    less_or_equal_than shift and go to state 133
 
-    logic_operator                 shift and go to state 124
+    logic_operator                 shift and go to state 125
 
-state 122
+state 123
 
     (40) arithmetic_expression -> open_parenthesis arithmetic_expression . close_parenthesis
     (27) logic_expression -> arithmetic_expression .
@@ -3569,7 +3597,7 @@ state 122
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
   ! shift/reduce conflict for close_parenthesis resolved as shift
-    close_parenthesis shift and go to state 143
+    close_parenthesis shift and go to state 144
     and             reduce using rule 27 (logic_expression -> arithmetic_expression .)
     or              reduce using rule 27 (logic_expression -> arithmetic_expression .)
     is_equal        reduce using rule 27 (logic_expression -> arithmetic_expression .)
@@ -3578,24 +3606,24 @@ state 122
     greater_or_equal_than reduce using rule 27 (logic_expression -> arithmetic_expression .)
     less_than       reduce using rule 27 (logic_expression -> arithmetic_expression .)
     less_or_equal_than reduce using rule 27 (logic_expression -> arithmetic_expression .)
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
   ! close_parenthesis [ reduce using rule 27 (logic_expression -> arithmetic_expression .) ]
 
-    arithmetic_operator            shift and go to state 91
+    arithmetic_operator            shift and go to state 92
 
-state 123
+state 124
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis . then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
-    then            shift and go to state 170
+    then            shift and go to state 171
 
 
-state 124
+state 125
 
     (28) logic_expression -> logic_expression logic_operator . logic_expression ACTION_ADD_QUADRUPLET
     (27) logic_expression -> . arithmetic_expression
@@ -3622,38 +3650,24 @@ state 124
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 73
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 74
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    logic_expression               shift and go to state 171
-    arithmetic_expression          shift and go to state 75
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
-
-state 125
-
-    (30) logic_operator -> and . ACTION_ADD_OPERATOR
-    (96) ACTION_ADD_OPERATOR -> .
-
-    open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    not             reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    word_value      reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    float_value     reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    bool_value      reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-    id              reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
-
-    ACTION_ADD_OPERATOR            shift and go to state 172
+    logic_expression               shift and go to state 172
+    arithmetic_expression          shift and go to state 76
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
 state 126
 
-    (31) logic_operator -> or . ACTION_ADD_OPERATOR
+    (30) logic_operator -> and . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -3667,7 +3681,7 @@ state 126
 
 state 127
 
-    (32) logic_operator -> is_equal . ACTION_ADD_OPERATOR
+    (31) logic_operator -> or . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -3681,7 +3695,7 @@ state 127
 
 state 128
 
-    (33) logic_operator -> is_not_equal . ACTION_ADD_OPERATOR
+    (32) logic_operator -> is_equal . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -3695,7 +3709,7 @@ state 128
 
 state 129
 
-    (34) logic_operator -> greater_than . ACTION_ADD_OPERATOR
+    (33) logic_operator -> is_not_equal . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -3709,7 +3723,7 @@ state 129
 
 state 130
 
-    (35) logic_operator -> greater_or_equal_than . ACTION_ADD_OPERATOR
+    (34) logic_operator -> greater_than . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -3723,7 +3737,7 @@ state 130
 
 state 131
 
-    (36) logic_operator -> less_than . ACTION_ADD_OPERATOR
+    (35) logic_operator -> greater_or_equal_than . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -3737,7 +3751,7 @@ state 131
 
 state 132
 
-    (37) logic_operator -> less_or_equal_than . ACTION_ADD_OPERATOR
+    (36) logic_operator -> less_than . ACTION_ADD_OPERATOR
     (96) ACTION_ADD_OPERATOR -> .
 
     open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
@@ -3750,6 +3764,20 @@ state 132
     ACTION_ADD_OPERATOR            shift and go to state 179
 
 state 133
+
+    (37) logic_operator -> less_or_equal_than . ACTION_ADD_OPERATOR
+    (96) ACTION_ADD_OPERATOR -> .
+
+    open_parenthesis reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    not             reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    word_value      reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    float_value     reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    bool_value      reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+    id              reduce using rule 96 (ACTION_ADD_OPERATOR -> .)
+
+    ACTION_ADD_OPERATOR            shift and go to state 180
+
+state 134
 
     (24) loops -> while open_parenthesis logic_expression close_parenthesis . ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO
     (111) ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .
@@ -3767,16 +3795,16 @@ state 133
     dunkelRead      reduce using rule 111 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
     wend            reduce using rule 111 (ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP -> .)
 
-    ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP shift and go to state 180
+    ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP shift and go to state 181
 
-state 134
+state 135
 
     (25) loops -> do ACTION_DO_WHILE_INDEX inside_logic loop . until open_parenthesis logic_expression close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE
 
-    until           shift and go to state 181
+    until           shift and go to state 182
 
 
-state 135
+state 136
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals . arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (38) arithmetic_expression -> . value
@@ -3800,21 +3828,21 @@ state 135
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    arithmetic_expression          shift and go to state 182
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    arithmetic_expression          shift and go to state 183
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 136
+state 137
 
     (69) assign -> let ids_access equals logic_expression . ACTION_ASSIGN_VALUE
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
@@ -3846,19 +3874,19 @@ state 136
     else            reduce using rule 103 (ACTION_ASSIGN_VALUE -> .)
     elsif           reduce using rule 103 (ACTION_ASSIGN_VALUE -> .)
     next            reduce using rule 103 (ACTION_ASSIGN_VALUE -> .)
-    and             shift and go to state 125
-    or              shift and go to state 126
-    is_equal        shift and go to state 127
-    is_not_equal    shift and go to state 128
-    greater_than    shift and go to state 129
-    greater_or_equal_than shift and go to state 130
-    less_than       shift and go to state 131
-    less_or_equal_than shift and go to state 132
+    and             shift and go to state 126
+    or              shift and go to state 127
+    is_equal        shift and go to state 128
+    is_not_equal    shift and go to state 129
+    greater_than    shift and go to state 130
+    greater_or_equal_than shift and go to state 131
+    less_than       shift and go to state 132
+    less_or_equal_than shift and go to state 133
 
-    ACTION_ASSIGN_VALUE            shift and go to state 183
-    logic_operator                 shift and go to state 124
+    ACTION_ASSIGN_VALUE            shift and go to state 184
+    logic_operator                 shift and go to state 125
 
-state 137
+state 138
 
     (70) assign -> let ids_access equals arithmetic_expression . ACTION_ASSIGN_VALUE
     (27) logic_expression -> arithmetic_expression .
@@ -3914,11 +3942,11 @@ state 137
     else            reduce using rule 27 (logic_expression -> arithmetic_expression .)
     elsif           reduce using rule 27 (logic_expression -> arithmetic_expression .)
     next            reduce using rule 27 (logic_expression -> arithmetic_expression .)
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
   ! dim             [ reduce using rule 103 (ACTION_ASSIGN_VALUE -> .) ]
   ! while           [ reduce using rule 103 (ACTION_ASSIGN_VALUE -> .) ]
@@ -3939,10 +3967,10 @@ state 137
   ! elsif           [ reduce using rule 103 (ACTION_ASSIGN_VALUE -> .) ]
   ! next            [ reduce using rule 103 (ACTION_ASSIGN_VALUE -> .) ]
 
-    ACTION_ASSIGN_VALUE            shift and go to state 184
-    arithmetic_operator            shift and go to state 91
+    ACTION_ASSIGN_VALUE            shift and go to state 185
+    arithmetic_operator            shift and go to state 92
 
-state 138
+state 139
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets . arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets . arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
@@ -3968,21 +3996,21 @@ state 138
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    arithmetic_expression          shift and go to state 185
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    arithmetic_expression          shift and go to state 186
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 139
+state 140
 
     (56) ids_access -> open_parenthesis ids_access close_parenthesis .
 
@@ -4025,7 +4053,7 @@ state 139
     step            reduce using rule 56 (ids_access -> open_parenthesis ids_access close_parenthesis .)
 
 
-state 140
+state 141
 
     (85) multiple_print -> multiple_print comma multiple_print .
     (85) multiple_print -> multiple_print . comma multiple_print
@@ -4050,12 +4078,12 @@ state 140
     elsif           reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
     next            reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
     close_parenthesis reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .)
-    comma           shift and go to state 84
+    comma           shift and go to state 85
 
   ! comma           [ reduce using rule 85 (multiple_print -> multiple_print comma multiple_print .) ]
 
 
-state 141
+state 142
 
     (40) arithmetic_expression -> open_parenthesis arithmetic_expression . close_parenthesis
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -4065,16 +4093,16 @@ state 141
     (44) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 143
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    close_parenthesis shift and go to state 144
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    arithmetic_operator            shift and go to state 91
+    arithmetic_operator            shift and go to state 92
 
-state 142
+state 143
 
     (82) print -> dunkelPrint open_parenthesis multiple_print close_parenthesis . ACTION_CONSOLE_WRITE
     (123) ACTION_CONSOLE_WRITE -> .
@@ -4098,9 +4126,9 @@ state 142
     elsif           reduce using rule 123 (ACTION_CONSOLE_WRITE -> .)
     next            reduce using rule 123 (ACTION_CONSOLE_WRITE -> .)
 
-    ACTION_CONSOLE_WRITE           shift and go to state 186
+    ACTION_CONSOLE_WRITE           shift and go to state 187
 
-state 143
+state 144
 
     (40) arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .
 
@@ -4142,7 +4170,7 @@ state 143
     step            reduce using rule 40 (arithmetic_expression -> open_parenthesis arithmetic_expression close_parenthesis .)
 
 
-state 144
+state 145
 
     (51) value -> open_parenthesis value close_parenthesis .
 
@@ -4184,7 +4212,7 @@ state 144
     step            reduce using rule 51 (value -> open_parenthesis value close_parenthesis .)
 
 
-state 145
+state 146
 
     (52) ids_access -> id ACTION_ADD_VAR_VALUE .
     (53) ids_access -> id ACTION_ADD_VAR_VALUE . open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND
@@ -4222,7 +4250,7 @@ state 145
     greater_or_equal_than reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     less_than       reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
     less_or_equal_than reduce using rule 52 (ids_access -> id ACTION_ADD_VAR_VALUE .)
-    open_brackets   shift and go to state 138
+    open_brackets   shift and go to state 139
 
   ! close_parenthesis [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
   ! sum             [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
@@ -4241,7 +4269,7 @@ state 145
   ! less_or_equal_than [ reduce using rule 60 (real_value -> id ACTION_ADD_VAR_VALUE .) ]
 
 
-state 146
+state 147
 
     (39) arithmetic_expression -> arithmetic_expression arithmetic_operator value . ACTION_ADD_QUADRUPLET
     (106) ACTION_ADD_QUADRUPLET -> .
@@ -4283,9 +4311,9 @@ state 146
     close_brackets  reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .)
     step            reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .)
 
-    ACTION_ADD_QUADRUPLET          shift and go to state 187
+    ACTION_ADD_QUADRUPLET          shift and go to state 188
 
-state 147
+state 148
 
     (51) value -> open_parenthesis . value close_parenthesis
     (56) ids_access -> open_parenthesis . ids_access close_parenthesis
@@ -4307,20 +4335,20 @@ state 147
     (73) functions -> . id ACTION_ADD_FUNCTION_CALL open_parenthesis close_parenthesis
     (74) functions -> . id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis
 
-    not             shift and go to state 51
-    open_parenthesis shift and go to state 147
-    id              shift and go to state 90
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
+    not             shift and go to state 52
+    open_parenthesis shift and go to state 148
+    id              shift and go to state 91
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
 
-    value                          shift and go to state 188
-    ids_access                     shift and go to state 89
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
+    value                          shift and go to state 189
+    ids_access                     shift and go to state 90
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
 
-state 148
+state 149
 
     (41) arithmetic_operator -> sum ACTION_ADD_OPERATOR .
 
@@ -4332,7 +4360,7 @@ state 148
     id              reduce using rule 41 (arithmetic_operator -> sum ACTION_ADD_OPERATOR .)
 
 
-state 149
+state 150
 
     (42) arithmetic_operator -> substraction ACTION_ADD_OPERATOR .
 
@@ -4344,7 +4372,7 @@ state 149
     id              reduce using rule 42 (arithmetic_operator -> substraction ACTION_ADD_OPERATOR .)
 
 
-state 150
+state 151
 
     (43) arithmetic_operator -> multiplication ACTION_ADD_OPERATOR .
 
@@ -4356,7 +4384,7 @@ state 150
     id              reduce using rule 43 (arithmetic_operator -> multiplication ACTION_ADD_OPERATOR .)
 
 
-state 151
+state 152
 
     (44) arithmetic_operator -> division ACTION_ADD_OPERATOR .
 
@@ -4368,7 +4396,7 @@ state 151
     id              reduce using rule 44 (arithmetic_operator -> division ACTION_ADD_OPERATOR .)
 
 
-state 152
+state 153
 
     (45) arithmetic_operator -> exponent ACTION_ADD_OPERATOR .
 
@@ -4380,7 +4408,7 @@ state 152
     id              reduce using rule 45 (arithmetic_operator -> exponent ACTION_ADD_OPERATOR .)
 
 
-state 153
+state 154
 
     (50) value -> not possible_values ACTION_ADD_NOT_OPERAND .
 
@@ -4422,7 +4450,7 @@ state 153
     step            reduce using rule 50 (value -> not possible_values ACTION_ADD_NOT_OPERAND .)
 
 
-state 154
+state 155
 
     (87) possible_read -> string comma multiple_read .
     (90) multiple_read -> multiple_read . comma ids_access
@@ -4445,10 +4473,10 @@ state 154
     else            reduce using rule 87 (possible_read -> string comma multiple_read .)
     elsif           reduce using rule 87 (possible_read -> string comma multiple_read .)
     next            reduce using rule 87 (possible_read -> string comma multiple_read .)
-    comma           shift and go to state 104
+    comma           shift and go to state 105
 
 
-state 155
+state 156
 
     (90) multiple_read -> multiple_read comma ids_access .
 
@@ -4473,7 +4501,7 @@ state 155
     next            reduce using rule 90 (multiple_read -> multiple_read comma ids_access .)
 
 
-state 156
+state 157
 
     (63) subroutines -> sub procedure id . ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines
     (101) ACTION_ADD_PROCEDURE -> .
@@ -4491,9 +4519,9 @@ state 156
     dunkelRead      reduce using rule 101 (ACTION_ADD_PROCEDURE -> .)
     return          reduce using rule 101 (ACTION_ADD_PROCEDURE -> .)
 
-    ACTION_ADD_PROCEDURE           shift and go to state 189
+    ACTION_ADD_PROCEDURE           shift and go to state 190
 
-state 157
+state 158
 
     (64) subroutines -> sub function id . ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (65) subroutines -> sub function id . ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
@@ -4503,49 +4531,39 @@ state 157
 
     open_parenthesis reduce using rule 100 (ACTION_ADD_FUNCTION -> .)
 
-    ACTION_ADD_FUNCTION            shift and go to state 190
+    ACTION_ADD_FUNCTION            shift and go to state 191
 
-state 158
+state 159
 
     (11) variable -> dim id as variable_type open_brackets . word_value close_brackets
     (12) variable -> dim id as variable_type open_brackets . word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> dim id as variable_type open_brackets . word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
 
-    word_value      shift and go to state 191
-
-
-state 159
-
-    (74) functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS . close_parenthesis
-
-    close_parenthesis shift and go to state 192
+    word_value      shift and go to state 192
 
 
 state 160
+
+    (74) functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS . close_parenthesis
+
+    close_parenthesis shift and go to state 193
+
+
+state 161
 
     (77) arguments -> arguments comma . arguments
     (75) arguments -> . ByVal value ACTION_ADD_FUNCTION_OPERAND
     (76) arguments -> . ByRef id ACTION_ADD_FUNCTION_OPERAND
     (77) arguments -> . arguments comma arguments
 
-    ByVal           shift and go to state 113
-    ByRef           shift and go to state 114
+    ByVal           shift and go to state 114
+    ByRef           shift and go to state 115
 
-    arguments                      shift and go to state 193
-
-state 161
-
-    (75) arguments -> ByVal value . ACTION_ADD_FUNCTION_OPERAND
-    (97) ACTION_ADD_FUNCTION_OPERAND -> .
-
-    comma           reduce using rule 97 (ACTION_ADD_FUNCTION_OPERAND -> .)
-    close_parenthesis reduce using rule 97 (ACTION_ADD_FUNCTION_OPERAND -> .)
-
-    ACTION_ADD_FUNCTION_OPERAND    shift and go to state 194
+    arguments                      shift and go to state 194
 
 state 162
 
-    (76) arguments -> ByRef id . ACTION_ADD_FUNCTION_OPERAND
+    (75) arguments -> ByVal value . ACTION_ADD_FUNCTION_OPERAND
     (97) ACTION_ADD_FUNCTION_OPERAND -> .
 
     comma           reduce using rule 97 (ACTION_ADD_FUNCTION_OPERAND -> .)
@@ -4554,6 +4572,16 @@ state 162
     ACTION_ADD_FUNCTION_OPERAND    shift and go to state 195
 
 state 163
+
+    (76) arguments -> ByRef id . ACTION_ADD_FUNCTION_OPERAND
+    (97) ACTION_ADD_FUNCTION_OPERAND -> .
+
+    comma           reduce using rule 97 (ACTION_ADD_FUNCTION_OPERAND -> .)
+    close_parenthesis reduce using rule 97 (ACTION_ADD_FUNCTION_OPERAND -> .)
+
+    ACTION_ADD_FUNCTION_OPERAND    shift and go to state 196
+
+state 164
 
     (18) conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .
 
@@ -4577,14 +4605,14 @@ state 163
     next            reduce using rule 18 (conditions -> base_if ACTION_FILL_JUMP end if ACTION_FILL_JUMP_END_IF .)
 
 
-state 164
+state 165
 
     (19) conditions -> base_if else ACTION_FILL_JUMP inside_logic end . if ACTION_FILL_JUMP_END_IF
 
-    if              shift and go to state 196
+    if              shift and go to state 197
 
 
-state 165
+state 166
 
     (20) conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .
 
@@ -4608,14 +4636,14 @@ state 165
     next            reduce using rule 20 (conditions -> base_if else_ifs end if ACTION_FILL_JUMP_END_IF .)
 
 
-state 166
+state 167
 
     (21) conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic . end if ACTION_FILL_JUMP_END_IF
 
-    end             shift and go to state 197
+    end             shift and go to state 198
 
 
-state 167
+state 168
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis . logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (27) logic_expression -> . arithmetic_expression
@@ -4642,22 +4670,22 @@ state 167
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 73
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 74
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    logic_expression               shift and go to state 198
-    arithmetic_expression          shift and go to state 75
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    logic_expression               shift and go to state 199
+    arithmetic_expression          shift and go to state 76
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 168
+state 169
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression . close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
@@ -4670,19 +4698,19 @@ state 168
     (36) logic_operator -> . less_than ACTION_ADD_OPERATOR
     (37) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 199
-    and             shift and go to state 125
-    or              shift and go to state 126
-    is_equal        shift and go to state 127
-    is_not_equal    shift and go to state 128
-    greater_than    shift and go to state 129
-    greater_or_equal_than shift and go to state 130
-    less_than       shift and go to state 131
-    less_or_equal_than shift and go to state 132
+    close_parenthesis shift and go to state 200
+    and             shift and go to state 126
+    or              shift and go to state 127
+    is_equal        shift and go to state 128
+    is_not_equal    shift and go to state 129
+    greater_than    shift and go to state 130
+    greater_or_equal_than shift and go to state 131
+    less_than       shift and go to state 132
+    less_or_equal_than shift and go to state 133
 
-    logic_operator                 shift and go to state 124
+    logic_operator                 shift and go to state 125
 
-state 169
+state 170
 
     (29) logic_expression -> open_parenthesis logic_expression close_parenthesis .
 
@@ -4715,7 +4743,7 @@ state 169
     next            reduce using rule 29 (logic_expression -> open_parenthesis logic_expression close_parenthesis .)
 
 
-state 170
+state 171
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis then . ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (110) ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .
@@ -4735,9 +4763,9 @@ state 170
     elsif           reduce using rule 110 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
     end             reduce using rule 110 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
 
-    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 200
+    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 201
 
-state 171
+state 172
 
     (28) logic_expression -> logic_expression logic_operator logic_expression . ACTION_ADD_QUADRUPLET
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
@@ -4778,14 +4806,14 @@ state 171
     else            reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .)
     elsif           reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .)
     next            reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .)
-    and             shift and go to state 125
-    or              shift and go to state 126
-    is_equal        shift and go to state 127
-    is_not_equal    shift and go to state 128
-    greater_than    shift and go to state 129
-    greater_or_equal_than shift and go to state 130
-    less_than       shift and go to state 131
-    less_or_equal_than shift and go to state 132
+    and             shift and go to state 126
+    or              shift and go to state 127
+    is_equal        shift and go to state 128
+    is_not_equal    shift and go to state 129
+    greater_than    shift and go to state 130
+    greater_or_equal_than shift and go to state 131
+    less_than       shift and go to state 132
+    less_or_equal_than shift and go to state 133
 
   ! and             [ reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .) ]
   ! or              [ reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .) ]
@@ -4796,10 +4824,10 @@ state 171
   ! less_than       [ reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .) ]
   ! less_or_equal_than [ reduce using rule 106 (ACTION_ADD_QUADRUPLET -> .) ]
 
-    logic_operator                 shift and go to state 124
-    ACTION_ADD_QUADRUPLET          shift and go to state 201
+    logic_operator                 shift and go to state 125
+    ACTION_ADD_QUADRUPLET          shift and go to state 202
 
-state 172
+state 173
 
     (30) logic_operator -> and ACTION_ADD_OPERATOR .
 
@@ -4811,7 +4839,7 @@ state 172
     id              reduce using rule 30 (logic_operator -> and ACTION_ADD_OPERATOR .)
 
 
-state 173
+state 174
 
     (31) logic_operator -> or ACTION_ADD_OPERATOR .
 
@@ -4823,7 +4851,7 @@ state 173
     id              reduce using rule 31 (logic_operator -> or ACTION_ADD_OPERATOR .)
 
 
-state 174
+state 175
 
     (32) logic_operator -> is_equal ACTION_ADD_OPERATOR .
 
@@ -4835,7 +4863,7 @@ state 174
     id              reduce using rule 32 (logic_operator -> is_equal ACTION_ADD_OPERATOR .)
 
 
-state 175
+state 176
 
     (33) logic_operator -> is_not_equal ACTION_ADD_OPERATOR .
 
@@ -4847,7 +4875,7 @@ state 175
     id              reduce using rule 33 (logic_operator -> is_not_equal ACTION_ADD_OPERATOR .)
 
 
-state 176
+state 177
 
     (34) logic_operator -> greater_than ACTION_ADD_OPERATOR .
 
@@ -4859,7 +4887,7 @@ state 176
     id              reduce using rule 34 (logic_operator -> greater_than ACTION_ADD_OPERATOR .)
 
 
-state 177
+state 178
 
     (35) logic_operator -> greater_or_equal_than ACTION_ADD_OPERATOR .
 
@@ -4871,7 +4899,7 @@ state 177
     id              reduce using rule 35 (logic_operator -> greater_or_equal_than ACTION_ADD_OPERATOR .)
 
 
-state 178
+state 179
 
     (36) logic_operator -> less_than ACTION_ADD_OPERATOR .
 
@@ -4883,7 +4911,7 @@ state 178
     id              reduce using rule 36 (logic_operator -> less_than ACTION_ADD_OPERATOR .)
 
 
-state 179
+state 180
 
     (37) logic_operator -> less_or_equal_than ACTION_ADD_OPERATOR .
 
@@ -4895,7 +4923,7 @@ state 179
     id              reduce using rule 37 (logic_operator -> less_or_equal_than ACTION_ADD_OPERATOR .)
 
 
-state 180
+state 181
 
     (24) loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP . inside_logic wend ACTION_WHILE_GOTO
     (3) inside_logic -> . variable inside_logic
@@ -4920,7 +4948,7 @@ state 180
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -4943,7 +4971,7 @@ state 180
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 202
+    inside_logic                   shift and go to state 203
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -4955,14 +4983,14 @@ state 180
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 181
+state 182
 
     (25) loops -> do ACTION_DO_WHILE_INDEX inside_logic loop until . open_parenthesis logic_expression close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE
 
-    open_parenthesis shift and go to state 203
+    open_parenthesis shift and go to state 204
 
 
-state 182
+state 183
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression . ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -4974,16 +5002,16 @@ state 182
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
     to              reduce using rule 103 (ACTION_ASSIGN_VALUE -> .)
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    ACTION_ASSIGN_VALUE            shift and go to state 204
-    arithmetic_operator            shift and go to state 91
+    ACTION_ASSIGN_VALUE            shift and go to state 205
+    arithmetic_operator            shift and go to state 92
 
-state 183
+state 184
 
     (69) assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .
 
@@ -5007,7 +5035,7 @@ state 183
     next            reduce using rule 69 (assign -> let ids_access equals logic_expression ACTION_ASSIGN_VALUE .)
 
 
-state 184
+state 185
 
     (70) assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .
 
@@ -5031,7 +5059,7 @@ state 184
     next            reduce using rule 70 (assign -> let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE .)
 
 
-state 185
+state 186
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression . close_brackets ACTION_ADD_ONE_DIM_OPERAND
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression . close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
@@ -5043,16 +5071,16 @@ state 185
     (44) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    close_brackets  shift and go to state 205
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    close_brackets  shift and go to state 206
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    arithmetic_operator            shift and go to state 91
+    arithmetic_operator            shift and go to state 92
 
-state 186
+state 187
 
     (82) print -> dunkelPrint open_parenthesis multiple_print close_parenthesis ACTION_CONSOLE_WRITE .
 
@@ -5076,7 +5104,7 @@ state 186
     next            reduce using rule 82 (print -> dunkelPrint open_parenthesis multiple_print close_parenthesis ACTION_CONSOLE_WRITE .)
 
 
-state 187
+state 188
 
     (39) arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .
 
@@ -5118,14 +5146,14 @@ state 187
     step            reduce using rule 39 (arithmetic_expression -> arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET .)
 
 
-state 188
+state 189
 
     (51) value -> open_parenthesis value . close_parenthesis
 
-    close_parenthesis shift and go to state 144
+    close_parenthesis shift and go to state 145
 
 
-state 189
+state 190
 
     (63) subroutines -> sub procedure id ACTION_ADD_PROCEDURE . inside_logic return ACTION_ADD_END_FUNCTION subroutines
     (3) inside_logic -> . variable inside_logic
@@ -5150,7 +5178,7 @@ state 189
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -5173,7 +5201,7 @@ state 189
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 206
+    inside_logic                   shift and go to state 207
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5185,26 +5213,26 @@ state 189
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 190
+state 191
 
     (64) subroutines -> sub function id ACTION_ADD_FUNCTION . open_parenthesis close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (65) subroutines -> sub function id ACTION_ADD_FUNCTION . open_parenthesis parameters close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (66) subroutines -> sub function id ACTION_ADD_FUNCTION . open_parenthesis close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION . open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
 
-    open_parenthesis shift and go to state 207
+    open_parenthesis shift and go to state 208
 
 
-state 191
+state 192
 
     (11) variable -> dim id as variable_type open_brackets word_value . close_brackets
     (12) variable -> dim id as variable_type open_brackets word_value . close_brackets open_brackets word_value close_brackets
     (13) variable -> dim id as variable_type open_brackets word_value . close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
 
-    close_brackets  shift and go to state 208
+    close_brackets  shift and go to state 209
 
 
-state 192
+state 193
 
     (74) functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .
 
@@ -5246,19 +5274,19 @@ state 192
     step            reduce using rule 74 (functions -> id ACTION_ADD_FUNCTION_CALL open_parenthesis arguments ACTION_ADD_PARAMETERS close_parenthesis .)
 
 
-state 193
+state 194
 
     (77) arguments -> arguments comma arguments .
     (77) arguments -> arguments . comma arguments
 
   ! shift/reduce conflict for comma resolved as shift
     close_parenthesis reduce using rule 77 (arguments -> arguments comma arguments .)
-    comma           shift and go to state 160
+    comma           shift and go to state 161
 
   ! comma           [ reduce using rule 77 (arguments -> arguments comma arguments .) ]
 
 
-state 194
+state 195
 
     (75) arguments -> ByVal value ACTION_ADD_FUNCTION_OPERAND .
 
@@ -5266,7 +5294,7 @@ state 194
     close_parenthesis reduce using rule 75 (arguments -> ByVal value ACTION_ADD_FUNCTION_OPERAND .)
 
 
-state 195
+state 196
 
     (76) arguments -> ByRef id ACTION_ADD_FUNCTION_OPERAND .
 
@@ -5274,7 +5302,7 @@ state 195
     close_parenthesis reduce using rule 76 (arguments -> ByRef id ACTION_ADD_FUNCTION_OPERAND .)
 
 
-state 196
+state 197
 
     (19) conditions -> base_if else ACTION_FILL_JUMP inside_logic end if . ACTION_FILL_JUMP_END_IF
     (115) ACTION_FILL_JUMP_END_IF -> .
@@ -5298,16 +5326,16 @@ state 196
     elsif           reduce using rule 115 (ACTION_FILL_JUMP_END_IF -> .)
     next            reduce using rule 115 (ACTION_FILL_JUMP_END_IF -> .)
 
-    ACTION_FILL_JUMP_END_IF        shift and go to state 209
+    ACTION_FILL_JUMP_END_IF        shift and go to state 210
 
-state 197
+state 198
 
     (21) conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end . if ACTION_FILL_JUMP_END_IF
 
-    if              shift and go to state 210
+    if              shift and go to state 211
 
 
-state 198
+state 199
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression . close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
@@ -5320,28 +5348,28 @@ state 198
     (36) logic_operator -> . less_than ACTION_ADD_OPERATOR
     (37) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 211
-    and             shift and go to state 125
-    or              shift and go to state 126
-    is_equal        shift and go to state 127
-    is_not_equal    shift and go to state 128
-    greater_than    shift and go to state 129
-    greater_or_equal_than shift and go to state 130
-    less_than       shift and go to state 131
-    less_or_equal_than shift and go to state 132
+    close_parenthesis shift and go to state 212
+    and             shift and go to state 126
+    or              shift and go to state 127
+    is_equal        shift and go to state 128
+    is_not_equal    shift and go to state 129
+    greater_than    shift and go to state 130
+    greater_or_equal_than shift and go to state 131
+    less_than       shift and go to state 132
+    less_or_equal_than shift and go to state 133
 
-    logic_operator                 shift and go to state 124
+    logic_operator                 shift and go to state 125
 
-state 199
+state 200
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis . ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (110) ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .
 
     then            reduce using rule 110 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
 
-    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 212
+    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 213
 
-state 200
+state 201
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP . inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (3) inside_logic -> . variable inside_logic
@@ -5366,7 +5394,7 @@ state 200
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -5391,7 +5419,7 @@ state 200
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 213
+    inside_logic                   shift and go to state 214
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5403,7 +5431,7 @@ state 200
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 201
+state 202
 
     (28) logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .
 
@@ -5436,14 +5464,14 @@ state 201
     next            reduce using rule 28 (logic_expression -> logic_expression logic_operator logic_expression ACTION_ADD_QUADRUPLET .)
 
 
-state 202
+state 203
 
     (24) loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic . wend ACTION_WHILE_GOTO
 
-    wend            shift and go to state 214
+    wend            shift and go to state 215
 
 
-state 203
+state 204
 
     (25) loops -> do ACTION_DO_WHILE_INDEX inside_logic loop until open_parenthesis . logic_expression close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE
     (27) logic_expression -> . arithmetic_expression
@@ -5470,36 +5498,36 @@ state 203
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 73
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 74
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    logic_expression               shift and go to state 215
-    arithmetic_expression          shift and go to state 75
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    logic_expression               shift and go to state 216
+    arithmetic_expression          shift and go to state 76
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 204
+state 205
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE . to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
 
-    to              shift and go to state 216
+    to              shift and go to state 217
 
 
-state 205
+state 206
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets . ACTION_ADD_ONE_DIM_OPERAND
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets . open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets . open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (107) ACTION_ADD_ONE_DIM_OPERAND -> .
 
-    open_brackets   shift and go to state 217
+    open_brackets   shift and go to state 218
     equals          reduce using rule 107 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     sum             reduce using rule 107 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     substraction    reduce using rule 107 (ACTION_ADD_ONE_DIM_OPERAND -> .)
@@ -5538,16 +5566,16 @@ state 205
     close_brackets  reduce using rule 107 (ACTION_ADD_ONE_DIM_OPERAND -> .)
     step            reduce using rule 107 (ACTION_ADD_ONE_DIM_OPERAND -> .)
 
-    ACTION_ADD_ONE_DIM_OPERAND     shift and go to state 218
+    ACTION_ADD_ONE_DIM_OPERAND     shift and go to state 219
 
-state 206
+state 207
 
     (63) subroutines -> sub procedure id ACTION_ADD_PROCEDURE inside_logic . return ACTION_ADD_END_FUNCTION subroutines
 
-    return          shift and go to state 219
+    return          shift and go to state 220
 
 
-state 207
+state 208
 
     (64) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis . close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis . parameters close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
@@ -5560,13 +5588,13 @@ state 207
     (12) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets
     (13) variable -> . dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets
 
-    close_parenthesis shift and go to state 220
+    close_parenthesis shift and go to state 221
     dim             shift and go to state 9
 
-    parameters                     shift and go to state 221
-    variable                       shift and go to state 222
+    parameters                     shift and go to state 222
+    variable                       shift and go to state 223
 
-state 208
+state 209
 
     (11) variable -> dim id as variable_type open_brackets word_value close_brackets .
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets . open_brackets word_value close_brackets
@@ -5592,10 +5620,10 @@ state 208
     next            reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     close_parenthesis reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
     comma           reduce using rule 11 (variable -> dim id as variable_type open_brackets word_value close_brackets .)
-    open_brackets   shift and go to state 223
+    open_brackets   shift and go to state 224
 
 
-state 209
+state 210
 
     (19) conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .
 
@@ -5619,7 +5647,7 @@ state 209
     next            reduce using rule 19 (conditions -> base_if else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
 
 
-state 210
+state 211
 
     (21) conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if . ACTION_FILL_JUMP_END_IF
     (115) ACTION_FILL_JUMP_END_IF -> .
@@ -5643,25 +5671,25 @@ state 210
     elsif           reduce using rule 115 (ACTION_FILL_JUMP_END_IF -> .)
     next            reduce using rule 115 (ACTION_FILL_JUMP_END_IF -> .)
 
-    ACTION_FILL_JUMP_END_IF        shift and go to state 224
+    ACTION_FILL_JUMP_END_IF        shift and go to state 225
 
-state 211
+state 212
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis . ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (110) ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .
 
     then            reduce using rule 110 (ACTION_ADD_QUADRUPLET_EMPTY_JUMP -> .)
 
-    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 225
+    ACTION_ADD_QUADRUPLET_EMPTY_JUMP shift and go to state 226
 
-state 212
+state 213
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP . then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
-    then            shift and go to state 226
+    then            shift and go to state 227
 
 
-state 213
+state 214
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic . ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (112) ACTION_NEW_IF -> .
@@ -5670,9 +5698,9 @@ state 213
     elsif           reduce using rule 112 (ACTION_NEW_IF -> .)
     end             reduce using rule 112 (ACTION_NEW_IF -> .)
 
-    ACTION_NEW_IF                  shift and go to state 227
+    ACTION_NEW_IF                  shift and go to state 228
 
-state 214
+state 215
 
     (24) loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend . ACTION_WHILE_GOTO
     (120) ACTION_WHILE_GOTO -> .
@@ -5696,9 +5724,9 @@ state 214
     elsif           reduce using rule 120 (ACTION_WHILE_GOTO -> .)
     next            reduce using rule 120 (ACTION_WHILE_GOTO -> .)
 
-    ACTION_WHILE_GOTO              shift and go to state 228
+    ACTION_WHILE_GOTO              shift and go to state 229
 
-state 215
+state 216
 
     (25) loops -> do ACTION_DO_WHILE_INDEX inside_logic loop until open_parenthesis logic_expression . close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE
     (28) logic_expression -> logic_expression . logic_operator logic_expression ACTION_ADD_QUADRUPLET
@@ -5711,19 +5739,19 @@ state 215
     (36) logic_operator -> . less_than ACTION_ADD_OPERATOR
     (37) logic_operator -> . less_or_equal_than ACTION_ADD_OPERATOR
 
-    close_parenthesis shift and go to state 229
-    and             shift and go to state 125
-    or              shift and go to state 126
-    is_equal        shift and go to state 127
-    is_not_equal    shift and go to state 128
-    greater_than    shift and go to state 129
-    greater_or_equal_than shift and go to state 130
-    less_than       shift and go to state 131
-    less_or_equal_than shift and go to state 132
+    close_parenthesis shift and go to state 230
+    and             shift and go to state 126
+    or              shift and go to state 127
+    is_equal        shift and go to state 128
+    is_not_equal    shift and go to state 129
+    greater_than    shift and go to state 130
+    greater_or_equal_than shift and go to state 131
+    less_than       shift and go to state 132
+    less_or_equal_than shift and go to state 133
 
-    logic_operator                 shift and go to state 124
+    logic_operator                 shift and go to state 125
 
-state 216
+state 217
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to . ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (116) ACTION_FOR_JUMP_BACK -> .
@@ -5735,9 +5763,9 @@ state 216
     bool_value      reduce using rule 116 (ACTION_FOR_JUMP_BACK -> .)
     id              reduce using rule 116 (ACTION_FOR_JUMP_BACK -> .)
 
-    ACTION_FOR_JUMP_BACK           shift and go to state 230
+    ACTION_FOR_JUMP_BACK           shift and go to state 231
 
-state 217
+state 218
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
@@ -5762,21 +5790,21 @@ state 217
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    arithmetic_expression          shift and go to state 231
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    arithmetic_expression          shift and go to state 232
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 218
+state 219
 
     (53) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .
 
@@ -5819,7 +5847,7 @@ state 218
     step            reduce using rule 53 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets ACTION_ADD_ONE_DIM_OPERAND .)
 
 
-state 219
+state 220
 
     (63) subroutines -> sub procedure id ACTION_ADD_PROCEDURE inside_logic return . ACTION_ADD_END_FUNCTION subroutines
     (102) ACTION_ADD_END_FUNCTION -> .
@@ -5827,9 +5855,9 @@ state 219
     sub             reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
     $end            reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
 
-    ACTION_ADD_END_FUNCTION        shift and go to state 232
+    ACTION_ADD_END_FUNCTION        shift and go to state 233
 
-state 220
+state 221
 
     (64) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis . inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis . as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
@@ -5855,7 +5883,7 @@ state 220
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -5865,7 +5893,7 @@ state 220
     (82) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis ACTION_CONSOLE_WRITE
     (86) read -> . dunkelRead possible_read ACTION_CONSOLE_READ
 
-    as              shift and go to state 234
+    as              shift and go to state 235
     end             reduce using rule 9 (inside_logic -> .)
     dim             shift and go to state 9
     while           shift and go to state 13
@@ -5879,7 +5907,7 @@ state 220
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 233
+    inside_logic                   shift and go to state 234
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -5891,17 +5919,17 @@ state 220
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 221
+state 222
 
     (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters . close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters . close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (72) parameters -> parameters . comma parameters
 
-    close_parenthesis shift and go to state 235
-    comma           shift and go to state 236
+    close_parenthesis shift and go to state 236
+    comma           shift and go to state 237
 
 
-state 222
+state 223
 
     (71) parameters -> variable .
 
@@ -5909,15 +5937,15 @@ state 222
     comma           reduce using rule 71 (parameters -> variable .)
 
 
-state 223
+state 224
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets . word_value close_brackets
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets . word_value close_brackets open_brackets word_value close_brackets
 
-    word_value      shift and go to state 237
+    word_value      shift and go to state 238
 
 
-state 224
+state 225
 
     (21) conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .
 
@@ -5941,14 +5969,14 @@ state 224
     next            reduce using rule 21 (conditions -> base_if else_ifs else ACTION_FILL_JUMP inside_logic end if ACTION_FILL_JUMP_END_IF .)
 
 
-state 225
+state 226
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP . then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
 
-    then            shift and go to state 238
+    then            shift and go to state 239
 
 
-state 226
+state 227
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then . inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (3) inside_logic -> . variable inside_logic
@@ -5973,7 +6001,7 @@ state 226
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -5998,7 +6026,7 @@ state 226
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 239
+    inside_logic                   shift and go to state 240
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6010,7 +6038,7 @@ state 226
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 227
+state 228
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (113) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
@@ -6019,9 +6047,9 @@ state 227
     elsif           reduce using rule 113 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
     end             reduce using rule 113 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
 
-    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 240
+    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 241
 
-state 228
+state 229
 
     (24) loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .
 
@@ -6045,7 +6073,7 @@ state 228
     next            reduce using rule 24 (loops -> while open_parenthesis logic_expression close_parenthesis ACTION_ADD_WHILE_QUADRUPLET_EMPTY_JUMP inside_logic wend ACTION_WHILE_GOTO .)
 
 
-state 229
+state 230
 
     (25) loops -> do ACTION_DO_WHILE_INDEX inside_logic loop until open_parenthesis logic_expression close_parenthesis . ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE
     (122) ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE -> .
@@ -6069,9 +6097,9 @@ state 229
     elsif           reduce using rule 122 (ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE -> .)
     next            reduce using rule 122 (ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE -> .)
 
-    ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE shift and go to state 241
+    ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE shift and go to state 242
 
-state 230
+state 231
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK . arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (38) arithmetic_expression -> . value
@@ -6095,21 +6123,21 @@ state 230
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    arithmetic_expression          shift and go to state 242
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    arithmetic_expression          shift and go to state 243
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 231
+state 232
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets ACTION_ADD_TWO_DIM_OPERAND
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
@@ -6120,16 +6148,16 @@ state 231
     (44) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    close_brackets  shift and go to state 243
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    close_brackets  shift and go to state 244
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    arithmetic_operator            shift and go to state 91
+    arithmetic_operator            shift and go to state 92
 
-state 232
+state 233
 
     (63) subroutines -> sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION . subroutines
     (63) subroutines -> . sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines
@@ -6139,32 +6167,32 @@ state 232
     (67) subroutines -> . sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (68) subroutines -> .
 
-    sub             shift and go to state 64
+    sub             shift and go to state 65
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 244
+    subroutines                    shift and go to state 245
 
-state 233
+state 234
 
     (64) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic . end sub ACTION_ADD_END_FUNCTION subroutines
 
-    end             shift and go to state 245
+    end             shift and go to state 246
 
 
-state 234
+state 235
 
     (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as . variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (14) variable_type -> . word
     (15) variable_type -> . float
     (16) variable_type -> . bool
 
-    word            shift and go to state 108
-    float           shift and go to state 109
-    bool            shift and go to state 110
+    word            shift and go to state 109
+    float           shift and go to state 110
+    bool            shift and go to state 111
 
-    variable_type                  shift and go to state 246
+    variable_type                  shift and go to state 247
 
-state 235
+state 236
 
     (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis . inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis . as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
@@ -6190,7 +6218,7 @@ state 235
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -6200,7 +6228,7 @@ state 235
     (82) print -> . dunkelPrint open_parenthesis multiple_print close_parenthesis ACTION_CONSOLE_WRITE
     (86) read -> . dunkelRead possible_read ACTION_CONSOLE_READ
 
-    as              shift and go to state 248
+    as              shift and go to state 249
     end             reduce using rule 9 (inside_logic -> .)
     dim             shift and go to state 9
     while           shift and go to state 13
@@ -6214,7 +6242,7 @@ state 235
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 247
+    inside_logic                   shift and go to state 248
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6226,7 +6254,7 @@ state 235
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 236
+state 237
 
     (72) parameters -> parameters comma . parameters
     (71) parameters -> . variable
@@ -6238,18 +6266,18 @@ state 236
 
     dim             shift and go to state 9
 
-    parameters                     shift and go to state 249
-    variable                       shift and go to state 222
+    parameters                     shift and go to state 250
+    variable                       shift and go to state 223
 
-state 237
+state 238
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value . close_brackets
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value . close_brackets open_brackets word_value close_brackets
 
-    close_brackets  shift and go to state 250
+    close_brackets  shift and go to state 251
 
 
-state 238
+state 239
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then . inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (3) inside_logic -> . variable inside_logic
@@ -6274,7 +6302,7 @@ state 238
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -6299,7 +6327,7 @@ state 238
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 251
+    inside_logic                   shift and go to state 252
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6311,7 +6339,7 @@ state 238
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 239
+state 240
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (113) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
@@ -6320,9 +6348,9 @@ state 239
     else            reduce using rule 113 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
     elsif           reduce using rule 113 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
 
-    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 252
+    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 253
 
-state 240
+state 241
 
     (17) base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .
 
@@ -6331,7 +6359,7 @@ state 240
     end             reduce using rule 17 (base_if -> if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
 
 
-state 241
+state 242
 
     (25) loops -> do ACTION_DO_WHILE_INDEX inside_logic loop until open_parenthesis logic_expression close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE .
 
@@ -6355,7 +6383,7 @@ state 241
     next            reduce using rule 25 (loops -> do ACTION_DO_WHILE_INDEX inside_logic loop until open_parenthesis logic_expression close_parenthesis ACTION_QUADRUPLET_EMPTY_JUMP_DO_WHILE .)
 
 
-state 242
+state 243
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression . ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -6367,22 +6395,22 @@ state 242
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
     step            reduce using rule 117 (ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP -> .)
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP shift and go to state 253
-    arithmetic_operator            shift and go to state 91
+    ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP shift and go to state 254
+    arithmetic_operator            shift and go to state 92
 
-state 243
+state 244
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . ACTION_ADD_TWO_DIM_OPERAND
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (108) ACTION_ADD_TWO_DIM_OPERAND -> .
 
-    open_brackets   shift and go to state 254
+    open_brackets   shift and go to state 255
     equals          reduce using rule 108 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     sum             reduce using rule 108 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     substraction    reduce using rule 108 (ACTION_ADD_TWO_DIM_OPERAND -> .)
@@ -6421,23 +6449,23 @@ state 243
     close_brackets  reduce using rule 108 (ACTION_ADD_TWO_DIM_OPERAND -> .)
     step            reduce using rule 108 (ACTION_ADD_TWO_DIM_OPERAND -> .)
 
-    ACTION_ADD_TWO_DIM_OPERAND     shift and go to state 255
+    ACTION_ADD_TWO_DIM_OPERAND     shift and go to state 256
 
-state 244
+state 245
 
     (63) subroutines -> sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines .
 
     $end            reduce using rule 63 (subroutines -> sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines .)
 
 
-state 245
+state 246
 
     (64) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end . sub ACTION_ADD_END_FUNCTION subroutines
 
-    sub             shift and go to state 256
+    sub             shift and go to state 257
 
 
-state 246
+state 247
 
     (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type . inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (3) inside_logic -> . variable inside_logic
@@ -6462,7 +6490,7 @@ state 246
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -6485,7 +6513,7 @@ state 246
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 257
+    inside_logic                   shift and go to state 258
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6497,39 +6525,39 @@ state 246
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 247
+state 248
 
     (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic . end sub ACTION_ADD_END_FUNCTION subroutines
 
-    end             shift and go to state 258
+    end             shift and go to state 259
 
 
-state 248
+state 249
 
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as . variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (14) variable_type -> . word
     (15) variable_type -> . float
     (16) variable_type -> . bool
 
-    word            shift and go to state 108
-    float           shift and go to state 109
-    bool            shift and go to state 110
+    word            shift and go to state 109
+    float           shift and go to state 110
+    bool            shift and go to state 111
 
-    variable_type                  shift and go to state 259
+    variable_type                  shift and go to state 260
 
-state 249
+state 250
 
     (72) parameters -> parameters comma parameters .
     (72) parameters -> parameters . comma parameters
 
   ! shift/reduce conflict for comma resolved as shift
     close_parenthesis reduce using rule 72 (parameters -> parameters comma parameters .)
-    comma           shift and go to state 236
+    comma           shift and go to state 237
 
   ! comma           [ reduce using rule 72 (parameters -> parameters comma parameters .) ]
 
 
-state 250
+state 251
 
     (12) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets . open_brackets word_value close_brackets
@@ -6554,10 +6582,10 @@ state 250
     next            reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     close_parenthesis reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
     comma           reduce using rule 12 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets .)
-    open_brackets   shift and go to state 260
+    open_brackets   shift and go to state 261
 
 
-state 251
+state 252
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic . ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
     (113) ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .
@@ -6566,9 +6594,9 @@ state 251
     else            reduce using rule 113 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
     elsif           reduce using rule 113 (ACTION_QUADRUPLET_EMPTY_JUMP_END_IF -> .)
 
-    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 261
+    ACTION_QUADRUPLET_EMPTY_JUMP_END_IF shift and go to state 262
 
-state 252
+state 253
 
     (22) else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .
 
@@ -6577,14 +6605,14 @@ state 252
     elsif           reduce using rule 22 (else_ifs -> elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
 
 
-state 253
+state 254
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP . step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
 
-    step            shift and go to state 262
+    step            shift and go to state 263
 
 
-state 254
+state 255
 
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets . arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (38) arithmetic_expression -> . value
@@ -6608,21 +6636,21 @@ state 254
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    arithmetic_expression          shift and go to state 263
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    arithmetic_expression          shift and go to state 264
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 255
+state 256
 
     (54) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .
 
@@ -6665,7 +6693,7 @@ state 255
     step            reduce using rule 54 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_TWO_DIM_OPERAND .)
 
 
-state 256
+state 257
 
     (64) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end sub . ACTION_ADD_END_FUNCTION subroutines
     (102) ACTION_ADD_END_FUNCTION -> .
@@ -6673,23 +6701,23 @@ state 256
     sub             reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
     $end            reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
 
-    ACTION_ADD_END_FUNCTION        shift and go to state 264
-
-state 257
-
-    (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic . end sub ACTION_ADD_END_FUNCTION subroutines
-
-    end             shift and go to state 265
-
+    ACTION_ADD_END_FUNCTION        shift and go to state 265
 
 state 258
 
-    (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end . sub ACTION_ADD_END_FUNCTION subroutines
+    (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic . end sub ACTION_ADD_END_FUNCTION subroutines
 
-    sub             shift and go to state 266
+    end             shift and go to state 266
 
 
 state 259
+
+    (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end . sub ACTION_ADD_END_FUNCTION subroutines
+
+    sub             shift and go to state 267
+
+
+state 260
 
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type . inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (3) inside_logic -> . variable inside_logic
@@ -6714,7 +6742,7 @@ state 259
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -6737,7 +6765,7 @@ state 259
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 267
+    inside_logic                   shift and go to state 268
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -6749,14 +6777,14 @@ state 259
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 260
+state 261
 
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets . word_value close_brackets
 
-    word_value      shift and go to state 268
+    word_value      shift and go to state 269
 
 
-state 261
+state 262
 
     (23) else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .
 
@@ -6765,7 +6793,7 @@ state 261
     elsif           reduce using rule 23 (else_ifs -> else_ifs elsif ACTION_FILL_JUMP open_parenthesis logic_expression close_parenthesis ACTION_ADD_QUADRUPLET_EMPTY_JUMP then inside_logic ACTION_QUADRUPLET_EMPTY_JUMP_END_IF .)
 
 
-state 262
+state 263
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step . arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (38) arithmetic_expression -> . value
@@ -6789,21 +6817,21 @@ state 262
     (55) ids_access -> . id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (56) ids_access -> . open_parenthesis ids_access close_parenthesis
 
-    open_parenthesis shift and go to state 85
-    not             shift and go to state 51
-    word_value      shift and go to state 55
-    float_value     shift and go to state 56
-    bool_value      shift and go to state 57
-    id              shift and go to state 58
+    open_parenthesis shift and go to state 86
+    not             shift and go to state 52
+    word_value      shift and go to state 56
+    float_value     shift and go to state 57
+    bool_value      shift and go to state 58
+    id              shift and go to state 59
 
-    arithmetic_expression          shift and go to state 269
-    value                          shift and go to state 49
-    possible_values                shift and go to state 50
-    real_value                     shift and go to state 52
-    functions                      shift and go to state 53
-    ids_access                     shift and go to state 54
+    arithmetic_expression          shift and go to state 270
+    value                          shift and go to state 50
+    possible_values                shift and go to state 51
+    real_value                     shift and go to state 53
+    functions                      shift and go to state 54
+    ids_access                     shift and go to state 55
 
-state 263
+state 264
 
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression . close_brackets ACTION_ADD_THREE_DIM_OPERAND
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -6813,16 +6841,16 @@ state 263
     (44) arithmetic_operator -> . division ACTION_ADD_OPERATOR
     (45) arithmetic_operator -> . exponent ACTION_ADD_OPERATOR
 
-    close_brackets  shift and go to state 270
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    close_brackets  shift and go to state 271
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    arithmetic_operator            shift and go to state 91
+    arithmetic_operator            shift and go to state 92
 
-state 264
+state 265
 
     (64) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION . subroutines
     (63) subroutines -> . sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines
@@ -6832,19 +6860,19 @@ state 264
     (67) subroutines -> . sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (68) subroutines -> .
 
-    sub             shift and go to state 64
+    sub             shift and go to state 65
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 271
+    subroutines                    shift and go to state 272
 
-state 265
+state 266
 
     (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic end . sub ACTION_ADD_END_FUNCTION subroutines
 
-    sub             shift and go to state 272
+    sub             shift and go to state 273
 
 
-state 266
+state 267
 
     (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end sub . ACTION_ADD_END_FUNCTION subroutines
     (102) ACTION_ADD_END_FUNCTION -> .
@@ -6852,23 +6880,23 @@ state 266
     sub             reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
     $end            reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
 
-    ACTION_ADD_END_FUNCTION        shift and go to state 273
-
-state 267
-
-    (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic . end sub ACTION_ADD_END_FUNCTION subroutines
-
-    end             shift and go to state 274
-
+    ACTION_ADD_END_FUNCTION        shift and go to state 274
 
 state 268
 
-    (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value . close_brackets
+    (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic . end sub ACTION_ADD_END_FUNCTION subroutines
 
-    close_brackets  shift and go to state 275
+    end             shift and go to state 275
 
 
 state 269
+
+    (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value . close_brackets
+
+    close_brackets  shift and go to state 276
+
+
+state 270
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression . ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO
     (39) arithmetic_expression -> arithmetic_expression . arithmetic_operator value ACTION_ADD_QUADRUPLET
@@ -6891,16 +6919,16 @@ state 269
     dunkelPrint     reduce using rule 118 (ACTION_FOR_INCREMENT -> .)
     dunkelRead      reduce using rule 118 (ACTION_FOR_INCREMENT -> .)
     next            reduce using rule 118 (ACTION_FOR_INCREMENT -> .)
-    sum             shift and go to state 92
-    substraction    shift and go to state 93
-    multiplication  shift and go to state 94
-    division        shift and go to state 95
-    exponent        shift and go to state 96
+    sum             shift and go to state 93
+    substraction    shift and go to state 94
+    multiplication  shift and go to state 95
+    division        shift and go to state 96
+    exponent        shift and go to state 97
 
-    ACTION_FOR_INCREMENT           shift and go to state 276
-    arithmetic_operator            shift and go to state 91
+    ACTION_FOR_INCREMENT           shift and go to state 277
+    arithmetic_operator            shift and go to state 92
 
-state 270
+state 271
 
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets . ACTION_ADD_THREE_DIM_OPERAND
     (109) ACTION_ADD_THREE_DIM_OPERAND -> .
@@ -6943,16 +6971,16 @@ state 270
     close_brackets  reduce using rule 109 (ACTION_ADD_THREE_DIM_OPERAND -> .)
     step            reduce using rule 109 (ACTION_ADD_THREE_DIM_OPERAND -> .)
 
-    ACTION_ADD_THREE_DIM_OPERAND   shift and go to state 277
+    ACTION_ADD_THREE_DIM_OPERAND   shift and go to state 278
 
-state 271
+state 272
 
     (64) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines .
 
     $end            reduce using rule 64 (subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines .)
 
 
-state 272
+state 273
 
     (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic end sub . ACTION_ADD_END_FUNCTION subroutines
     (102) ACTION_ADD_END_FUNCTION -> .
@@ -6960,9 +6988,9 @@ state 272
     sub             reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
     $end            reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
 
-    ACTION_ADD_END_FUNCTION        shift and go to state 278
+    ACTION_ADD_END_FUNCTION        shift and go to state 279
 
-state 273
+state 274
 
     (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION . subroutines
     (63) subroutines -> . sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines
@@ -6972,19 +7000,19 @@ state 273
     (67) subroutines -> . sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (68) subroutines -> .
 
-    sub             shift and go to state 64
+    sub             shift and go to state 65
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 279
+    subroutines                    shift and go to state 280
 
-state 274
+state 275
 
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end . sub ACTION_ADD_END_FUNCTION subroutines
 
-    sub             shift and go to state 280
+    sub             shift and go to state 281
 
 
-state 275
+state 276
 
     (13) variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .
 
@@ -7010,7 +7038,7 @@ state 275
     comma           reduce using rule 13 (variable -> dim id as variable_type open_brackets word_value close_brackets open_brackets word_value close_brackets open_brackets word_value close_brackets .)
 
 
-state 276
+state 277
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT . inside_logic next id ACTION_FOR_GOTO
     (3) inside_logic -> . variable inside_logic
@@ -7035,7 +7063,7 @@ state 276
     (62) calls -> . functions
     (78) read_or_write -> . print
     (79) read_or_write -> . read
-    (80) read_or_write -> . dunkelCls
+    (80) read_or_write -> . dunkelCls ACTION_ADD_CLS_QUADRUPLET
     (69) assign -> . let ids_access equals logic_expression ACTION_ASSIGN_VALUE
     (70) assign -> . let ids_access equals arithmetic_expression ACTION_ASSIGN_VALUE
     (17) base_if -> . if open_parenthesis logic_expression close_parenthesis then ACTION_ADD_QUADRUPLET_EMPTY_JUMP inside_logic ACTION_NEW_IF ACTION_QUADRUPLET_EMPTY_JUMP_END_IF
@@ -7058,7 +7086,7 @@ state 276
     dunkelPrint     shift and go to state 22
     dunkelRead      shift and go to state 23
 
-    inside_logic                   shift and go to state 281
+    inside_logic                   shift and go to state 282
     variable                       shift and go to state 3
     conditions                     shift and go to state 4
     loops                          shift and go to state 5
@@ -7070,7 +7098,7 @@ state 276
     print                          shift and go to state 18
     read                           shift and go to state 19
 
-state 277
+state 278
 
     (55) ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .
 
@@ -7113,7 +7141,7 @@ state 277
     step            reduce using rule 55 (ids_access -> id ACTION_ADD_VAR_VALUE open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets open_brackets arithmetic_expression close_brackets ACTION_ADD_THREE_DIM_OPERAND .)
 
 
-state 278
+state 279
 
     (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION . subroutines
     (63) subroutines -> . sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines
@@ -7123,19 +7151,19 @@ state 278
     (67) subroutines -> . sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (68) subroutines -> .
 
-    sub             shift and go to state 64
+    sub             shift and go to state 65
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 282
+    subroutines                    shift and go to state 283
 
-state 279
+state 280
 
     (65) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines .
 
     $end            reduce using rule 65 (subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis inside_logic end sub ACTION_ADD_END_FUNCTION subroutines .)
 
 
-state 280
+state 281
 
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub . ACTION_ADD_END_FUNCTION subroutines
     (102) ACTION_ADD_END_FUNCTION -> .
@@ -7143,23 +7171,23 @@ state 280
     sub             reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
     $end            reduce using rule 102 (ACTION_ADD_END_FUNCTION -> .)
 
-    ACTION_ADD_END_FUNCTION        shift and go to state 283
+    ACTION_ADD_END_FUNCTION        shift and go to state 284
 
-state 281
+state 282
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic . next id ACTION_FOR_GOTO
 
-    next            shift and go to state 284
+    next            shift and go to state 285
 
 
-state 282
+state 283
 
     (66) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines .
 
     $end            reduce using rule 66 (subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines .)
 
 
-state 283
+state 284
 
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION . subroutines
     (63) subroutines -> . sub procedure id ACTION_ADD_PROCEDURE inside_logic return ACTION_ADD_END_FUNCTION subroutines
@@ -7169,26 +7197,26 @@ state 283
     (67) subroutines -> . sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines
     (68) subroutines -> .
 
-    sub             shift and go to state 64
+    sub             shift and go to state 65
     $end            reduce using rule 68 (subroutines -> .)
 
-    subroutines                    shift and go to state 285
+    subroutines                    shift and go to state 286
 
-state 284
+state 285
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next . id ACTION_FOR_GOTO
 
-    id              shift and go to state 286
+    id              shift and go to state 287
 
 
-state 285
+state 286
 
     (67) subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines .
 
     $end            reduce using rule 67 (subroutines -> sub function id ACTION_ADD_FUNCTION open_parenthesis parameters close_parenthesis as variable_type inside_logic end sub ACTION_ADD_END_FUNCTION subroutines .)
 
 
-state 286
+state 287
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id . ACTION_FOR_GOTO
     (119) ACTION_FOR_GOTO -> .
@@ -7212,9 +7240,9 @@ state 286
     elsif           reduce using rule 119 (ACTION_FOR_GOTO -> .)
     next            reduce using rule 119 (ACTION_FOR_GOTO -> .)
 
-    ACTION_FOR_GOTO                shift and go to state 287
+    ACTION_FOR_GOTO                shift and go to state 288
 
-state 287
+state 288
 
     (26) loops -> for id ACTION_ADD_FOR_VALUE equals arithmetic_expression ACTION_ASSIGN_VALUE to ACTION_FOR_JUMP_BACK arithmetic_expression ACTION_ADD_FOR_QUADRUPLET_EMPTY_JUMP step arithmetic_expression ACTION_FOR_INCREMENT inside_logic next id ACTION_FOR_GOTO .
 
@@ -7240,27 +7268,27 @@ state 287
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for close_parenthesis in state 87 resolved as shift
 WARNING: shift/reduce conflict for close_parenthesis in state 88 resolved as shift
 WARNING: shift/reduce conflict for close_parenthesis in state 89 resolved as shift
-WARNING: shift/reduce conflict for close_parenthesis in state 122 resolved as shift
-WARNING: shift/reduce conflict for comma in state 140 resolved as shift
-WARNING: shift/reduce conflict for and in state 171 resolved as shift
-WARNING: shift/reduce conflict for or in state 171 resolved as shift
-WARNING: shift/reduce conflict for is_equal in state 171 resolved as shift
-WARNING: shift/reduce conflict for is_not_equal in state 171 resolved as shift
-WARNING: shift/reduce conflict for greater_than in state 171 resolved as shift
-WARNING: shift/reduce conflict for greater_or_equal_than in state 171 resolved as shift
-WARNING: shift/reduce conflict for less_than in state 171 resolved as shift
-WARNING: shift/reduce conflict for less_or_equal_than in state 171 resolved as shift
-WARNING: shift/reduce conflict for comma in state 193 resolved as shift
-WARNING: shift/reduce conflict for comma in state 249 resolved as shift
+WARNING: shift/reduce conflict for close_parenthesis in state 90 resolved as shift
+WARNING: shift/reduce conflict for close_parenthesis in state 123 resolved as shift
+WARNING: shift/reduce conflict for comma in state 141 resolved as shift
+WARNING: shift/reduce conflict for and in state 172 resolved as shift
+WARNING: shift/reduce conflict for or in state 172 resolved as shift
+WARNING: shift/reduce conflict for is_equal in state 172 resolved as shift
+WARNING: shift/reduce conflict for is_not_equal in state 172 resolved as shift
+WARNING: shift/reduce conflict for greater_than in state 172 resolved as shift
+WARNING: shift/reduce conflict for greater_or_equal_than in state 172 resolved as shift
+WARNING: shift/reduce conflict for less_than in state 172 resolved as shift
+WARNING: shift/reduce conflict for less_or_equal_than in state 172 resolved as shift
+WARNING: shift/reduce conflict for comma in state 194 resolved as shift
+WARNING: shift/reduce conflict for comma in state 250 resolved as shift
 WARNING: reduce/reduce conflict in state 24 resolved using rule (program -> inside_logic end)
 WARNING: rejected rule (subroutines -> <empty>) in state 24
-WARNING: reduce/reduce conflict in state 101 resolved using rule (ids_access -> id ACTION_ADD_VAR_VALUE)
-WARNING: rejected rule (real_value -> id ACTION_ADD_VAR_VALUE) in state 101
-WARNING: reduce/reduce conflict in state 137 resolved using rule (logic_expression -> arithmetic_expression)
-WARNING: rejected rule (ACTION_ASSIGN_VALUE -> <empty>) in state 137
-WARNING: reduce/reduce conflict in state 145 resolved using rule (ids_access -> id ACTION_ADD_VAR_VALUE)
-WARNING: rejected rule (real_value -> id ACTION_ADD_VAR_VALUE) in state 145
+WARNING: reduce/reduce conflict in state 102 resolved using rule (ids_access -> id ACTION_ADD_VAR_VALUE)
+WARNING: rejected rule (real_value -> id ACTION_ADD_VAR_VALUE) in state 102
+WARNING: reduce/reduce conflict in state 138 resolved using rule (logic_expression -> arithmetic_expression)
+WARNING: rejected rule (ACTION_ASSIGN_VALUE -> <empty>) in state 138
+WARNING: reduce/reduce conflict in state 146 resolved using rule (ids_access -> id ACTION_ADD_VAR_VALUE)
+WARNING: rejected rule (real_value -> id ACTION_ADD_VAR_VALUE) in state 146
 WARNING: Rule (real_value -> id ACTION_ADD_VAR_VALUE) is never reduced

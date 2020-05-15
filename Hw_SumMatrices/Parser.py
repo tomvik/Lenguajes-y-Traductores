@@ -313,7 +313,7 @@ class Parser:
         '''
         read_or_write : print
         read_or_write : read
-        read_or_write : dunkelCls
+        read_or_write : dunkelCls ACTION_ADD_CLS_QUADRUPLET
         '''
 
     def p_print(self, p):
@@ -690,7 +690,7 @@ class Parser:
         statement_result = str(self.__operands_stack.pop())
         if(statement_result[0] != '#' and statement_result[0] != '*'):
             statement_result = 'L ' + statement_result
-        self.__quadruplets.append(str("gotoT") + ' ' + statement_result + ' ' + str(self.__jumps_stack.pop()))
+        self.__quadruplets.append('gotoT ' + statement_result + ' ' + str(self.__jumps_stack.pop()))
         self.__quadruplets_index += 1
 
     def p_action_console_write(self, p):
@@ -704,6 +704,12 @@ class Parser:
         ACTION_CONSOLE_READ :
         '''
         self.common_write_action('dunkelRead ')
+
+    def p_action_add_cls_quadruplet(self, p):
+        '''
+        ACTION_ADD_CLS_QUADRUPLET :
+        '''
+        self.__quadruplets.append('dunkelCls')
 
     def p_error(self, p):
         raise Exception('\nIncorrecto\n')
