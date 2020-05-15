@@ -1,0 +1,13 @@
+TODO:
+Quadruplets:
+    cin
+    cout
+    clr
+    goto
+
+Implementation:
+    Arithmetic
+    Logic
+    Ifs
+    Loops
+    Functions calls
