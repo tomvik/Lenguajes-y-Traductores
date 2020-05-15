@@ -21,8 +21,10 @@ sub procedure getVerifiedDimensions
 return
 
 sub procedure readDimensions
-    dunkelPrint "Input the dimensions one by one, remembering that they should match\n"
-    dunkelRead "# of columns on A, less than 10", col_a
+    dunkelPrint "Input the dimensions one by one, remembering that they should match", col_a, matrices[1], matrices[1][2], matrices[1][2][3], "sup bitchs", col_a + 2, "what up", col_a + 2
+    dunkelRead "# of columns on A, less than 10", col_a, row_a, col_b
+    dunkelRead col_a, row_a
+    dunkelRead col_a
     dunkelRead "# of row on A, less than 10", row_a
     dunkelRead "# of columns on B, less than 10", col_b
     dunkelRead "# of row on B, less than 10", row_b
@@ -46,7 +48,7 @@ sub procedure sumAndPrintData
             dunkelPrint (matrices[0][row][col] + matrices[1][row][col])
             dunkelPrint (" ")
         next col
-        dunkelPrint "\n"
+        dunkelPrint " "
     next row
 return
 

@@ -24,6 +24,7 @@ class Parser:
         self.__ifs_stack = []
         self.__for_increment_stack = []
         self.__for_id_stack = []
+        self.__write_variables_stack = []
         self.__quadruplets = []
         self.add_symbol('result', 'bool')
 
@@ -41,7 +42,8 @@ class Parser:
                 self.__operands_stack[i] = '#' + str(self.__symbols_table_index)
 
         for i in range(len(self.__quadruplets)):
-            self.__quadruplets[i] = self.__quadruplets[i].replace(name, '#' + str(self.__symbols_table_index))  
+            if(not ('dunkelWrite' in self.__quadruplets[i]) and not ('dunkelRead' in self.__quadruplets[i]) ):
+                self.__quadruplets[i] = self.__quadruplets[i].replace(name, '#' + str(self.__symbols_table_index))  
         
         self.__symbols_table_index += 1
 
@@ -99,6 +101,16 @@ class Parser:
         if(operator == '^'):
             return True
         return False
+
+    def common_write_action(self, dunkelWhat):
+        cout_or_cin = ''
+        while self.__write_variables_stack:
+            current_write_variable = self.__write_variables_stack.pop()
+            if current_write_variable[0] == '"':
+                current_write_variable = current_write_variable.replace('"', "")
+            cout_or_cin = current_write_variable + ' ' + cout_or_cin
+        self.__quadruplets.append(dunkelWhat + cout_or_cin)
+        self.__quadruplets_index += 1
 
     def p_program(self, p):
         '''
@@ -306,8 +318,8 @@ class Parser:
 
     def p_print(self, p):
         '''
-        print : dunkelPrint multiple_print
-        print : dunkelPrint open_parenthesis multiple_print close_parenthesis
+        print : dunkelPrint multiple_print ACTION_CONSOLE_WRITE
+        print : dunkelPrint open_parenthesis multiple_print close_parenthesis ACTION_CONSOLE_WRITE
         '''
 
     def p_multiple_print(self, p):
@@ -316,18 +328,32 @@ class Parser:
         multiple_print : arithmetic_expression
         multiple_print : multiple_print comma multiple_print
         '''
+        if(len(p) == 2):
+            if(p[0] == None and p[1] == None):
+                self.__write_variables_stack.append(self.__operands_stack.pop())
+            else:
+                self.__write_variables_stack.append(p[1])
     
     def p_read(self, p):
         '''
-        read : dunkelRead multiple_read
-        read : dunkelRead string comma multiple_read
+        read : dunkelRead possible_read ACTION_CONSOLE_READ
         '''
+
+    def p_possible_read(self, p):
+        '''
+        possible_read : string comma multiple_read
+        possible_read : multiple_read
+        '''
+        if len(p) == 4:
+            self.__write_variables_stack.append(p[1])
     
     def p_multiple_read(self, p):
         '''
         multiple_read : ids_access 
         multiple_read : multiple_read comma ids_access
         '''
+        if(len(p) == 2 or len(p) == 4):
+            self.__write_variables_stack.append(self.__operands_stack.pop())
 
     def p_action_add_for_value(self, p):
         '''
@@ -666,6 +692,18 @@ class Parser:
             statement_result = 'L ' + statement_result
         self.__quadruplets.append(str("gotoT") + ' ' + statement_result + ' ' + str(self.__jumps_stack.pop()))
         self.__quadruplets_index += 1
+
+    def p_action_console_write(self, p):
+        '''
+        ACTION_CONSOLE_WRITE :
+        '''
+        self.common_write_action('dunkelWrite ')
+
+    def p_action_console_read(self, p):
+        '''
+        ACTION_CONSOLE_READ :
+        '''
+        self.common_write_action('dunkelRead ')
 
     def p_error(self, p):
         raise Exception('\nIncorrecto\n')
