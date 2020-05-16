@@ -13,8 +13,17 @@ let matrices[1][0][0] = 1
 let dummy[0] = 1
 let dummy[1] = 0
 
-let result = (1 == 1) and (1 == 1)
-while (not result)
-    dunkelPrint "Hola"
-wend
+let result = 5
+if (result == 1) then
+    dunkelPrint "inside if"
+elsif (result == 2) then
+    dunkelPrint "inside elif 2"
+elsif (result == 3) then
+    dunkelPrint "inside elif 3"
+elsif (result == 4) then
+    dunkelPrint "inside elif 4"
+else
+    dunkelPrint "inside else"
+end if
+dunkelPrint "finished"
 end

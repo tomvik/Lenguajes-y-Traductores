@@ -11,7 +11,7 @@ class Parser:
         self.tokens = self.__lexer.getTokens()
         self.__parser = yacc.yacc(module=self)
         self.__symbols_table = {}
-        self.__quadruplets_index = 1
+        self.__quadruplets_index = 0
         self.__max_available_in_memory = 50
         self.__current_available_used = 0
         self.__symbols_table_index = self.__max_available_in_memory + 1
