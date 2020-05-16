@@ -10,30 +10,33 @@ def execute(executables):
     This function executes the quadruplets generated from the lexer and parser
     '''
     quadruplets, symbols_table, temporal_variables, max_temporal_variables = executables
-    print_quadruplets_and_memory(quadruplets, symbols_table)
+    #print_quadruplets_and_memory(quadruplets, symbols_table)
     for i in range (temporal_variables):
         symbols_table['temp_' + str(i)] = SymbolsElement('temp_' + str(i), 'temp', '#' + str(i), 0, 0, 0, 0)
 
     # Set address as new key.
-    print('################Change key and fix index')
+    #print('################Change key and fix index')
     new_symbols_table = {}
     for key, value in symbols_table.items():
         new_symbols_table[value.address] = value
         if new_symbols_table[value.address].index != 0:
-            print('This could be changed', quadruplets[new_symbols_table[value.address].index].split())
+            #print('This could be changed', quadruplets[new_symbols_table[value.address].index].split())
             if quadruplets[new_symbols_table[value.address].index].split()[0] == 'goto':
                 new_symbols_table[value.address].index += 1
+            elif quadruplets[new_symbols_table[value.address].index].split()[0] == 'return':
+                new_symbols_table[value.address].index += 2
 
     symbols_table = new_symbols_table
-    print_quadruplets_and_memory(quadruplets, symbols_table)
+    #print_quadruplets_and_memory(quadruplets, symbols_table)
     
     current_quadruplet = 0
     while current_quadruplet < len(quadruplets):
         current_quadruplet = execute_single_quadruple(quadruplets[current_quadruplet].split(), current_quadruplet, symbols_table)
-        sleep(0.1)
+    #print_quadruplets_and_memory(quadruplets, symbols_table)
 
 def execute_single_quadruple(single_quadruplet, current_quadruplet, symbols_table):
-    print('Current quadruplet with index:', current_quadruplet, single_quadruplet)
+    #sleep(0.05)
+    #print('Current quadruplet with index:', current_quadruplet, single_quadruplet)
     if single_quadruplet[0] == 'dunkelWrite':
         for data in single_quadruplet[1:]:
             if data[0] == '#' and len(data) > 1:

@@ -3,7 +3,6 @@ Quadruplets:
     goto
 
 Implementation:
-    Check loops
-    Check subroutines
-    Check functions
-    Check if else
+    Maybe use matrices element as counter
+    Check for next id to properly say which next id to go.
+    Check return value of function

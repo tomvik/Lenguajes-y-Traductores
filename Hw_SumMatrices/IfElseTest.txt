@@ -1,0 +1,71 @@
+dim col_a as word
+dim row_a as word
+dim col_b as word
+dim row_b as word
+dim max_row_and_col as word
+
+let max_row_and_col = 10
+
+dim matrices as word[2][10][10]
+dim dummy as word[2]
+
+let matrices[1][0][0] = 1
+let dummy[0] = 1
+let dummy[1] = 0
+
+let result = 5
+
+gosub first
+gosub second
+gosub third
+
+end
+
+sub procedure first
+    for counter = 0 to result+1 step 1
+        for second_counter = 0 to counter step 1
+            dunkelPrint "inside for with counter:", counter, "and second_counter:", second_counter
+            fourth()
+        next second_counter
+    next counter
+    dunkelPrint "finished for"
+return
+
+sub function fourth() as bool
+    let result = 5
+    if (result == 1) then
+        dunkelPrint "inside if"
+    elsif (result == 2) then
+        dunkelPrint "inside elif 2"
+    elsif (result == 3) then
+        dunkelPrint "inside elif 3"
+    elsif (result == 4) then
+        dunkelPrint "inside elif 4"
+    else
+        dunkelPrint "inside else"
+    end if
+    dunkelPrint "finished if"
+    if (result <> 5) then
+        dunkelPrint "Hola"
+    end if
+end sub
+
+sub procedure second
+    while (result > 0)
+        dunkelPrint "Result is:", result
+        let result = result - 1
+    wend
+    dunkelPrint "finished while"
+return
+
+sub procedure third
+    do
+        dunkelPrint "Result is:", result
+        let result = result + 1
+    loop until (result <> 5)
+    dunkelPrint "finished do-while"
+    gosub first
+    if (result == 5) then
+        dunkelPrint "Hola"
+    end if
+return

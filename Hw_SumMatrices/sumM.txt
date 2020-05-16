@@ -15,9 +15,11 @@ gosub sumAndPrintData
 end
 
 sub procedure getVerifiedDimensions
+    dim is_sumable as bool
     do
         gosub readDimensions
-    loop until(not dimensionsAreSumable(ByVal col_a, ByVal row_a, ByVal col_b, ByVal row_b))
+        let is_sumable = dimensionsAreSumable(ByVal col_a, ByVal row_a, ByVal col_b, ByVal row_b) or true
+    loop until(not is_sumable)
 return
 
 sub procedure readDimensions 

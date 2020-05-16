@@ -31,6 +31,11 @@ class Parser:
     def Parse(self, s):
         self.__parser.parse(s)
 
+        for key in self.__symbols_table:
+            for i in range(len(self.__quadruplets)):
+                if(not ('dunkelWrite' in self.__quadruplets[i]) and not ('dunkelRead' in self.__quadruplets[i]) ):
+                    self.__quadruplets[i] = self.__quadruplets[i].replace(self.__symbols_table[key].id, self.__symbols_table[key].address)  
+
     def get_executable(self):
         return (self.__quadruplets, self.__symbols_table, self.__current_available_used, self.__max_available_in_memory)
 
@@ -43,10 +48,6 @@ class Parser:
         for i in range(len(self.__operands_stack)):
             if self.__operands_stack[i] == name:
                 self.__operands_stack[i] = '#' + str(self.__symbols_table_index)
-
-        for i in range(len(self.__quadruplets)):
-            if(not ('dunkelWrite' in self.__quadruplets[i]) and not ('dunkelRead' in self.__quadruplets[i]) ):
-                self.__quadruplets[i] = self.__quadruplets[i].replace(name, '#' + str(self.__symbols_table_index))  
         
         self.__symbols_table_index += 1
 
@@ -68,8 +69,10 @@ class Parser:
     def fill_jump(self, empty_jump_quadruplet_index, goto_index, goto_str):
         # This loop is done because when the expression needs to be recalculated many times
         # as in a loop, the jump must be from it, and not from the gotoF.
-        while(not goto_str in self.__quadruplets[empty_jump_quadruplet_index]):
+        while(goto_str != self.__quadruplets[empty_jump_quadruplet_index].split()[0] or ((goto_str == 'goto') and len(self.__quadruplets[empty_jump_quadruplet_index].split()) > 1)):
             empty_jump_quadruplet_index += 1
+        if(empty_jump_quadruplet_index == goto_index):
+            goto_index += 1
         self.__quadruplets[empty_jump_quadruplet_index] += ' ' + str(goto_index)
 
     def is_valid_for_condition(self, operator):
@@ -588,9 +591,9 @@ class Parser:
         '''
         print('FILL ALL THE JUMPS')
         for goto_index in self.__ifs_stack[-1]:
-            print('Before filling the jump: ', self.__quadruplets[goto_index - 1])
-            self.fill_jump(goto_index - 1, self.__quadruplets_index, 'goto')
-            print('Before filling the jump: ', self.__quadruplets[goto_index - 1])
+            print('Before filling the jump: ', self.__quadruplets[goto_index])
+            self.fill_jump(goto_index, self.__quadruplets_index, 'goto')
+            print('Before filling the jump: ', self.__quadruplets[goto_index])
         self.__ifs_stack.pop()
 
     def p_action_for_jump_back(self, p):
@@ -634,12 +637,15 @@ class Parser:
         '''
         ACTION_FOR_GOTO :
         '''
+        add_one = 0
         empty_jump_quadruplet_index = self.__jumps_stack.pop() - 1
         self.__quadruplets.append(self.__for_increment_stack.pop())
         self.__quadruplets_index += 1
-        self.__quadruplets.append('goto ' + str(empty_jump_quadruplet_index))
+        if(self.__quadruplets[empty_jump_quadruplet_index][0] == '='):
+            add_one = 1
+        self.__quadruplets.append('goto ' + str(empty_jump_quadruplet_index + add_one))
         self.__quadruplets_index += 1
-        self.fill_jump(empty_jump_quadruplet_index, self.__quadruplets_index, 'gotoF')
+        self.fill_jump(empty_jump_quadruplet_index, self.__quadruplets_index + add_one, 'gotoF')
 
     def p_action_while_goto(self, p):
         '''
