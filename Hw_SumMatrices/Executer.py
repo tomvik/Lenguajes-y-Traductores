@@ -9,7 +9,8 @@ def execute(executables):
     '''
     This function executes the quadruplets generated from the lexer and parser
     '''
-    quadruplets, symbols_table, temporal_variables, max_temporal_variables = executables
+    quadruplets, symbols_table, temporal_variables = executables
+    print('\n\n Starting execution \n')
     #print_quadruplets_and_memory(quadruplets, symbols_table)
     for i in range (temporal_variables):
         symbols_table['temp_' + str(i)] = SymbolsElement('temp_' + str(i), 'temp', '#' + str(i), 0, 0, 0, 0)
@@ -58,7 +59,7 @@ def execute_single_quadruple(single_quadruplet, current_quadruplet, symbols_tabl
                 if data in symbols_table:
                     to_process_read.append(data)
                 else:
-                    raise Exception (f'dunkelWrite Error! variable {data} is not defined')
+                    raise Exception (f'dunkelPrint Error! variable {data} is not defined')
             elif '***-*' == data[0:5] or '**-*' == data[0:4] or '*-*' == data[0:3]:
                 to_process_read.append(data)
             else:
@@ -80,7 +81,6 @@ def execute_single_quadruple(single_quadruplet, current_quadruplet, symbols_tabl
             parsed_matrix, _, _ = parse_matrix(single_quadruplet[-1], symbols_table)
             symbols_table = set_matrix_value(parsed_matrix, symbols_table, operation_result)
         else:
-            #print("The result was:", operation_result)
             symbols_table[single_quadruplet[-1]].value = operation_result
 
     elif single_quadruplet[0] == '=' or single_quadruplet[0] == 'not':
@@ -101,6 +101,8 @@ def execute_single_quadruple(single_quadruplet, current_quadruplet, symbols_tabl
             parsed_matrix, _, _ = parse_matrix(single_quadruplet[2], symbols_table)
             symbols_table = set_matrix_value(parsed_matrix, symbols_table, operand_value)
         else:
+            if('word' in symbols_table[single_quadruplet[2]].type):
+                operand_value = int(operand_value)
             symbols_table[single_quadruplet[2]].value = operand_value
 
     elif single_quadruplet[0] == 'gotoF':
@@ -149,6 +151,9 @@ def get_matrix_value(matrix, symbols_table):
 def set_matrix_value(matrix, symbols_table, value):
     if not (matrix[0] in symbols_table):
         raise Exception (f'Set Matrix Value Error! variable {matrix[0]} is not defined and it is part of the dimentions')
+
+    if 'word' in symbols_table[matrix[0]].type:
+        value = int(value)
 
     if len(matrix) == 2:
         symbols_table[matrix[0]].value[matrix[1]] = value

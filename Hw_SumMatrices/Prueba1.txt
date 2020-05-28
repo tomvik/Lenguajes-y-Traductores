@@ -1,0 +1,113 @@
+dim a as word
+dim b as word
+dim c as word
+dim r1 as float
+dim r2 as float
+dim still_looping as word
+let still_looping = 1
+do
+    gosub getCoefficients
+    gosub calculateRoots
+    printRoots(ByVal r1, ByVal r2)
+    dunkelRead "Now input 1 if you want to continue. Otherwise, input 2", still_looping
+loop until (still_looping == 1)
+
+end
+
+
+sub procedure getCoefficients
+    dunkelPrint "Input the coefficients of the quadratic equation in the form of ax^2+bx+c"
+    for input = 0 to 3 step 1
+        if (input == 0) then
+            dunkelPrint "Input the value of a"
+            dunkelRead "Data:", a
+        elsif (input == 1) then
+            dunkelPrint "Input the value of b"
+            dunkelRead "Data:", b
+        else
+            dunkelPrint "Input the value of c"
+            dunkelRead "Data:", c
+        end if
+    next input
+return
+
+sub procedure calculateRoots
+    dim sqrt as float
+    dim neg_b as float
+    dim a_two as float
+
+    let neg_b = ( b - b ) - b
+    let a_two = 2 * a
+    let sqrt = ( 4 * a * c )
+    let sqrt = ( sqrt - sqrt ) - sqrt
+    let sqrt = (b * b) + sqrt
+
+    dunkelPrint "Inside the sqrt is:", sqrt
+    gosub getSqrt
+    dunkelPrint "After taking the sqrt", sqrt
+
+    let r1 = ( neg_b - sqrt ) / a_two
+    let r2 = ( neg_b + sqrt ) / a_two
+return
+
+sub procedure getSqrt
+    // sqrt(x2 + a)  ~  (x + a) / 2x
+    // variable sqrt = x2 + a
+    dim x as word
+    dim x2 as word
+    let x = 1
+    let x2 = x * x
+    while ( x2 < sqrt) 
+        let x = x + 1
+        let x2 = x * x
+        dunkelPrint "This while", x
+    wend
+    if (x2 <> sqrt) then
+        dim previous_difference as float
+        dim current_difference as float
+
+        let previous_difference = sqrt - ((x - 1) * (x - 1))
+        let current_difference = sqrt - (x * x)
+
+        dim abs_previous_difference as float
+        dim abs_current_difference as float
+
+        if (previous_difference < 0) then
+            let abs_previous_difference = previous_difference - previous_difference - previous_difference
+        else
+            let abs_previous_difference = previous_difference
+        end if
+
+        if (current_difference < 0) then
+            let abs_current_difference = current_difference - current_difference - current_difference
+        else
+            let abs_current_difference = current_difference
+        end if
+
+        dim a as float
+
+        if (abs_previous_difference < abs_current_difference) then
+            let a = previous_difference
+        else 
+            let a = current_difference
+        end if
+        
+        let sqrt = (x + a) / (2 * x)
+        dunkelPrint "Finished this shit", x, a
+    else
+        dunkelPrint "This is nice"
+        let sqrt = x
+    end if
+return
+
+
+sub function printRoots(dim r1 as float, dim r2 as float)
+    dunkelPrint "The first root of x is:", r1
+    dunkelPrint "The second root of x is:", r2
+end sub
+
+
+// Tests:
+// 1 5 6 = -2, -3
+// 1 6 9 = -3, -3
+// 1 1 -2 = 1, -2

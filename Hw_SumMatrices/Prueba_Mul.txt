@@ -1,0 +1,98 @@
+dim columns as word[2]
+dim rows as word[2]
+dim max_row_and_col as word
+
+let max_row_and_col = 10
+
+gosub readProperDimensions
+
+dim matrices as word[2][10][10]
+dim result_matrix as word[10][10]
+
+gosub getData
+
+gosub multiplyMatrices
+
+gosub printData
+
+end
+
+sub procedure readProperDimensions
+    dim first_try as bool
+    dim is_valid as bool
+    let first_try = true
+    do 
+        if(not first_try) then
+            dunkelPrint "The dimentions were incorrect. Input them again."
+            dunkelPrint ""
+        end if
+        gosub readDimensions
+        let is_valid = (columns[0] <= 10) and (columns[1] <= 10) and (rows[0] <= 10) and (rows[1] <= 10)
+        let is_valid = is_valid and (rows[0] == columns[1])
+        let first_try = false
+    loop until (not is_valid)
+return
+
+sub procedure readDimensions 
+    dunkelPrint "Input the dimensions one by one, remembering that they should match"
+    dunkelRead "# of columns on A, less than 10", columns[0]
+    dunkelRead "# of row on A, less than 10", rows[0]
+    dunkelRead "# of columns on B, less than 10", columns[1]
+    dunkelRead "# of row on B, less than 10", rows[1]
+    dunkelPrint ""
+    dunkelPrint "Your input was:", columns[0], rows[0], columns[1], columns[1]
+    dunkelCls
+return
+
+sub procedure getData
+    dim current_row as word
+    dim current_col as word
+    dunkelPrint ""
+    for matrix = 0 to 2 step 1
+        dunkelPrint "Input the data of the matrix", matrix + 1
+        let current_row = rows[matrix]
+        let current_col = columns[matrix]
+        dunkelPrint "Current row and col", current_row, ",", current_col
+        for row = 0 to rows[matrix] step 1
+            for col = 0 to columns[matrix] step 1
+                dunkelPrint "Input the data of the element", row, ",", col
+                dunkelRead "Data:", matrices[matrix][row][col]
+            next col
+        next row
+    next matrix
+return
+
+sub procedure multiplyMatrices
+    dim temp_mul as word
+    dim temp_add as word
+    for times = 0 to rows[0] step 1
+        for col = 0 to columns[1] step 1
+            for row = 0 to rows[1] step 1
+                let temp_mul = matrices[0][times][row] * matrices[1][row][col]
+                let temp_add = temp_add + temp_mul
+            next col
+            let result_matrix[times][col] = temp_add
+            let temp_add = 0
+        next row
+    next times
+return
+
+sub procedure printData
+    for row = 0 to rows[0] step 1
+        for col = 0 to columns[1] step 1
+            dunkelPrint result_matrix[row][col]
+        next col
+        dunkelPrint ""
+    next row
+return
+
+// Test 1:
+// -1  4       9  -3       15   7
+//         x           =
+//  2  3       6   1       36  -3
+//
+// Test 2:
+//
+//  1  2  3        10  11       140   146
+//             x   20  21    =
+//  4  5  6        30  31       320   335

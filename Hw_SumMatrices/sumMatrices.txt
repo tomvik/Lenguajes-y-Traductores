@@ -47,7 +47,10 @@ return
 
 sub procedure sumAndPrintData
     for row = 0 to row_a step 1
-        dunkelPrint (matrices[0][row][0] + matrices[1][row][0]), (matrices[0][row][1] + matrices[1][row][1])
+        for col = 0 to col_a step 1
+            dunkelPrint (matrices[0][row][col] + matrices[1][row][col])
+        next col
+        dunkelPrint ""
     next row
 return
 

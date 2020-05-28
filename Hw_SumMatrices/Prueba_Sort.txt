@@ -1,0 +1,71 @@
+dim numbers as word[50]
+dim length as word
+dim my_limit as word
+
+let my_limit = 50
+
+gosub readProperDimensions
+
+gosub getData
+
+gosub bubbleSort
+
+gosub printData
+
+end
+
+sub procedure readProperDimensions
+    dim first_try as bool
+    let first_try = true
+
+    dim is_valid as bool
+    do 
+        if(not first_try) then
+            dunkelPrint "The dimentions were incorrect. Input them again."
+            dunkelPrint ""
+        end if
+        gosub readDimensions
+        
+        let is_valid = (length > 0) and (length <= my_limit)
+        let first_try = false
+    loop until (not is_valid )
+return
+
+sub procedure readDimensions 
+    dunkelPrint "Input the length of the numbers to be read. Remember they should be less than", my_limit
+    dunkelRead "Length:", length
+    dunkelPrint "Your length is:", length
+return
+
+sub procedure getData
+    dunkelPrint ""
+    for num = 0 to length step 1
+        dunkelPrint "Input the data of the position", num
+        dunkelRead "Data:", numbers[num]
+    next num
+return
+
+sub procedure bubbleSort
+    dim temp as word
+    for i = 0 to (length-1) step 1
+        for j = 0 to ((length-i)-1) step 1
+            if(numbers[j] > numbers[j+1]) then
+                let temp = numbers[j+1]
+                let numbers[j+1] = numbers[j]
+                let numbers[j] = temp
+            end if
+        next j
+    next i
+return
+
+sub procedure printData
+    dunkelPrint ""
+    dunkelPrint "The sorted array is:"
+    for num = 0 to length step 1
+        dunkelPrint numbers[num]
+    next num
+return
+
+// Tests:
+// 5    5 4 3 2 1                    1 2 3 4 5
+// 5    7 8 5 4 6 9 3 2 1            1 2 3 4 5 6 7 8 9

@@ -31,23 +31,40 @@ class Parser:
     def Parse(self, s):
         self.__parser.parse(s)
 
+        print('################################Print you cunt')        
+        for key in self.__symbols_table:
+            self.__symbols_table[key].print_element()
+
         for key in self.__symbols_table:
             for i in range(len(self.__quadruplets)):
                 if(not ('dunkelWrite' in self.__quadruplets[i]) and not ('dunkelRead' in self.__quadruplets[i]) ):
-                    self.__quadruplets[i] = self.__quadruplets[i].replace(self.__symbols_table[key].id, self.__symbols_table[key].address)  
+                    new_quadruplet = ''
+                    for splited in self.__quadruplets[i].split():
+                        if(splited == self.__symbols_table[key].id):
+                            splited = self.__symbols_table[key].address
+                        new_quadruplet += splited + ' '
+                    self.__quadruplets[i] = new_quadruplet
+                    #if()
+                    #self.__quadruplets[i] = self.__quadruplets[i].replace(self.__symbols_table[key].id, self.__symbols_table[key].address)  
+        
+
+        print('################################Print you cunt')        
+        for key in self.__symbols_table:
+            self.__symbols_table[key].print_element()
 
     def get_executable(self):
-        return (self.__quadruplets, self.__symbols_table, self.__current_available_used, self.__max_available_in_memory)
+        return (self.__quadruplets, self.__symbols_table, self.__current_available_used)
 
     def add_symbol(self, name, data_type, index = 0, dimention_1 = 0, dimention_2 = 0, dimention_3 = 0):
-        if (data_type == 'word_array' or data_type == 'bool_array' or data_type == 'double_array'):
-            self.__symbols_table[name] = SymbolsElement(name, data_type, '*' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
-        else:
-            self.__symbols_table[name] = SymbolsElement(name, data_type, '#' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
+        if not (name in self.__symbols_table):
+            if (data_type == 'word_array' or data_type == 'bool_array' or data_type == 'double_array'):
+                self.__symbols_table[name] = SymbolsElement(name, data_type, '*' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
+            else:
+                self.__symbols_table[name] = SymbolsElement(name, data_type, '#' + str(self.__symbols_table_index), index, dimention_1, dimention_2, dimention_3)
         
         for i in range(len(self.__operands_stack)):
             if self.__operands_stack[i] == name:
-                self.__operands_stack[i] = '#' + str(self.__symbols_table_index)
+                self.__operands_stack[i] = '#' + str(self.__symbols_table[name].index)
         
         self.__symbols_table_index += 1
 
@@ -194,7 +211,7 @@ class Parser:
     def p_arithmetic_expression(self, p):
         '''
         arithmetic_expression : value
-        arithmetic_expression : arithmetic_expression arithmetic_operator value ACTION_ADD_QUADRUPLET
+        arithmetic_expression : arithmetic_expression arithmetic_operator arithmetic_expression ACTION_ADD_QUADRUPLET
         arithmetic_expression : open_parenthesis arithmetic_expression close_parenthesis
         '''
     

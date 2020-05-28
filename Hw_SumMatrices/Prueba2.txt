@@ -1,0 +1,43 @@
+dim input_number as word
+dim temp_number as word
+dim current_digit as word
+
+dunkelRead "Input the number to read out:", input_number
+
+if (input_number == 0) then
+    dunkelPrint "cero"
+end if
+
+while (input_number > 0) 
+    let temp_number = input_number / 10
+    let current_digit = input_number - (temp_number * 10)
+    let input_number = temp_number
+    gosub printTextDigit
+    //dunkelPrint "temp", temp_number, "current", current_digit, "input", input_number
+wend
+
+end
+
+sub procedure printTextDigit
+    if (current_digit == 0) then
+        dunkelPrint "cero"
+    elsif (current_digit == 1) then
+        dunkelPrint "uno"
+    elsif (current_digit == 2) then
+        dunkelPrint "dos"
+    elsif (current_digit == 3) then
+        dunkelPrint "tres"
+    elsif (current_digit == 4) then
+        dunkelPrint "cuatro"
+    elsif (current_digit == 5) then
+        dunkelPrint "cinco"
+    elsif (current_digit == 6) then
+        dunkelPrint "seis"
+    elsif (current_digit == 7) then
+        dunkelPrint "siete"
+    elsif (current_digit == 8) then
+        dunkelPrint "ocho"
+    else
+        dunkelPrint "nueve"
+    end if
+return
