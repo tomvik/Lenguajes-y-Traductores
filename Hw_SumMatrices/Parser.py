@@ -514,6 +514,10 @@ class Parser:
         '''
         first_dim = self.__operands_stack.pop()
         matrix = self.__operands_stack.pop()
+        
+        for key in self.__symbols_table:
+            if(self.__symbols_table[key].address == matrix and self.__symbols_table[key].value.ndim != 1):
+                raise Exception (f'Matrix syntax error! variable {matrix} is not of 1 dims')
 
         self.__operands_stack.append('*-' + str(matrix) + '-' + str(first_dim))
         print('I added the one dim operand: ', self.__operands_stack[-1])
@@ -525,6 +529,10 @@ class Parser:
         second_dim = self.__operands_stack.pop()
         first_dim = self.__operands_stack.pop()
         matrix = self.__operands_stack.pop()
+        
+        for key in self.__symbols_table:
+            if(self.__symbols_table[key].address == matrix and self.__symbols_table[key].value.ndim != 2):
+                raise Exception (f'Matrix syntax error! variable {matrix} is not of 2 dims')
 
         self.__operands_stack.append('**-' + str(matrix) + '-' + str(first_dim) + '-' + str(second_dim))
         print('I added the two dim operand: ', self.__operands_stack[-1])
@@ -537,6 +545,10 @@ class Parser:
         second_dim = self.__operands_stack.pop()
         first_dim = self.__operands_stack.pop()
         matrix = self.__operands_stack.pop()
+        
+        for key in self.__symbols_table:
+            if(self.__symbols_table[key].address == matrix and self.__symbols_table[key].value.ndim != 3):
+                raise Exception (f'Matrix syntax error! variable {matrix} is not of 3 dims')
 
         self.__operands_stack.append('***-' + str(matrix) + '-' + str(first_dim) + '-' + str(second_dim) + '-' + str(third_dim))
         print('I added the three dim operand: ', self.__operands_stack[-1])

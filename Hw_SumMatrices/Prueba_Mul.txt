@@ -4,16 +4,27 @@ dim max_row_and_col as word
 
 let max_row_and_col = 10
 
-gosub readProperDimensions
+//gosub readProperDimensions
 
 dim matrices as word[2][10][10]
 dim result_matrix as word[10][10]
 
-gosub getData
+let columns[0] = 0
+let rows[0] = 1
+let matrices[0][columns[0]][rows[0]] = 2
+dunkelPrint "Mi valor", matrices[0][columns[0]][rows[0]]
 
-gosub multiplyMatrices
 
-gosub printData
+//gosub getData
+
+//gosub multiplyMatrices
+
+//gosub printData
+
+dim variable as word
+let variable = 0
+//gosub Recursivo
+
 
 end
 
@@ -26,7 +37,7 @@ sub procedure readProperDimensions
             dunkelPrint "The dimentions were incorrect. Input them again."
             dunkelPrint ""
         end if
-        gosub readDimensions
+        //gosub readDimensions
         let is_valid = (columns[0] <= 10) and (columns[1] <= 10) and (rows[0] <= 10) and (rows[1] <= 10)
         let is_valid = is_valid and (rows[0] == columns[1])
         let first_try = false
@@ -96,3 +107,4 @@ return
 //  1  2  3        10  11       140   146
 //             x   20  21    =
 //  4  5  6        30  31       320   335
+// Recursivo
